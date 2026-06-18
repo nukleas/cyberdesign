@@ -4,6 +4,9 @@ import { join } from 'node:path';
 import { semanticTokens } from './src/tokens/semantic.js';
 import { orangeTheme } from './src/tokens/themes/orange.js';
 import { cyanTheme } from './src/tokens/themes/cyan.js';
+import { greenTheme } from './src/tokens/themes/green.js';
+import { redTheme } from './src/tokens/themes/red.js';
+import { steelTheme } from './src/tokens/themes/steel.js';
 
 const ROOT = new URL('.', import.meta.url).pathname;
 const DIST = join(ROOT, 'dist');
@@ -56,6 +59,12 @@ const varsOnly = [
   block('.theme-orange', orangeTheme),
   '\n\n',
   block('.theme-cyan', cyanTheme),
+  '\n\n',
+  block('.theme-green', greenTheme),
+  '\n\n',
+  block('.theme-red', redTheme),
+  '\n\n',
+  block('.theme-steel', steelTheme),
   '\n',
 ].join('');
 
@@ -74,8 +83,14 @@ const tailwind = [
   '\n\n',
   block('.theme-cyan', cyanTheme),
   '\n\n',
+  block('.theme-green', greenTheme),
+  '\n\n',
+  block('.theme-red', redTheme),
+  '\n\n',
+  block('.theme-steel', steelTheme),
+  '\n\n',
   '/* 2. Expose tokens to Tailwind v4 */\n',
-  tailwindBlock(semanticTokens, { orange: orangeTheme, cyan: cyanTheme }),
+  tailwindBlock(semanticTokens, { orange: orangeTheme, cyan: cyanTheme, green: greenTheme, red: redTheme, steel: steelTheme }),
   '\n',
 ].join('');
 
@@ -92,6 +107,12 @@ const bundle = [
   block('.theme-orange', orangeTheme),
   '\n\n',
   block('.theme-cyan', cyanTheme),
+  '\n\n',
+  block('.theme-green', greenTheme),
+  '\n\n',
+  block('.theme-red', redTheme),
+  '\n\n',
+  block('.theme-steel', steelTheme),
   '\n\n',
   '/* Base */\n',
   readCss('base.css'),

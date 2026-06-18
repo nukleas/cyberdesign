@@ -2041,15 +2041,12 @@
   window.toggleTheme = function() {
     const html = document.documentElement;
     const label = document.getElementById('theme-label');
-    if (html.classList.contains('theme-orange')) {
-      html.classList.remove('theme-orange');
-      html.classList.add('theme-cyan');
-      label.textContent = 'theme-cyan';
-    } else {
-      html.classList.remove('theme-cyan');
-      html.classList.add('theme-orange');
-      label.textContent = 'theme-orange';
-    }
+    const themes = ['theme-orange', 'theme-cyan', 'theme-green', 'theme-red', 'theme-steel'];
+    const current = themes.find(t => html.classList.contains(t)) || themes[0];
+    const next = themes[(themes.indexOf(current) + 1) % themes.length];
+    html.classList.remove(...themes);
+    html.classList.add(next);
+    label.textContent = next;
   }
 </script>
 

@@ -34,9 +34,14 @@ export const palette = {
   greenBright:  '#52ff9f',  // robostrudel --green-bright
   red:          '#ff4444',  // ocint #f44
   redAlt:       '#ff456c',  // robostrudel --red
+  redBright:    '#ff7777',  // lighter red for accent-bright
   blue:         '#4488ff',  // ocint #48f
   blueAlt:      '#6aa8ff',  // robostrudel --ai-blue
   yellow:       '#f7ff5a',  // robostrudel --viz-active
+
+  // Steel / metallic family
+  steel:        '#9aafc4',  // blue-grey steel
+  steelBright:  '#c8d8e8',  // chrome highlight
 
   // Surface
   surfaceGlass: 'rgba(11, 15, 24, 0.94)',
