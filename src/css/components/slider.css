@@ -1,0 +1,117 @@
+/* ── Range Slider ───────────────────────────────────────── */
+/* Mirrors robostrudel's sophisticated slider with neon track + 3D thumb */
+
+.cd-slider {
+  display: block;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ── WebKit ─────────────────────────────────────────────── */
+
+.cd-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--cd-accent) 35%, transparent),
+      color-mix(in srgb, var(--cd-accent-secondary) 25%, transparent)
+    ),
+    var(--cd-bg-panel);
+  border: 1px solid var(--cd-border);
+  border-radius: 0;
+}
+
+.cd-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 12px;
+  height: 18px;
+  margin-top: -8px;
+  background: var(--cd-accent-bright, #bdffff);
+  border: 1px solid var(--cd-bg);
+  border-radius: 0;
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--cd-accent) 50%, transparent),
+    2px 2px 0 color-mix(in srgb, var(--cd-accent-secondary) 55%, transparent);
+  transition: box-shadow 150ms ease;
+}
+
+.cd-slider:focus::-webkit-slider-thumb,
+.cd-slider:hover::-webkit-slider-thumb {
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--cd-accent) 70%, transparent),
+    2px 2px 0 color-mix(in srgb, var(--cd-accent-secondary) 55%, transparent);
+}
+
+/* ── Firefox ────────────────────────────────────────────── */
+
+.cd-slider::-moz-range-track {
+  height: 4px;
+  background: var(--cd-bg-panel);
+  border: 1px solid var(--cd-border);
+  border-radius: 0;
+}
+
+.cd-slider::-moz-range-progress {
+  height: 4px;
+  background: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  border-radius: 0;
+}
+
+.cd-slider::-moz-range-thumb {
+  width: 12px;
+  height: 18px;
+  background: var(--cd-accent-bright, #bdffff);
+  border: 1px solid var(--cd-bg);
+  border-radius: 0;
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--cd-accent) 50%, transparent),
+    2px 2px 0 color-mix(in srgb, var(--cd-accent-secondary) 55%, transparent);
+}
+
+.cd-slider:focus-visible {
+  outline: 1px solid var(--cd-accent);
+  outline-offset: 4px;
+}
+
+.cd-slider:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── Slider with value label ────────────────────────────── */
+/*
+  Usage:
+  <div class="cd-slider-wrap">
+    <input type="range" class="cd-slider">
+    <span class="cd-slider-value">74</span>
+  </div>
+*/
+
+.cd-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cd-slider-wrap .cd-slider {
+  flex: 1;
+}
+
+.cd-slider-value {
+  font-family: var(--cd-font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--cd-accent);
+  min-width: 3ch;
+  text-align: right;
+  flex-shrink: 0;
+}

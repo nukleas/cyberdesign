@@ -1,0 +1,144 @@
+/* ── Accordion ────────────────────────────────────────────────────────────── */
+/* Uses native <details>/<summary> for zero-JS open/close semantics.          */
+/* Smooth animation via grid-template-rows trick (modern browsers).           */
+
+.cd-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Item (<details>) ─────────────────────────────────────────────────────── */
+
+.cd-accordion__item {
+  border: 1px solid var(--cd-border-dim);
+  border-bottom: none;
+  font-family: var(--cd-font-mono);
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.cd-accordion__item:last-child {
+  border-bottom: 1px solid var(--cd-border-dim);
+}
+
+.cd-accordion__item[open] {
+  border-color: color-mix(in srgb, var(--cd-accent) 25%, transparent);
+}
+
+.cd-accordion__item[open]:last-child {
+  border-bottom-color: color-mix(in srgb, var(--cd-accent) 25%, transparent);
+}
+
+/* ── Trigger (<summary>) ──────────────────────────────────────────────────── */
+
+.cd-accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 14px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cd-text-secondary);
+  background: var(--cd-bg-panel);
+  transition: color 0.15s, background 0.15s;
+  outline: none;
+}
+
+/* Remove default browser disclosure marker */
+.cd-accordion__trigger::-webkit-details-marker { display: none; }
+.cd-accordion__trigger::marker { display: none; }
+
+.cd-accordion__trigger:hover {
+  background: var(--cd-bg-panel-hover);
+  color: var(--cd-text);
+}
+
+.cd-accordion__item[open] > .cd-accordion__trigger {
+  color: var(--cd-accent);
+  background: color-mix(in srgb, var(--cd-accent) 4%, var(--cd-bg-panel));
+}
+
+/* Chevron arrow via ::after */
+.cd-accordion__trigger::after {
+  content: '›';
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--cd-text-dim);
+  flex-shrink: 0;
+  transform: rotate(0deg);
+  transition: transform 0.2s ease, color 0.15s;
+  line-height: 1;
+}
+
+.cd-accordion__item[open] > .cd-accordion__trigger::after {
+  transform: rotate(90deg);
+  color: var(--cd-accent);
+}
+
+/* Optional icon slot before the label */
+.cd-accordion__icon {
+  flex-shrink: 0;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.cd-accordion__item[open] > .cd-accordion__trigger .cd-accordion__icon {
+  opacity: 1;
+  color: var(--cd-accent);
+}
+
+/* ── Content — smooth height animation ────────────────────────────────────── */
+
+.cd-accordion__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.22s ease;
+}
+
+.cd-accordion__item[open] > .cd-accordion__body {
+  grid-template-rows: 1fr;
+}
+
+.cd-accordion__content {
+  overflow: hidden;
+}
+
+.cd-accordion__content-inner {
+  padding: 12px 14px 14px;
+  font-size: 11px;
+  color: var(--cd-text-secondary);
+  line-height: 1.65;
+  border-top: 1px solid var(--cd-border-dim);
+}
+
+/* ── Flush variant — no outer border, full-width separators ───────────────── */
+
+.cd-accordion--flush .cd-accordion__item {
+  border-left: none;
+  border-right: none;
+}
+
+.cd-accordion--flush .cd-accordion__item:first-child {
+  border-top: none;
+}
+
+/* ── Separated variant — gaps between items ───────────────────────────────── */
+
+.cd-accordion--sep {
+  gap: 4px;
+}
+
+.cd-accordion--sep .cd-accordion__item {
+  border-bottom: 1px solid var(--cd-border-dim);
+}
+
+.cd-accordion--sep .cd-accordion__item[open] {
+  border-color: color-mix(in srgb, var(--cd-accent) 25%, transparent);
+}

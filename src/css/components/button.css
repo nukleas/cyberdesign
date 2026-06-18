@@ -1,0 +1,104 @@
+.cd-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--cd-border);
+  border-radius: 0;
+  background: rgba(5, 6, 10, 0.55);
+  color: var(--cd-text-muted);
+  font-family: var(--cd-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
+}
+
+/* Corner pixel accent dot */
+.cd-btn::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 3px;
+  height: 3px;
+  background: currentColor;
+  opacity: 0.4;
+  transition: opacity 120ms ease;
+}
+
+.cd-btn:hover:not(:disabled) {
+  color: var(--cd-accent);
+  border-color: var(--cd-border-glow);
+  background: var(--cd-accent-subtle);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 14%, transparent),
+    0 0 12px color-mix(in srgb, var(--cd-accent) 20%, transparent),
+    inset 0 -2px 0 color-mix(in srgb, var(--cd-accent) 20%, transparent);
+}
+
+.cd-btn:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.cd-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Primary variant */
+.cd-btn--primary {
+  background: var(--cd-accent-subtle);
+  border-color: color-mix(in srgb, var(--cd-accent) 60%, transparent);
+  color: var(--cd-accent);
+}
+
+.cd-btn--primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--cd-accent) 15%, transparent);
+  border-color: var(--cd-accent);
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--cd-accent) 30%, transparent),
+    0 0 24px color-mix(in srgb, var(--cd-accent) 15%, transparent),
+    3px 3px 0 color-mix(in srgb, var(--cd-accent-secondary) 30%, transparent);
+}
+
+/* Danger variant */
+.cd-btn--danger {
+  color: #ff456c;
+  border-color: rgba(255, 69, 108, 0.30);
+}
+
+.cd-btn--danger:hover:not(:disabled) {
+  color: #ff456c;
+  background: rgba(255, 69, 108, 0.10);
+  border-color: rgba(255, 69, 108, 0.60);
+  box-shadow:
+    0 0 12px rgba(255, 69, 108, 0.20),
+    inset 0 -2px 0 rgba(255, 69, 108, 0.20);
+}
+
+/* Small variant */
+.cd-btn--sm {
+  height: 22px;
+  padding: 0 8px;
+  font-size: 9px;
+}
+
+/* Icon-only variant */
+.cd-btn--icon {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+.cd-btn--icon.cd-btn--sm {
+  width: 22px;
+  height: 22px;
+}

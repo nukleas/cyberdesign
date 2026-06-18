@@ -1,0 +1,137 @@
+/* ── Toast / Notification ─────────────────────────────────────────────────── */
+
+@keyframes cd-toast-in  { from { opacity: 0; transform: translateX(110%); } to { opacity: 1; transform: translateX(0); } }
+@keyframes cd-toast-out { from { opacity: 1; transform: translateX(0); max-height: 80px; margin-bottom: 8px; } to { opacity: 0; transform: translateX(110%); max-height: 0; margin-bottom: 0; } }
+
+/* ── Region (fixed container) ─────────────────────────────────────────────── */
+
+.cd-toast-region {
+  position: fixed;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  width: 320px;
+}
+
+/* Placement modifiers */
+.cd-toast-region--tr { top: 16px;    right: 16px; }
+.cd-toast-region--br { bottom: 16px; right: 16px; flex-direction: column-reverse; }
+.cd-toast-region--tl { top: 16px;    left: 16px;  }
+.cd-toast-region--bl { bottom: 16px; left: 16px;  flex-direction: column-reverse; }
+.cd-toast-region--tc { top: 16px;    left: 50%;   transform: translateX(-50%); }
+
+/* Default placement */
+.cd-toast-region:not([class*="--"]) { top: 16px; right: 16px; }
+
+/* ── Individual toast ─────────────────────────────────────────────────────── */
+
+.cd-toast {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 13px;
+  background: var(--cd-bg-panel);
+  border: 1px solid var(--cd-border-mid);
+  font-family: var(--cd-font-mono);
+  pointer-events: auto;
+  overflow: hidden;
+  animation: cd-toast-in 0.22s ease forwards;
+}
+
+.cd-toast.is-dismissing {
+  animation: cd-toast-out 0.22s ease forwards;
+}
+
+/* Left accent bar */
+.cd-toast::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+
+.cd-toast__icon {
+  flex-shrink: 0;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.cd-toast__content { flex: 1; min-width: 0; }
+
+.cd-toast__title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 2px;
+}
+
+.cd-toast__body {
+  font-size: 10px;
+  color: var(--cd-text-secondary);
+  line-height: 1.5;
+}
+
+.cd-toast__dismiss {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  font: 10px/1 var(--cd-font-mono);
+  cursor: pointer;
+  opacity: 0.35;
+  padding: 0;
+  margin-top: 1px;
+  transition: opacity 0.15s;
+}
+
+.cd-toast__dismiss:hover { opacity: 0.9; }
+
+/* ── Color variants ───────────────────────────────────────────────────────── */
+
+.cd-toast--info {
+  border-color: color-mix(in srgb, var(--cd-blue) 30%, transparent);
+}
+.cd-toast--info::before    { background: var(--cd-blue); }
+.cd-toast--info .cd-toast__title  { color: var(--cd-blue); }
+.cd-toast--info .cd-toast__icon   { color: var(--cd-blue); }
+.cd-toast--info .cd-toast__dismiss { color: var(--cd-blue); }
+
+.cd-toast--success {
+  border-color: color-mix(in srgb, var(--cd-green) 30%, transparent);
+}
+.cd-toast--success::before { background: var(--cd-green); }
+.cd-toast--success .cd-toast__title  { color: var(--cd-green); }
+.cd-toast--success .cd-toast__icon   { color: var(--cd-green); }
+.cd-toast--success .cd-toast__dismiss { color: var(--cd-green); }
+
+.cd-toast--warning {
+  border-color: color-mix(in srgb, var(--cd-amber) 30%, transparent);
+}
+.cd-toast--warning::before { background: var(--cd-amber); }
+.cd-toast--warning .cd-toast__title  { color: var(--cd-amber); }
+.cd-toast--warning .cd-toast__icon   { color: var(--cd-amber); }
+.cd-toast--warning .cd-toast__dismiss { color: var(--cd-amber); }
+
+.cd-toast--error {
+  border-color: color-mix(in srgb, var(--cd-red) 30%, transparent);
+}
+.cd-toast--error::before { background: var(--cd-red); }
+.cd-toast--error .cd-toast__title  { color: var(--cd-red); }
+.cd-toast--error .cd-toast__icon   { color: var(--cd-red); }
+.cd-toast--error .cd-toast__dismiss { color: var(--cd-red); }
+
+.cd-toast--accent {
+  border-color: var(--cd-border-glow);
+}
+.cd-toast--accent::before { background: var(--cd-accent); }
+.cd-toast--accent .cd-toast__title  { color: var(--cd-accent); }
+.cd-toast--accent .cd-toast__icon   { color: var(--cd-accent); }
+.cd-toast--accent .cd-toast__dismiss { color: var(--cd-accent); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cd-toast, .cd-toast.is-dismissing { animation: none; }
+}

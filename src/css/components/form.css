@@ -1,0 +1,280 @@
+/* ── Form label ─────────────────────────────────────────── */
+
+.cd-form-label {
+  display: block;
+  font-family: var(--cd-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cd-text-secondary);
+  user-select: none;
+}
+
+/* Required asterisk */
+.cd-form-label[data-required]::after,
+.cd-form-label--required::after {
+  content: ' *';
+  color: var(--cd-neon-red);
+}
+
+/* ── Form field wrapper ─────────────────────────────────── */
+/*
+  Usage:
+  <div class="cd-field">
+    <label class="cd-label">Field Name</label>
+    <input class="cd-input">
+    <p class="cd-field-desc">Helper text</p>
+    <p class="cd-field-error">Error message</p>
+  </div>
+*/
+
+.cd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+/* Inline layout: label left, control right */
+.cd-field--inline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cd-field--inline .cd-label {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.cd-field--inline > *:last-child:not(.cd-label) {
+  flex: 1;
+  min-width: 0;
+}
+
+.cd-field-desc {
+  font-family: var(--cd-font-mono);
+  font-size: 9px;
+  color: var(--cd-text-muted);
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.cd-field-error {
+  font-family: var(--cd-font-mono);
+  font-size: 9px;
+  color: var(--cd-neon-red);
+  letter-spacing: 0.04em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cd-field-error::before {
+  content: '⚠';
+  font-size: 9px;
+}
+
+/* ── Form section ───────────────────────────────────────── */
+
+.cd-form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Separator ──────────────────────────────────────────── */
+
+.cd-separator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.cd-separator::before,
+.cd-separator::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--cd-border-dim);
+}
+
+/* With content (e.g. "OR") */
+.cd-separator--label {
+  font-family: var(--cd-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--cd-text-dim);
+  white-space: nowrap;
+}
+
+/* No content — pure line */
+.cd-separator--plain::before { flex: 1; }
+.cd-separator--plain::after  { display: none; }
+
+/* Neon variant */
+.cd-separator--neon::before,
+.cd-separator--neon::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--cd-accent) 35%, transparent) 40%,
+    color-mix(in srgb, var(--cd-accent-secondary) 25%, transparent) 60%,
+    transparent
+  );
+}
+
+/* Vertical */
+.cd-separator--vertical {
+  flex-direction: column;
+  width: 1px;
+  height: 100%;
+  gap: 6px;
+}
+
+.cd-separator--vertical::before,
+.cd-separator--vertical::after {
+  flex: 1;
+  width: 1px;
+  height: auto;
+}
+
+/* ── Tooltip (CSS-only) ─────────────────────────────────── */
+/*
+  Usage: <span class="cd-tooltip" data-tip="Helpful hint">hover me</span>
+*/
+
+.cd-tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.cd-tooltip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--cd-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cd-text);
+  background: var(--cd-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 45%, transparent);
+  padding: 4px 8px;
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--cd-accent) 20%, transparent),
+    2px 2px 0 color-mix(in srgb, var(--cd-accent-secondary) 20%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  z-index: 9998;
+}
+
+/* Arrow */
+.cd-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid color-mix(in srgb, var(--cd-accent) 45%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  z-index: 9999;
+}
+
+.cd-tooltip:hover::after,
+.cd-tooltip:hover::before {
+  opacity: 1;
+}
+
+/* Tooltip below */
+.cd-tooltip--below::after {
+  bottom: auto;
+  top: calc(100% + 8px);
+}
+
+.cd-tooltip--below::before {
+  bottom: auto;
+  top: calc(100% + 3px);
+  border-top: none;
+  border-bottom: 5px solid color-mix(in srgb, var(--cd-accent) 45%, transparent);
+}
+
+/* ── Progress bar ───────────────────────────────────────── */
+/*
+  Usage:
+  <div class="cd-progress">
+    <div class="cd-progress__bar" style="width: 65%"></div>
+  </div>
+*/
+
+.cd-progress {
+  width: 100%;
+  height: 4px;
+  background: var(--cd-bg-panel-hover);
+  border: 1px solid var(--cd-border-dim);
+  overflow: hidden;
+  position: relative;
+}
+
+.cd-progress__bar {
+  height: 100%;
+  background: var(--cd-accent);
+  transition: width 300ms ease;
+  position: relative;
+}
+
+.cd-progress__bar::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: color-mix(in srgb, var(--cd-accent-bright, var(--cd-accent)) 80%, white);
+  filter: blur(2px);
+}
+
+/* Indeterminate / scanning */
+.cd-progress--indeterminate .cd-progress__bar {
+  width: 40% !important;
+  animation: cd-progress-scan 1.8s ease-in-out infinite;
+}
+
+@keyframes cd-progress-scan {
+  0%   { transform: translateX(-150%); }
+  100% { transform: translateX(350%); }
+}
+
+/* Color variants */
+.cd-progress--danger .cd-progress__bar  { background: var(--cd-neon-red); }
+.cd-progress--success .cd-progress__bar { background: var(--cd-neon-green); }
+.cd-progress--warning .cd-progress__bar { background: var(--cd-neon-amber); }
+
+/* Thick variant */
+.cd-progress--thick {
+  height: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-progress--indeterminate .cd-progress__bar {
+    animation-duration: 0.001ms;
+  }
+}

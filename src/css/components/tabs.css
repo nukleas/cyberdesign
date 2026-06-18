@@ -1,0 +1,155 @@
+/* ── Tabs ─────────────────────────────────────────────────────────────────── */
+
+.cd-tabs { display: flex; flex-direction: column; }
+
+/* Tab list */
+.cd-tabs__list {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  border-bottom: 1px solid var(--cd-border-dim);
+  flex-shrink: 0;
+}
+
+/* Individual tab trigger */
+.cd-tabs__trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: 700 9px/1 var(--cd-font-mono);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cd-text-muted);
+  white-space: nowrap;
+  transition: color 0.15s;
+  outline: none;
+}
+
+/* Neon underline indicator */
+.cd-tabs__trigger::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--cd-accent);
+  box-shadow: 0 0 8px var(--cd-accent-glow);
+  transform: scaleX(0);
+  transition: transform 0.18s ease;
+  transform-origin: left center;
+}
+
+.cd-tabs__trigger:hover { color: var(--cd-text-secondary); }
+
+.cd-tabs__trigger[aria-selected="true"],
+.cd-tabs__trigger.is-active {
+  color: var(--cd-accent);
+  text-shadow: 0 0 8px var(--cd-accent-glow);
+}
+
+.cd-tabs__trigger[aria-selected="true"]::after,
+.cd-tabs__trigger.is-active::after {
+  transform: scaleX(1);
+}
+
+/* Badge count on a tab */
+.cd-tabs__trigger .cd-badge {
+  font-size: 8px;
+  padding: 1px 5px;
+  height: auto;
+  line-height: 1.4;
+}
+
+/* Tab panels */
+.cd-tabs__panels { flex: 1; min-height: 0; }
+
+.cd-tabs__panel {
+  display: none;
+  padding-top: 16px;
+}
+
+.cd-tabs__panel[data-active],
+.cd-tabs__panel.is-active {
+  display: block;
+}
+
+/* ── Pills variant ────────────────────────────────────────────────────────── */
+
+.cd-tabs--pills .cd-tabs__list {
+  gap: 4px;
+  border-bottom: none;
+  padding-bottom: 12px;
+}
+
+.cd-tabs--pills .cd-tabs__trigger {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid var(--cd-border-mid);
+  color: var(--cd-text-secondary);
+}
+
+.cd-tabs--pills .cd-tabs__trigger::after { display: none; }
+
+.cd-tabs--pills .cd-tabs__trigger:hover {
+  border-color: color-mix(in srgb, var(--cd-accent) 40%, transparent);
+  color: var(--cd-text);
+}
+
+.cd-tabs--pills .cd-tabs__trigger[aria-selected="true"],
+.cd-tabs--pills .cd-tabs__trigger.is-active {
+  background: var(--cd-accent-subtle);
+  border-color: var(--cd-accent);
+  color: var(--cd-accent);
+  text-shadow: none;
+  box-shadow: 0 0 8px var(--cd-accent-glow);
+}
+
+/* ── Vertical variant ─────────────────────────────────────────────────────── */
+
+.cd-tabs--vertical {
+  flex-direction: row;
+  gap: 0;
+}
+
+.cd-tabs--vertical .cd-tabs__list {
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: none;
+  border-right: 1px solid var(--cd-border-dim);
+  padding: 0;
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.cd-tabs--vertical .cd-tabs__trigger {
+  width: 100%;
+  height: 32px;
+  padding: 0 16px;
+  justify-content: flex-start;
+}
+
+.cd-tabs--vertical .cd-tabs__trigger::after {
+  top: 0;
+  left: auto;
+  right: -1px;
+  bottom: 0;
+  width: 2px;
+  height: auto;
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+
+.cd-tabs--vertical .cd-tabs__trigger[aria-selected="true"]::after,
+.cd-tabs--vertical .cd-tabs__trigger.is-active::after {
+  transform: scaleY(1);
+}
+
+.cd-tabs--vertical .cd-tabs__panels { padding-top: 0; padding-left: 16px; }
+.cd-tabs--vertical .cd-tabs__panel  { padding-top: 0; }

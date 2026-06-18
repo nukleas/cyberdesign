@@ -1,0 +1,115 @@
+/* ── Table ───────────────────────────────────────────────────────────────── */
+
+.cd-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.cd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--cd-font-mono);
+  font-size: 11px;
+  color: var(--cd-text);
+}
+
+/* Header */
+.cd-table thead tr {
+  border-bottom: 1px solid color-mix(in srgb, var(--cd-accent) 30%, transparent);
+}
+
+.cd-table th {
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--cd-accent);
+  white-space: nowrap;
+  background: color-mix(in srgb, var(--cd-accent) 4%, transparent);
+}
+
+/* Sortable column header */
+.cd-table th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+}
+
+.cd-table th[data-sort]::after {
+  content: ' ·';
+  color: var(--cd-text-dim);
+}
+
+.cd-table th[data-sort="asc"]::after  { content: ' ↑'; color: var(--cd-accent); }
+.cd-table th[data-sort="desc"]::after { content: ' ↓'; color: var(--cd-accent); }
+
+.cd-table th[data-sort]:hover {
+  color: var(--cd-accent-bright);
+}
+
+/* Rows */
+.cd-table tbody tr {
+  border-bottom: 1px solid var(--cd-border-dim);
+  transition: background 0.1s;
+}
+
+.cd-table tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--cd-accent) 2%, transparent);
+}
+
+.cd-table tbody tr:hover {
+  background: var(--cd-accent-subtle);
+}
+
+/* Cells */
+.cd-table td {
+  padding: 8px 12px;
+  color: var(--cd-text-secondary);
+  vertical-align: middle;
+}
+
+.cd-table td:first-child {
+  color: var(--cd-text);
+}
+
+/* Variants */
+.cd-table--compact th,
+.cd-table--compact td {
+  padding: 5px 10px;
+  font-size: 10px;
+}
+
+.cd-table--compact th {
+  font-size: 8px;
+}
+
+.cd-table--bordered td,
+.cd-table--bordered th {
+  border: 1px solid var(--cd-border-dim);
+}
+
+.cd-table--bordered thead tr {
+  border-bottom-color: color-mix(in srgb, var(--cd-accent) 25%, transparent);
+}
+
+/* Cell status dots — <td data-status="ok|warn|err"> */
+.cd-table td[data-status]::before {
+  content: '●';
+  margin-right: 6px;
+  font-size: 8px;
+}
+
+.cd-table td[data-status="ok"]::before    { color: var(--cd-green); }
+.cd-table td[data-status="warn"]::before  { color: var(--cd-amber); }
+.cd-table td[data-status="err"]::before   { color: var(--cd-red);   }
+.cd-table td[data-status="idle"]::before  { color: var(--cd-text-dim); }
+
+/* Numeric cell — right-align, accent color */
+.cd-table td.cd-table__num,
+.cd-table th.cd-table__num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.cd-table td.cd-table__num { color: var(--cd-accent); }

@@ -1,0 +1,464 @@
+/* ── Stat card ──────────────────────────────────────────── */
+/*
+  Usage:
+  <div class="cd-stat cd-stat--accent">
+    <span class="cd-stat__label">Active Incidents</span>
+    <span class="cd-stat__value">142</span>
+    <span class="cd-stat__delta cd-stat__delta--up">+12 today</span>
+  </div>
+*/
+
+.cd-stat {
+  background: rgba(5, 6, 10, 0.72);
+  border: 1px solid var(--cd-border);
+  box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--cd-accent) 8%, transparent);
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.cd-stat:hover {
+  border-color: color-mix(in srgb, var(--cd-accent) 30%, transparent);
+}
+
+.cd-stat__label {
+  font-family: var(--cd-font-mono);
+  font-size: 7px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--cd-text-muted);
+}
+
+.cd-stat__value {
+  font-family: var(--cd-font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cd-neon-green);
+  text-shadow:
+    2px 0 0 rgba(255, 43, 214, 0.35),
+    0 0 6px rgba(82, 255, 159, 0.35);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.cd-stat__delta {
+  font-family: var(--cd-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--cd-text-muted);
+}
+
+.cd-stat__delta--up   { color: var(--cd-neon-green); }
+.cd-stat__delta--down { color: var(--cd-neon-red); }
+
+/* Color variants override the value color */
+.cd-stat--accent .cd-stat__value {
+  color: var(--cd-accent);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--cd-accent) 50%, transparent);
+}
+.cd-stat--red .cd-stat__value {
+  color: var(--cd-neon-red);
+  text-shadow: 0 0 8px rgba(255, 69, 108, 0.5);
+}
+.cd-stat--yellow .cd-stat__value {
+  color: var(--cd-neon-yellow);
+  text-shadow: 0 0 8px rgba(247, 255, 90, 0.5);
+}
+.cd-stat--blue .cd-stat__value {
+  color: var(--cd-neon-blue);
+  text-shadow: 0 0 8px rgba(106, 168, 255, 0.5);
+}
+.cd-stat--magenta .cd-stat__value {
+  color: var(--cd-accent-secondary);
+  text-shadow: 0 0 8px rgba(255, 43, 214, 0.5);
+}
+
+/* ── Stats grid ─────────────────────────────────────────── */
+/* Grid of cd-stat cards separated by 1px border lines */
+
+.cd-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1px;
+  background: var(--cd-border-dim);
+  border: 1px solid var(--cd-border-dim);
+}
+
+.cd-stats .cd-stat {
+  border: none;
+  box-shadow: none;
+}
+
+/* ── Horizontal bar chart ───────────────────────────────── */
+/*
+  Set per-bar color+width via CSS custom properties:
+  <div class="cd-hbar" style="--bar-color: #52ff9f; --bar-w: 72%">
+*/
+
+.cd-hbar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+}
+
+.cd-hbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--cd-font-mono);
+}
+
+.cd-hbar__dot {
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background: var(--bar-color, var(--cd-accent));
+  box-shadow: 0 0 4px var(--bar-color, var(--cd-accent));
+}
+
+.cd-hbar__label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cd-text-muted);
+  width: 80px;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cd-hbar__track {
+  flex: 1;
+  height: 4px;
+  background: var(--cd-bg-panel-hover);
+  border: 1px solid var(--cd-border-dim);
+  overflow: hidden;
+  position: relative;
+}
+
+.cd-hbar__fill {
+  height: 100%;
+  width: var(--bar-w, 50%);
+  background: var(--bar-color, var(--cd-accent));
+  transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+/* Glowing tip at the right edge of the fill */
+.cd-hbar__fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: color-mix(in srgb, var(--bar-color, var(--cd-accent)) 80%, white);
+  filter: blur(2px);
+}
+
+.cd-hbar__value {
+  font-size: 9px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--cd-text-muted);
+  width: 28px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Thick variant */
+.cd-hbar-chart--thick .cd-hbar__track { height: 8px; }
+.cd-hbar-chart--thick .cd-hbar__dot   { width: 8px; height: 8px; }
+
+/* ── Histogram (vertical bars) ──────────────────────────── */
+/*
+  Set per-bar height via CSS custom property:
+  <div class="cd-histogram__bar" style="--bar-h: 65%; --bar-color: #47f6ff">
+*/
+
+.cd-histogram {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: 100%;
+  height: 80px;
+  position: relative;
+}
+
+/* Horizontal grid lines */
+.cd-histogram__grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cd-histogram__grid-line {
+  width: 100%;
+  height: 1px;
+  background: var(--cd-border-dim);
+}
+
+.cd-histogram__bar {
+  flex: 1;
+  height: var(--bar-h, 50%);
+  background: var(--bar-color, var(--cd-accent));
+  opacity: 0.75;
+  min-height: 2px;
+  transition: height 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 120ms ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.cd-histogram__bar:hover {
+  opacity: 1;
+  box-shadow: 0 0 6px var(--bar-color, var(--cd-accent));
+}
+
+/* Stacked bar: flex children */
+.cd-histogram__bar--stack {
+  display: flex;
+  flex-direction: column-reverse;
+  background: none;
+  opacity: 1;
+}
+
+.cd-histogram__segment {
+  width: 100%;
+  height: var(--seg-h, 50%);
+  background: var(--seg-color, var(--cd-accent));
+  opacity: 0.78;
+  min-height: 1px;
+}
+
+/* ── Sparkline ──────────────────────────────────────────── */
+/*
+  Tiny inline bar series. Use --bar-h per bar.
+  <div class="cd-sparkline">
+    <div class="cd-sparkline__bar" style="--bar-h: 80%"></div>
+    ...
+  </div>
+*/
+
+.cd-sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 24px;
+}
+
+.cd-sparkline__bar {
+  flex: 1;
+  height: var(--bar-h, 50%);
+  background: var(--bar-color, var(--cd-accent));
+  min-height: 2px;
+  opacity: 0.65;
+  transition: opacity 120ms ease;
+}
+
+.cd-sparkline__bar:hover {
+  opacity: 1;
+}
+
+/* Fixed-width bars (less elastic) */
+.cd-sparkline--fixed .cd-sparkline__bar {
+  flex: none;
+  width: 3px;
+}
+
+/* Activity grid (like GitHub contributions) */
+.cd-activity-grid {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cd-activity-cell {
+  width: 10px;
+  height: 10px;
+  background: var(--cell-color, var(--cd-bg-panel-hover));
+  opacity: var(--cell-opacity, 0.15);
+  transition: opacity 120ms ease;
+  cursor: default;
+}
+
+.cd-activity-cell:hover {
+  outline: 1px solid var(--cd-accent);
+  opacity: 1;
+}
+
+/* ── Event timeline ─────────────────────────────────────── */
+/*
+  <div class="cd-timeline">
+    <div class="cd-timeline__item">
+      <div class="cd-timeline__spine">
+        <div class="cd-timeline__dot" style="--dot-color: #ff456c"></div>
+        <div class="cd-timeline__connector"></div>
+      </div>
+      <div class="cd-timeline__body">
+        <div class="cd-timeline__time">14:32</div>
+        <div class="cd-timeline__title">Event title</div>
+        <div class="cd-timeline__desc">Optional description</div>
+      </div>
+    </div>
+  </div>
+*/
+
+.cd-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.cd-timeline__item {
+  display: flex;
+  gap: 12px;
+}
+
+.cd-timeline__spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 8px;
+}
+
+.cd-timeline__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+  background: var(--dot-color, var(--cd-accent));
+  box-shadow: 0 0 6px var(--dot-color, var(--cd-accent));
+}
+
+.cd-timeline__connector {
+  flex: 1;
+  width: 1px;
+  background: var(--cd-border-dim);
+  margin-top: 4px;
+  min-height: 8px;
+}
+
+/* Last item: hide connector */
+.cd-timeline__item:last-child .cd-timeline__connector {
+  display: none;
+}
+
+.cd-timeline__body {
+  flex: 1;
+  padding-bottom: 16px;
+}
+
+.cd-timeline__time {
+  font-family: var(--cd-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--cd-accent);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cd-timeline__title {
+  font-family: var(--cd-font-mono);
+  font-size: 12px;
+  color: var(--cd-text);
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.cd-timeline__desc {
+  font-family: var(--cd-font-mono);
+  font-size: 10px;
+  color: var(--cd-text-muted);
+  line-height: 1.5;
+}
+
+/* ── Canvas chart containers ────────────────────────────── */
+/* Shell that canvas-based charts (from charts.js) render into */
+
+.cd-chart {
+  position: relative;
+  width: 100%;
+  background: var(--cd-bg-panel);
+  border: 1px solid var(--cd-border-glow);
+  box-shadow: var(--cd-panel-shadow);
+  overflow: hidden;
+}
+
+.cd-chart canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Inset top + bottom neon gradient accent lines (robostrudel visualizer pattern) */
+.cd-chart::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--cd-accent) 55%, transparent) 40%,
+    color-mix(in srgb, var(--cd-accent-secondary) 40%, transparent) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Chart header inside the container */
+.cd-chart__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--cd-border-dim);
+  flex-shrink: 0;
+}
+
+.cd-chart__title {
+  font-family: var(--cd-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--cd-accent);
+}
+
+.cd-chart__meta {
+  font-family: var(--cd-font-mono);
+  font-size: 8px;
+  color: var(--cd-text-muted);
+  letter-spacing: 0.06em;
+}
+
+/* Scope variant: shorter, scope-specific accent */
+.cd-chart--scope {
+  height: 60px;
+}
+
+.cd-chart--scope::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--cd-neon-yellow) 55%, transparent) 50%,
+    transparent 100%
+  );
+}

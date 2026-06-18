@@ -1,0 +1,101 @@
+/* ── Spinner / Loader ─────────────────────────────────────────────────────── */
+
+@keyframes cd-spin { to { transform: rotate(360deg); } }
+@keyframes cd-spin-rev { to { transform: rotate(-360deg); } }
+@keyframes cd-pulse-dots {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+  40%           { transform: scale(1);   opacity: 1;   }
+}
+
+/* ── Ring spinner (default) ───────────────────────────────────────────────── */
+
+.cd-spinner {
+  --cd-spinner-size: 20px;
+  --cd-spinner-stroke: 2px;
+  display: inline-block;
+  width: var(--cd-spinner-size);
+  height: var(--cd-spinner-size);
+  border-radius: 50%;
+  border: var(--cd-spinner-stroke) solid color-mix(in srgb, var(--cd-accent) 18%, transparent);
+  border-top-color: var(--cd-accent);
+  animation: cd-spin 0.75s linear infinite;
+  flex-shrink: 0;
+}
+
+/* Dual-ring variant — inner ring counter-rotates */
+.cd-spinner--dual {
+  position: relative;
+  border-top-color: var(--cd-accent);
+  border-right-color: color-mix(in srgb, var(--cd-accent) 35%, transparent);
+}
+
+.cd-spinner--dual::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  border: var(--cd-spinner-stroke) solid transparent;
+  border-bottom-color: var(--cd-accent-secondary, #ff2bd6);
+  animation: cd-spin-rev 0.6s linear infinite;
+}
+
+/* ── Size variants ────────────────────────────────────────────────────────── */
+
+.cd-spinner--xs { --cd-spinner-size: 12px; --cd-spinner-stroke: 1.5px; }
+.cd-spinner--sm { --cd-spinner-size: 16px; --cd-spinner-stroke: 2px;   }
+.cd-spinner--lg { --cd-spinner-size: 32px; --cd-spinner-stroke: 3px;   }
+.cd-spinner--xl { --cd-spinner-size: 48px; --cd-spinner-stroke: 3px;   }
+
+/* ── Dot pulse variant ────────────────────────────────────────────────────── */
+
+.cd-spinner--dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  animation: none;
+  width: auto;
+  height: auto;
+}
+
+.cd-spinner--dots::before,
+.cd-spinner--dots::after,
+.cd-spinner--dots span {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cd-accent);
+  animation: cd-pulse-dots 1.2s ease-in-out infinite;
+}
+
+.cd-spinner--dots::before { animation-delay: 0s;    }
+.cd-spinner--dots span    { animation-delay: 0.2s;  }
+.cd-spinner--dots::after  { animation-delay: 0.4s;  }
+
+/* ── Inline loading state — wrap content with this ───────────────────────── */
+
+.cd-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.cd-loading::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--cd-bg) 60%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cd-spinner       { animation: none; opacity: 0.5; }
+  .cd-spinner--dots::before,
+  .cd-spinner--dots span,
+  .cd-spinner--dots::after { animation: none; opacity: 0.5; }
+}

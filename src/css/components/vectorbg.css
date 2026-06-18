@@ -1,0 +1,57 @@
+/* ── Spinning Vector Backgrounds ────────────────────────────────────────────
+   CSS animation layer for inline SVG decorative backgrounds.
+   All SVGs use viewBox="0 0 240 240" and inherit --cd-* colors from the DOM.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+@keyframes cd-vbg-cw  { to { transform: rotate(360deg);  } }
+@keyframes cd-vbg-ccw { to { transform: rotate(-360deg); } }
+
+/* ── Container ───────────────────────────────────────────────────────────── */
+
+.cd-vectorbg {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 240px;
+  height: 240px;
+}
+
+.cd-vectorbg svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cd-vectorbg--sm   { width: 160px; height: 160px; }
+.cd-vectorbg--lg   { width: 360px; height: 360px; }
+.cd-vectorbg--fill { width: 100%;  height: 100%;  }
+
+/* ── Spin utility classes (apply directly to SVG <g> elements) ───────────── */
+/* All groups include a full-size invisible <rect> to anchor transform-origin  */
+/* at the SVG center via transform-box: fill-box; transform-origin: center    */
+
+.cd-vbg-cw {
+  animation: cd-vbg-cw 12s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.cd-vbg-ccw {
+  animation: cd-vbg-ccw 8s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Speed modifiers — combine with .cd-vbg-cw / .cd-vbg-ccw */
+.cd-vbg-xl   { animation-duration: 48s;  }
+.cd-vbg-slow { animation-duration: 24s;  }
+.cd-vbg-med  { animation-duration: 10s;  }
+.cd-vbg-fast { animation-duration: 3.5s; }
+
+/* Reduced motion — freeze all spinning */
+@media (prefers-reduced-motion: reduce) {
+  .cd-vbg-cw,
+  .cd-vbg-ccw { animation: none; }
+}

@@ -1,0 +1,176 @@
+/* ── Base input ─────────────────────────────────────────── */
+
+.cd-input {
+  display: block;
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  background: rgba(5, 6, 10, 0.82);
+  color: var(--cd-text);
+  border: 1px solid var(--cd-border);
+  border-radius: 0;
+  font-family: var(--cd-font-mono);
+  font-size: 11px;
+  line-height: 1;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.cd-input::placeholder {
+  color: var(--cd-text-dim);
+  font-style: italic;
+}
+
+.cd-input:focus {
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 18%, transparent),
+    0 0 8px color-mix(in srgb, var(--cd-accent) 20%, transparent),
+    inset 0 0 4px color-mix(in srgb, var(--cd-accent) 6%, transparent);
+}
+
+.cd-input:hover:not(:focus):not(:disabled) {
+  border-color: var(--cd-border-mid, #26324c);
+}
+
+.cd-input:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Left-accent variant (robostrudel corpus search pattern) */
+.cd-input--accent {
+  border-left: 2px solid var(--cd-accent);
+  padding-left: 9px;
+}
+
+/* Error state */
+.cd-input--error {
+  border-color: rgba(255, 69, 108, 0.55);
+  box-shadow: 0 0 6px rgba(255, 69, 108, 0.15);
+}
+
+.cd-input--error:focus {
+  border-color: rgba(255, 69, 108, 0.80);
+  box-shadow:
+    0 0 0 1px rgba(255, 69, 108, 0.20),
+    0 0 8px rgba(255, 69, 108, 0.25),
+    inset 0 0 4px rgba(255, 69, 108, 0.08);
+}
+
+/* Small variant */
+.cd-input--sm {
+  height: 24px;
+  font-size: 10px;
+  padding: 0 8px;
+}
+
+/* Large variant */
+.cd-input--lg {
+  height: 40px;
+  font-size: 12px;
+  padding: 0 14px;
+}
+
+/* Number — hide spin buttons */
+.cd-input[type="number"]::-webkit-inner-spin-button,
+.cd-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.cd-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ── Textarea ─────────────────────────────────────────── */
+
+.cd-textarea {
+  display: block;
+  width: 100%;
+  min-height: 80px;
+  padding: 8px 10px;
+  background: rgba(5, 6, 10, 0.82);
+  color: var(--cd-text);
+  border: 1px solid var(--cd-border);
+  border-radius: 0;
+  font-family: var(--cd-font-mono);
+  font-size: 11px;
+  line-height: 1.55;
+  outline: none;
+  resize: vertical;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.cd-textarea::placeholder {
+  color: var(--cd-text-dim);
+  font-style: italic;
+}
+
+.cd-textarea:focus {
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 18%, transparent),
+    0 0 8px color-mix(in srgb, var(--cd-accent) 20%, transparent),
+    inset 0 0 4px color-mix(in srgb, var(--cd-accent) 6%, transparent);
+}
+
+.cd-textarea:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  resize: none;
+}
+
+.cd-textarea--error {
+  border-color: rgba(255, 69, 108, 0.55);
+}
+
+.cd-textarea--error:focus {
+  border-color: rgba(255, 69, 108, 0.80);
+  box-shadow:
+    0 0 0 1px rgba(255, 69, 108, 0.20),
+    0 0 8px rgba(255, 69, 108, 0.25);
+}
+
+/* ── Input group (prefix / suffix) ─────────────────────── */
+
+.cd-input-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+
+.cd-input-group .cd-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.cd-input-addon {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  background: rgba(5, 6, 10, 0.60);
+  border: 1px solid var(--cd-border);
+  color: var(--cd-text-muted);
+  font-family: var(--cd-font-mono);
+  font-size: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Prefix addon: remove right border so it merges with input */
+.cd-input-group .cd-input-addon:first-child {
+  border-right: none;
+}
+
+/* Suffix addon: remove left border so it merges with input */
+.cd-input-group .cd-input-addon:last-child {
+  border-left: none;
+}
+
+/* When the input is focused, light up the whole group border */
+.cd-input-group:focus-within .cd-input-addon {
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+}

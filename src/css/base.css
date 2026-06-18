@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono@latest/fonts/webfonts/JetBrainsMono[wght].woff2') format('woff2-variations');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: var(--cd-font-mono);
+  background-color: var(--cd-bg);
+  color: var(--cd-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--cd-accent) 24%, transparent);
+  color: var(--cd-text);
+}

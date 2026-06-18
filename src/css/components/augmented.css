@@ -1,0 +1,363 @@
+/* ── Augmented Clip-Path Utilities ─────────────────────────────────────────
+   Inspired by augmented-ui (propjockey.io) — lightweight subset using
+   clip-path: polygon() + filter: drop-shadow() for neon-bordered clipped shapes.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Clip size tokens — override per-element with --cd-clip */
+:root {
+  --cd-clip-sm: 6px;
+  --cd-clip-md: 12px;
+  --cd-clip-lg: 20px;
+  --cd-clip-xl: 32px;
+}
+
+/* Internal fallback for all clip utilities */
+.cd-clip-tl, .cd-clip-tr, .cd-clip-br, .cd-clip-bl,
+.cd-clip-2, .cd-clip-2r, .cd-clip-4,
+.cd-step-tr, .cd-step-tl, .cd-step-br, .cd-step-bl {
+  --_cs: var(--cd-clip, var(--cd-clip-md));
+}
+
+/* ── Single corner clips ──────────────────────────────────────────────────── */
+
+.cd-clip-tl {
+  clip-path: polygon(
+    var(--_cs) 0%, 100% 0%, 100% 100%, 0% 100%, 0% var(--_cs)
+  );
+}
+
+.cd-clip-tr {
+  clip-path: polygon(
+    0% 0%, calc(100% - var(--_cs)) 0%, 100% var(--_cs), 100% 100%, 0% 100%
+  );
+}
+
+.cd-clip-br {
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% calc(100% - var(--_cs)),
+    calc(100% - var(--_cs)) 100%, 0% 100%
+  );
+}
+
+.cd-clip-bl {
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 100%, var(--_cs) 100%, 0% calc(100% - var(--_cs))
+  );
+}
+
+/* ── Dual corner clips ────────────────────────────────────────────────────── */
+
+/* Diagonal TL+BR — the classic cyberpunk slash shape */
+.cd-clip-2 {
+  clip-path: polygon(
+    var(--_cs) 0%,
+    100% 0%,
+    100% calc(100% - var(--_cs)),
+    calc(100% - var(--_cs)) 100%,
+    0% 100%,
+    0% var(--_cs)
+  );
+}
+
+/* Reverse diagonal TR+BL */
+.cd-clip-2r {
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--_cs)) 0%,
+    100% var(--_cs),
+    100% 100%,
+    var(--_cs) 100%,
+    0% calc(100% - var(--_cs))
+  );
+}
+
+/* ── All four corners clipped ─────────────────────────────────────────────── */
+
+.cd-clip-4 {
+  clip-path: polygon(
+    var(--_cs) 0%,
+    calc(100% - var(--_cs)) 0%,
+    100% var(--_cs),
+    100% calc(100% - var(--_cs)),
+    calc(100% - var(--_cs)) 100%,
+    var(--_cs) 100%,
+    0% calc(100% - var(--_cs)),
+    0% var(--_cs)
+  );
+}
+
+/* ── Step notches (right-angle cutout, pixel aesthetic) ──────────────────── */
+
+.cd-step-tr {
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--_cs)) 0%,
+    calc(100% - var(--_cs)) var(--_cs),
+    100% var(--_cs),
+    100% 100%,
+    0% 100%
+  );
+}
+
+.cd-step-tl {
+  clip-path: polygon(
+    0% var(--_cs),
+    var(--_cs) var(--_cs),
+    var(--_cs) 0%,
+    100% 0%,
+    100% 100%,
+    0% 100%
+  );
+}
+
+.cd-step-br {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% calc(100% - var(--_cs)),
+    calc(100% - var(--_cs)) calc(100% - var(--_cs)),
+    calc(100% - var(--_cs)) 100%,
+    0% 100%
+  );
+}
+
+.cd-step-bl {
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    var(--_cs) 100%,
+    var(--_cs) calc(100% - var(--_cs)),
+    0% calc(100% - var(--_cs))
+  );
+}
+
+/* ── Neon glow on clipped shapes ─────────────────────────────────────────── */
+/* filter: drop-shadow() traces the rendered silhouette, following clip-path  */
+
+.cd-aug-glow {
+  filter: drop-shadow(0 0 4px var(--cd-accent)) drop-shadow(0 0 10px var(--cd-accent-glow));
+}
+
+.cd-aug-glow:hover {
+  filter: drop-shadow(0 0 6px var(--cd-accent)) drop-shadow(0 0 16px var(--cd-accent-glow));
+}
+
+.cd-aug-glow-secondary {
+  filter:
+    drop-shadow(0 0 4px var(--cd-accent-secondary))
+    drop-shadow(0 0 10px var(--cd-accent-secondary-glow));
+}
+
+/* ── Augmented panel ─────────────────────────────────────────────────────── */
+
+.cd-aug-panel {
+  --cd-clip: var(--cd-clip-lg);
+  position: relative;
+  background: var(--cd-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 28%, transparent);
+  padding: 20px;
+  color: var(--cd-text);
+  filter: drop-shadow(0 0 4px var(--cd-accent-glow)) drop-shadow(0 0 1px var(--cd-accent));
+  clip-path: polygon(
+    var(--cd-clip) 0%,
+    100% 0%,
+    100% calc(100% - var(--cd-clip)),
+    calc(100% - var(--cd-clip)) 100%,
+    0% 100%,
+    0% var(--cd-clip)
+  );
+  transition: filter 0.2s, border-color 0.2s;
+}
+
+.cd-aug-panel:hover {
+  border-color: color-mix(in srgb, var(--cd-accent) 50%, transparent);
+  filter: drop-shadow(0 0 8px var(--cd-accent-glow)) drop-shadow(0 0 2px var(--cd-accent));
+}
+
+.cd-aug-panel--sm { --cd-clip: var(--cd-clip-sm); padding: 12px 14px; }
+.cd-aug-panel--lg { --cd-clip: var(--cd-clip-xl); padding: 28px; }
+.cd-aug-panel--4 {
+  clip-path: polygon(
+    var(--cd-clip) 0%,
+    calc(100% - var(--cd-clip)) 0%,
+    100% var(--cd-clip),
+    100% calc(100% - var(--cd-clip)),
+    calc(100% - var(--cd-clip)) 100%,
+    var(--cd-clip) 100%,
+    0% calc(100% - var(--cd-clip)),
+    0% var(--cd-clip)
+  );
+}
+
+/* ── Augmented button ────────────────────────────────────────────────────── */
+
+.cd-aug-btn {
+  --cd-clip: var(--cd-clip-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 16px;
+  background: transparent;
+  border: 1px solid var(--cd-accent);
+  color: var(--cd-accent);
+  font: 700 10px/1 var(--cd-font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.15s, color 0.15s, background 0.15s, border-color 0.15s;
+  clip-path: polygon(
+    var(--cd-clip) 0%,
+    100% 0%,
+    100% calc(100% - var(--cd-clip)),
+    calc(100% - var(--cd-clip)) 100%,
+    0% 100%,
+    0% var(--cd-clip)
+  );
+}
+
+.cd-aug-btn:hover {
+  color: var(--cd-accent-bright);
+  border-color: var(--cd-accent-bright);
+  filter: drop-shadow(0 0 6px var(--cd-accent)) drop-shadow(0 0 12px var(--cd-accent-glow));
+}
+
+.cd-aug-btn:active {
+  background: var(--cd-accent-subtle);
+}
+
+.cd-aug-btn--primary {
+  background: var(--cd-accent-subtle);
+  filter: drop-shadow(0 0 3px var(--cd-accent-glow));
+}
+
+.cd-aug-btn--primary:hover {
+  background: color-mix(in srgb, var(--cd-accent) 18%, transparent);
+}
+
+.cd-aug-btn--sm {
+  --cd-clip: 5px;
+  height: 24px;
+  padding: 0 10px;
+  font-size: 9px;
+}
+
+.cd-aug-btn--lg {
+  --cd-clip: var(--cd-clip-md);
+  height: 40px;
+  padding: 0 24px;
+  font-size: 11px;
+}
+
+/* Reverse diagonal variant — TR+BL cut */
+.cd-aug-btn--rev {
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--cd-clip)) 0%,
+    100% var(--cd-clip),
+    100% 100%,
+    var(--cd-clip) 100%,
+    0% calc(100% - var(--cd-clip))
+  );
+}
+
+/* ── Corner bracket decoration ───────────────────────────────────────────── */
+/* Adds glowing corner tick marks without clipping the element's content      */
+
+.cd-corners {
+  position: relative;
+}
+
+.cd-corners::before,
+.cd-corners::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.cd-corners::before {
+  top: 0;
+  left: 0;
+  border-top: 1px solid var(--cd-accent);
+  border-left: 1px solid var(--cd-accent);
+  box-shadow: -2px -2px 6px var(--cd-accent-glow), 0 0 3px var(--cd-accent-glow);
+}
+
+.cd-corners::after {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1px solid var(--cd-accent);
+  border-right: 1px solid var(--cd-accent);
+  box-shadow: 2px 2px 6px var(--cd-accent-glow), 0 0 3px var(--cd-accent-glow);
+}
+
+/* Four-corner variant — uses a child wrapper technique via shadow DOM trick */
+.cd-corners-4 {
+  position: relative;
+  --_c: color-mix(in srgb, var(--cd-accent) 80%, transparent);
+}
+
+.cd-corners-4::before,
+.cd-corners-4::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+
+.cd-corners-4::before {
+  top: 0; left: 0;
+  border-top: 1px solid var(--_c);
+  border-left: 1px solid var(--_c);
+}
+
+.cd-corners-4::after {
+  bottom: 0; right: 0;
+  border-bottom: 1px solid var(--_c);
+  border-right: 1px solid var(--_c);
+}
+
+/* Companion spans for all-four-corner version */
+.cd-corners-4 > .cd-corner-tr {
+  position: absolute;
+  top: 0; right: 0;
+  width: 10px; height: 10px;
+  border-top: 1px solid var(--_c);
+  border-right: 1px solid var(--_c);
+  pointer-events: none;
+}
+
+.cd-corners-4 > .cd-corner-bl {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 10px; height: 10px;
+  border-bottom: 1px solid var(--_c);
+  border-left: 1px solid var(--_c);
+  pointer-events: none;
+}
+
+/* Hover brightens the corners */
+.cd-corners:hover::before,
+.cd-corners:hover::after {
+  border-color: var(--cd-accent-bright);
+  box-shadow: -2px -2px 8px var(--cd-accent-glow), 0 0 4px var(--cd-accent-glow);
+}
+
+.cd-corners-4:hover::before,
+.cd-corners-4:hover::after {
+  border-color: var(--cd-accent-bright);
+}
+
+/* ── Size modifier classes ────────────────────────────────────────────────── */
+
+.cd-clip--sm { --cd-clip: var(--cd-clip-sm); }
+.cd-clip--md { --cd-clip: var(--cd-clip-md); }
+.cd-clip--lg { --cd-clip: var(--cd-clip-lg); }
+.cd-clip--xl { --cd-clip: var(--cd-clip-xl); }

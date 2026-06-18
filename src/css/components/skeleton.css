@@ -1,0 +1,77 @@
+/* ── Skeleton / Loading Placeholder ─────────────────────────────────────── */
+/* Reuses @keyframes cd-skel-shimmer from animations.css                     */
+
+.cd-skeleton {
+  display: block;
+  background: color-mix(in srgb, var(--cd-accent) 6%, var(--cd-bg-panel));
+  position: relative;
+  overflow: hidden;
+}
+
+.cd-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--cd-accent) 10%, transparent) 40%,
+    color-mix(in srgb, var(--cd-accent) 14%, transparent) 50%,
+    color-mix(in srgb, var(--cd-accent) 10%, transparent) 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: cd-skel-shimmer 1.5s ease-in-out infinite;
+}
+
+/* Shape variants */
+.cd-skeleton--text {
+  height: 10px;
+  border-radius: 2px;
+}
+
+.cd-skeleton--heading {
+  height: 16px;
+  border-radius: 2px;
+}
+
+.cd-skeleton--avatar {
+  border-radius: 50%;
+}
+
+.cd-skeleton--btn {
+  height: 28px;
+  border-radius: 0;
+  width: 80px;
+}
+
+/* Width helpers */
+.cd-skeleton--w-full  { width: 100%; }
+.cd-skeleton--w-3\/4  { width: 75%;  }
+.cd-skeleton--w-1\/2  { width: 50%;  }
+.cd-skeleton--w-1\/3  { width: 33%;  }
+
+/* ── Skeleton block — compound line group ─────────────────────────────────── */
+
+.cd-skeleton-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Row = inline group (avatar + text, etc.) */
+.cd-skeleton-block__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Pre-built card skeleton */
+.cd-skeleton-card {
+  padding: 16px;
+  background: var(--cd-bg-panel);
+  border: 1px solid var(--cd-border-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

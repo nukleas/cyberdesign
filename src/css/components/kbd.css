@@ -1,0 +1,54 @@
+/* ── Kbd — Keyboard Shortcut ─────────────────────────────────────────────── */
+
+.cd-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  font: 700 9px/1 var(--cd-font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--cd-text-secondary);
+  background: var(--cd-bg-panel-hover);
+  border: 1px solid var(--cd-border-mid);
+  border-bottom-width: 2px;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+}
+
+/* Accent-highlighted key */
+.cd-kbd--accent {
+  color: var(--cd-accent);
+  border-color: color-mix(in srgb, var(--cd-accent) 40%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--cd-accent) 60%, transparent);
+  box-shadow: 0 0 6px var(--cd-accent-glow);
+}
+
+/* Larger variant for standalone display */
+.cd-kbd--lg {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 11px;
+}
+
+/* Key combination group — wraps multiple .cd-kbd with a + separator */
+.cd-kbd-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  vertical-align: middle;
+}
+
+.cd-kbd-group .cd-kbd { vertical-align: baseline; }
+
+/* Separator between keys */
+.cd-kbd-group__sep {
+  font-size: 9px;
+  color: var(--cd-text-dim);
+  font-family: var(--cd-font-mono);
+  line-height: 1;
+}

@@ -1,0 +1,114 @@
+/* ── Switch / Toggle ────────────────────────────────────── */
+/*
+  Usage:
+  <label class="cd-switch">
+    <input type="checkbox" class="cd-switch__input">
+    <span class="cd-switch__track">
+      <span class="cd-switch__thumb"></span>
+    </span>
+    <span class="cd-switch__label">Enable feature</span>
+  </label>
+*/
+
+.cd-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: var(--cd-font-mono);
+  font-size: 11px;
+  color: var(--cd-text-secondary);
+  user-select: none;
+  transition: color 120ms ease;
+}
+
+.cd-switch:hover {
+  color: var(--cd-text);
+}
+
+.cd-switch__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Track */
+.cd-switch__track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 32px;
+  height: 16px;
+  flex-shrink: 0;
+  background: rgba(5, 6, 10, 0.82);
+  border: 1px solid var(--cd-border);
+  transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+}
+
+.cd-switch:hover .cd-switch__track {
+  border-color: color-mix(in srgb, var(--cd-accent) 40%, transparent);
+}
+
+/* Thumb */
+.cd-switch__thumb {
+  position: absolute;
+  left: 2px;
+  width: 10px;
+  height: 10px;
+  background: var(--cd-text-dim);
+  transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+}
+
+/* Checked state */
+.cd-switch__input:checked + .cd-switch__track {
+  border-color: var(--cd-accent);
+  background: color-mix(in srgb, var(--cd-accent) 15%, transparent);
+  box-shadow:
+    0 0 6px color-mix(in srgb, var(--cd-accent) 25%, transparent),
+    inset 0 0 4px color-mix(in srgb, var(--cd-accent) 8%, transparent);
+}
+
+.cd-switch__input:checked + .cd-switch__track .cd-switch__thumb {
+  transform: translateX(16px);
+  background: var(--cd-accent);
+  box-shadow:
+    0 0 6px color-mix(in srgb, var(--cd-accent) 60%, transparent),
+    2px 2px 0 color-mix(in srgb, var(--cd-accent-secondary) 40%, transparent);
+}
+
+/* Focus */
+.cd-switch__input:focus-visible + .cd-switch__track {
+  outline: 1px solid var(--cd-accent);
+  outline-offset: 2px;
+}
+
+/* Disabled */
+.cd-switch__input:disabled + .cd-switch__track {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.cd-switch__input:disabled ~ .cd-switch__label {
+  opacity: 0.3;
+}
+
+/* Size: small */
+.cd-switch--sm .cd-switch__track {
+  width: 24px;
+  height: 12px;
+}
+
+.cd-switch--sm .cd-switch__thumb {
+  width: 8px;
+  height: 8px;
+}
+
+.cd-switch--sm .cd-switch__input:checked + .cd-switch__track .cd-switch__thumb {
+  transform: translateX(12px);
+}

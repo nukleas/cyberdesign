@@ -1,0 +1,116 @@
+/* ── Pagination ───────────────────────────────────────────────────────────── */
+
+.cd-pagination {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--cd-font-mono);
+  flex-wrap: wrap;
+}
+
+/* ── Base page item ───────────────────────────────────────────────────────── */
+
+.cd-pagination__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 4px;
+  background: none;
+  border: 1px solid var(--cd-border-dim);
+  color: var(--cd-text-muted);
+  font: 700 9px/1 var(--cd-font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s, background 0.12s, box-shadow 0.12s;
+  user-select: none;
+}
+
+.cd-pagination__item:hover {
+  border-color: color-mix(in srgb, var(--cd-accent) 45%, transparent);
+  color: var(--cd-text);
+}
+
+/* Active page */
+.cd-pagination__item.is-active,
+.cd-pagination__item[aria-current="page"] {
+  background: var(--cd-accent-subtle);
+  border-color: var(--cd-accent);
+  color: var(--cd-accent);
+  box-shadow: 0 0 8px var(--cd-accent-glow), inset 0 0 8px color-mix(in srgb, var(--cd-accent) 6%, transparent);
+  cursor: default;
+}
+
+/* Disabled */
+.cd-pagination__item:disabled,
+.cd-pagination__item[aria-disabled="true"] {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ── Prev / Next arrows ───────────────────────────────────────────────────── */
+
+.cd-pagination__prev,
+.cd-pagination__next {
+  min-width: 36px;
+  gap: 4px;
+}
+
+/* ── Ellipsis ─────────────────────────────────────────────────────────────── */
+
+.cd-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 30px;
+  font-size: 10px;
+  color: var(--cd-text-dim);
+  cursor: default;
+  user-select: none;
+  letter-spacing: 0.1em;
+}
+
+/* ── Size variants ────────────────────────────────────────────────────────── */
+
+.cd-pagination--sm .cd-pagination__item {
+  min-width: 24px;
+  height: 24px;
+  font-size: 8px;
+}
+
+.cd-pagination--lg .cd-pagination__item {
+  min-width: 36px;
+  height: 36px;
+  font-size: 10px;
+}
+
+/* ── Compact — no gaps, items share borders ───────────────────────────────── */
+
+.cd-pagination--compact {
+  gap: 0;
+}
+
+.cd-pagination--compact .cd-pagination__item {
+  margin-left: -1px;
+}
+
+.cd-pagination--compact .cd-pagination__item:first-child { margin-left: 0; }
+
+.cd-pagination--compact .cd-pagination__item.is-active {
+  z-index: 1;
+  position: relative;
+}
+
+/* ── Info text (e.g. "Page 3 of 12") ─────────────────────────────────────── */
+
+.cd-pagination__info {
+  font: 700 9px/1 var(--cd-font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cd-text-dim);
+  margin: 0 8px;
+}

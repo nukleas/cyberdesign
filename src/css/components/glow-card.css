@@ -1,0 +1,32 @@
+.cd-glow-card {
+  background: color-mix(in srgb, var(--cd-bg-panel) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 30%, transparent);
+  backdrop-filter: blur(var(--cd-card-blur, 4px));
+  -webkit-backdrop-filter: blur(var(--cd-card-blur, 4px));
+  transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.cd-glow-card:hover {
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--cd-bg-panel-hover) 80%, transparent);
+}
+
+.cd-glow-card[data-active="true"],
+.cd-glow-card.is-active {
+  border-color: color-mix(in srgb, var(--cd-accent) 60%, transparent);
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--cd-accent) 25%, transparent),
+    0 0 20px color-mix(in srgb, var(--cd-accent) 12%, transparent),
+    inset 0 0 8px color-mix(in srgb, var(--cd-accent) 6%, transparent);
+}
+
+/* Color variant modifiers — override --cd-accent locally for the card */
+.cd-glow-card--orange  { --cd-accent: #ff8800; }
+.cd-glow-card--amber   { --cd-accent: #ffaa00; }
+.cd-glow-card--gold    { --cd-accent: #ffcc00; }
+.cd-glow-card--cyan    { --cd-accent: #47f6ff; }
+.cd-glow-card--magenta { --cd-accent: #ff2bd6; }
+.cd-glow-card--green   { --cd-accent: #52ff9f; }
+.cd-glow-card--red     { --cd-accent: #ff456c; }
+.cd-glow-card--blue    { --cd-accent: #6aa8ff; }
+.cd-glow-card--purple  { --cd-accent: #9d7cff; }

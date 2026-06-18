@@ -1,0 +1,136 @@
+/* ── Shared control base ────────────────────────────────── */
+
+.cd-checkbox,
+.cd-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  background: rgba(5, 6, 10, 0.82);
+  border: 1px solid var(--cd-border);
+  cursor: pointer;
+  position: relative;
+  transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+  vertical-align: middle;
+  margin: 0;
+}
+
+.cd-checkbox:hover:not(:disabled),
+.cd-radio:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+}
+
+.cd-checkbox:focus-visible,
+.cd-radio:focus-visible {
+  outline: 1px solid var(--cd-accent);
+  outline-offset: 2px;
+}
+
+.cd-checkbox:disabled,
+.cd-radio:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── Checkbox ───────────────────────────────────────────── */
+
+.cd-checkbox {
+  border-radius: 0;
+}
+
+/* Checked state: neon fill + checkmark */
+.cd-checkbox:checked {
+  background: color-mix(in srgb, var(--cd-accent) 20%, transparent);
+  border-color: var(--cd-accent);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--cd-accent) 30%, transparent);
+}
+
+/* Checkmark via clip-path on a pseudo-element */
+.cd-checkbox:checked::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 5px;
+  width: 8px;
+  height: 4px;
+  border-left: 1.5px solid var(--cd-accent);
+  border-bottom: 1.5px solid var(--cd-accent);
+  transform: rotate(-45deg) translateY(-2px);
+}
+
+/* Indeterminate state */
+.cd-checkbox:indeterminate {
+  background: color-mix(in srgb, var(--cd-accent) 15%, transparent);
+  border-color: color-mix(in srgb, var(--cd-accent) 60%, transparent);
+}
+
+.cd-checkbox:indeterminate::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  width: 8px;
+  height: 1.5px;
+  background: var(--cd-accent);
+  transform: translateY(-50%);
+}
+
+/* ── Radio ──────────────────────────────────────────────── */
+
+.cd-radio {
+  border-radius: 50%;
+}
+
+/* Checked: filled dot */
+.cd-radio:checked {
+  border-color: var(--cd-accent);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--cd-accent) 30%, transparent);
+}
+
+.cd-radio:checked::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--cd-accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 4px color-mix(in srgb, var(--cd-accent) 60%, transparent);
+}
+
+/* ── Control label (checkbox/radio + text wrapper) ──────── */
+
+.cd-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--cd-font-mono);
+  font-size: 11px;
+  color: var(--cd-text-secondary);
+  user-select: none;
+  transition: color 120ms ease;
+}
+
+.cd-control:hover {
+  color: var(--cd-text);
+}
+
+.cd-control input:disabled ~ .cd-control__label {
+  opacity: 0.3;
+}
+
+.cd-control__label {
+  line-height: 1;
+}
+
+.cd-control__desc {
+  display: block;
+  font-size: 9px;
+  color: var(--cd-text-muted);
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}

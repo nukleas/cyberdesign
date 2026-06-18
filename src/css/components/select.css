@@ -1,0 +1,96 @@
+/* ── Select wrapper ─────────────────────────────────────── */
+/* Wrap <select> in .cd-select-wrap to get the custom arrow  */
+
+.cd-select-wrap {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+}
+
+/* Custom chevron arrow */
+.cd-select-wrap::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--cd-text-muted);
+  transition: border-top-color 150ms ease;
+}
+
+.cd-select-wrap:focus-within::after {
+  border-top-color: var(--cd-accent);
+}
+
+/* ── Select element ─────────────────────────────────────── */
+
+.cd-select {
+  display: block;
+  width: 100%;
+  height: 32px;
+  padding: 0 32px 0 10px;
+  background: rgba(5, 6, 10, 0.82);
+  color: var(--cd-text);
+  border: 1px solid var(--cd-border);
+  border-radius: 0;
+  font-family: var(--cd-font-mono);
+  font-size: 11px;
+  line-height: 1;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+/* Style native option elements */
+.cd-select option {
+  background: #0b0f18;
+  color: #e8e4e0;
+}
+
+.cd-select:focus {
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 18%, transparent),
+    0 0 8px color-mix(in srgb, var(--cd-accent) 20%, transparent);
+}
+
+.cd-select:hover:not(:focus):not(:disabled) {
+  border-color: var(--cd-border-mid, #26324c);
+}
+
+.cd-select:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.cd-select--error {
+  border-color: rgba(255, 69, 108, 0.55);
+}
+
+.cd-select--error:focus {
+  border-color: rgba(255, 69, 108, 0.80);
+  box-shadow:
+    0 0 0 1px rgba(255, 69, 108, 0.20),
+    0 0 8px rgba(255, 69, 108, 0.25);
+}
+
+.cd-select--sm {
+  height: 24px;
+  font-size: 10px;
+  padding-right: 28px;
+  padding-left: 8px;
+}
+
+/* Uppercase label variant (robostrudel viz-controls pattern) */
+.cd-select--label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 10px;
+}
