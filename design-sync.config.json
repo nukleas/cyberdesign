@@ -1,0 +1,11 @@
+{
+  "pkg": "cyberdesign",
+  "globalName": "cyberdesign",
+  "projectId": "1797336d-8055-4c05-a59d-2b3b42d32277",
+  "shape": "package",
+  "buildCmd": "npx tsx build.ts && npx tsc -p tsconfig.types.json",
+  "cssEntry": "./dist/cyberdesign.css",
+  "overrides": {
+    "Modal": { "cardMode": "single", "viewport": "560x460" }
+  }
+}

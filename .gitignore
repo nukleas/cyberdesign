@@ -5,3 +5,7 @@ _*/
 *.jpeg
 .DS_Store
 *.tsbuildinfo
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
