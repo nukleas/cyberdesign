@@ -62,7 +62,7 @@
 .cd-toast__content { flex: 1; min-width: 0; }
 
 .cd-toast__title {
-  font-size: 10px;
+  font-size: var(--cd-text-sm);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -70,7 +70,7 @@
 }
 
 .cd-toast__body {
-  font-size: 10px;
+  font-size: var(--cd-text-sm);
   color: var(--cd-text-secondary);
   line-height: 1.5;
 }
@@ -79,7 +79,7 @@
   flex-shrink: 0;
   background: none;
   border: none;
-  font: 10px/1 var(--cd-font-mono);
+  font: var(--cd-text-sm)/1 var(--cd-font-mono);
   cursor: pointer;
   opacity: 0.35;
   padding: 0;

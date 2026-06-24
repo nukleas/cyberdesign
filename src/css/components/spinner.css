@@ -35,7 +35,7 @@
   inset: 3px;
   border-radius: 50%;
   border: var(--cd-spinner-stroke) solid transparent;
-  border-bottom-color: var(--cd-accent-secondary, #ff2bd6);
+  border-bottom-color: var(--cd-accent-bright);
   animation: cd-spin-rev 0.6s linear infinite;
 }
 

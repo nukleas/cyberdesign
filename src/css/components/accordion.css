@@ -41,14 +41,13 @@
   cursor: pointer;
   list-style: none;
   user-select: none;
-  font-size: 10px;
+  font-size: var(--cd-text-sm);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--cd-text-secondary);
   background: var(--cd-bg-panel);
   transition: color 0.15s, background 0.15s;
-  outline: none;
 }
 
 /* Remove default browser disclosure marker */
@@ -58,6 +57,11 @@
 .cd-accordion__trigger:hover {
   background: var(--cd-bg-panel-hover);
   color: var(--cd-text);
+}
+
+.cd-accordion__trigger:focus-visible {
+  color: var(--cd-accent);
+  background: color-mix(in srgb, var(--cd-accent) 4%, var(--cd-bg-panel));
 }
 
 .cd-accordion__item[open] > .cd-accordion__trigger {
@@ -112,7 +116,7 @@
 
 .cd-accordion__content-inner {
   padding: 12px 14px 14px;
-  font-size: 11px;
+  font-size: var(--cd-text-base);
   color: var(--cd-text-secondary);
   line-height: 1.65;
   border-top: 1px solid var(--cd-border-dim);

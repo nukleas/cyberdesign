@@ -203,7 +203,7 @@
   background: transparent;
   border: 1px solid var(--cd-accent);
   color: var(--cd-accent);
-  font: 700 10px/1 var(--cd-font-mono);
+  font: 700 var(--cd-text-sm)/1 var(--cd-font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
@@ -229,6 +229,12 @@
   background: var(--cd-accent-subtle);
 }
 
+.cd-aug-btn:focus-visible {
+  color: var(--cd-accent-bright);
+  border-color: var(--cd-accent-bright);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--cd-accent) 50%, transparent);
+}
+
 .cd-aug-btn--primary {
   background: var(--cd-accent-subtle);
   filter: drop-shadow(0 0 3px var(--cd-accent-glow));
@@ -240,16 +246,16 @@
 
 .cd-aug-btn--sm {
   --cd-clip: 5px;
-  height: 24px;
+  height: 26px;
   padding: 0 10px;
-  font-size: 9px;
+  font-size: var(--cd-text-xs);
 }
 
 .cd-aug-btn--lg {
   --cd-clip: var(--cd-clip-md);
   height: 40px;
   padding: 0 24px;
-  font-size: 11px;
+  font-size: var(--cd-text-base);
 }
 
 /* Reverse diagonal variant — TR+BL cut */

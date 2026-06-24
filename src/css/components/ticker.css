@@ -1,0 +1,100 @@
+/* ── Ticker / Data Stream ──────────────────────────────────────────────────── */
+/*
+  Horizontal (or vertical) scrolling data ticker / feed.
+
+  Usage:
+  <div class="cd-ticker">
+    <div class="cd-ticker__inner">
+      <span class="cd-ticker__item">NEURAL FEED LIVE</span>
+      <span class="cd-ticker__item">BREACH IN SECTOR 4</span>
+      ...
+    </div>
+  </div>
+
+  Items auto-scroll. Pause on hover (respects reduced-motion).
+
+  Modifiers: --vertical, --fast, --slow, --glitch-on (items get occasional glitch)
+*/
+
+.cd-ticker {
+  overflow: hidden;
+  background: color-mix(in srgb, var(--cd-bg-panel) 80%, transparent);
+  border: 1px solid var(--cd-border-dim);
+  white-space: nowrap;
+  position: relative;
+}
+
+.cd-ticker__inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 32px;
+  padding: 6px 0;
+  animation: cd-ticker-scroll 18s linear infinite;
+}
+
+.cd-ticker:hover .cd-ticker__inner {
+  animation-play-state: paused;
+}
+
+.cd-ticker__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--cd-text-sm);
+  color: var(--cd-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cd-ticker__item::before {
+  content: '•';
+  color: var(--cd-accent);
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.cd-ticker__item--glitch {
+  animation: cd-logo-glitch 4s ease-in-out infinite;
+}
+
+/* Speed variants */
+.cd-ticker--fast .cd-ticker__inner { animation-duration: 9s; }
+.cd-ticker--slow .cd-ticker__inner { animation-duration: 32s; }
+
+/* Vertical variant */
+.cd-ticker--vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  white-space: normal;
+}
+
+.cd-ticker--vertical .cd-ticker__inner {
+  flex-direction: column;
+  animation: cd-ticker-scroll-vertical 22s linear infinite;
+  gap: 18px;
+}
+
+.cd-ticker--vertical .cd-ticker__item {
+  writing-mode: horizontal-tb;
+  text-orientation: initial;
+}
+
+@keyframes cd-ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes cd-ticker-scroll-vertical {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cd-ticker__inner {
+    animation: none;
+  }
+  .cd-ticker--vertical .cd-ticker__inner {
+    animation: none;
+  }
+}

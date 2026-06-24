@@ -134,7 +134,7 @@
 
 .cd-label {
   font-family: var(--cd-font-mono);
-  font-size: 9px;
+  font-size: var(--cd-text-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.18em;
@@ -142,7 +142,7 @@
 
 .cd-label-wide {
   font-family: var(--cd-font-mono);
-  font-size: 9px;
+  font-size: var(--cd-text-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3em;

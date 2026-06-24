@@ -20,7 +20,7 @@
   background: none;
   border: 1px solid var(--cd-border-dim);
   color: var(--cd-text-muted);
-  font: 700 9px/1 var(--cd-font-mono);
+  font: 700 var(--cd-text-xs)/1 var(--cd-font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   text-decoration: none;
@@ -32,6 +32,12 @@
 .cd-pagination__item:hover {
   border-color: color-mix(in srgb, var(--cd-accent) 45%, transparent);
   color: var(--cd-text);
+}
+
+.cd-pagination__item:focus-visible {
+  border-color: var(--cd-accent);
+  color: var(--cd-accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--cd-accent) 30%, transparent);
 }
 
 /* Active page */
@@ -67,7 +73,7 @@
   justify-content: center;
   min-width: 24px;
   height: 30px;
-  font-size: 10px;
+  font-size: var(--cd-text-sm);
   color: var(--cd-text-dim);
   cursor: default;
   user-select: none;
@@ -77,15 +83,15 @@
 /* ── Size variants ────────────────────────────────────────────────────────── */
 
 .cd-pagination--sm .cd-pagination__item {
-  min-width: 24px;
-  height: 24px;
-  font-size: 8px;
+  min-width: 28px;
+  height: 28px;
+  font-size: var(--cd-text-xs);
 }
 
 .cd-pagination--lg .cd-pagination__item {
   min-width: 36px;
   height: 36px;
-  font-size: 10px;
+  font-size: var(--cd-text-sm);
 }
 
 /* ── Compact — no gaps, items share borders ───────────────────────────────── */
@@ -108,7 +114,7 @@
 /* ── Info text (e.g. "Page 3 of 12") ─────────────────────────────────────── */
 
 .cd-pagination__info {
-  font: 700 9px/1 var(--cd-font-mono);
+  font: 700 var(--cd-text-xs)/1 var(--cd-font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--cd-text-dim);

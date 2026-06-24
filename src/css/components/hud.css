@@ -1,0 +1,165 @@
+/* ── HUD Frames, Bars & Segments ──────────────────────────────────────────── */
+/*
+  Heads-up display elements for cyberpunk / neo-futuristic interfaces.
+
+  Usage examples:
+  <!-- Floating frame / panel wrapper -->
+  <div class="cd-hud-frame">
+    <div class="cd-hud__label">THREAT LEVEL</div>
+    <div class="cd-hud__value cd-hud__value--warn">HIGH</div>
+  </div>
+
+  <!-- Top / bottom status bar -->
+  <div class="cd-hud-bar cd-hud-bar--top">
+    <div class="cd-hud-segment">
+      <span class="cd-hud-segment__label">LOC</span>
+      <span class="cd-hud-segment__value">SECTOR-7</span>
+    </div>
+    ...
+  </div>
+
+  Compose with: .cd-corners, .cd-glow, .cd-scanline (as child), existing badges/stats.
+
+  Modifiers: --top, --bottom, --side, --floating, --compact
+*/
+
+.cd-hud-frame,
+.cd-hud {
+  position: relative;
+  background: color-mix(in srgb, var(--cd-bg-panel) 94%, transparent);
+  border: 1px solid var(--cd-border-glow);
+  padding: 14px 16px;
+  color: var(--cd-text);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--cd-accent) 6%, transparent),
+    0 0 12px color-mix(in srgb, var(--cd-accent) 10%, transparent);
+}
+
+.cd-hud-frame::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 25%, transparent);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Inner label / readout */
+.cd-hud__label {
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--cd-text-muted);
+  margin-bottom: 4px;
+}
+
+.cd-hud__value {
+  font-size: var(--cd-text-base);
+  font-weight: 700;
+  color: var(--cd-accent);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 6px var(--cd-accent-glow);
+}
+
+.cd-hud__value--ok   { color: var(--cd-neon-green); }
+.cd-hud__value--warn { color: var(--cd-amber); }
+.cd-hud__value--err  { color: var(--cd-neon-red); }
+.cd-hud__value--dim  { color: var(--cd-text-secondary); font-weight: 400; }
+
+/* Status / data bar (top or bottom of screen or panels) */
+.cd-hud-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: color-mix(in srgb, var(--cd-bg) 92%, var(--cd-accent) 2%);
+  border: 1px solid var(--cd-border-dim);
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--cd-text-muted);
+  user-select: none;
+  overflow: hidden;
+}
+
+.cd-hud-bar--top {
+  border-bottom-color: var(--cd-accent);
+  box-shadow: 0 0 8px var(--cd-accent-glow);
+}
+
+.cd-hud-bar--bottom {
+  border-top-color: var(--cd-accent);
+  box-shadow: 0 0 8px var(--cd-accent-glow);
+}
+
+.cd-hud-bar--side {
+  flex-direction: column;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 8px 4px;
+}
+
+/* Individual data segment inside bar or frame */
+.cd-hud-segment {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  border-right: 1px solid var(--cd-border-dim);
+  white-space: nowrap;
+  height: 100%;
+}
+
+.cd-hud-bar--side .cd-hud-segment {
+  border-right: none;
+  border-bottom: 1px solid var(--cd-border-dim);
+  padding: 8px 4px;
+  height: auto;
+}
+
+.cd-hud-segment:last-child {
+  border-right: none;
+  border-bottom: none;
+}
+
+.cd-hud-segment__label {
+  color: var(--cd-text-dim);
+  letter-spacing: 0.2em;
+  font-size: 8px;
+}
+
+.cd-hud-segment__value {
+  color: var(--cd-accent);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.cd-hud-segment__value--ok   { color: var(--cd-neon-green); }
+.cd-hud-segment__value--warn { color: var(--cd-amber); }
+.cd-hud-segment__value--err  { color: var(--cd-neon-red); }
+
+/* Compact variant for dense UIs */
+.cd-hud-bar--compact .cd-hud-segment {
+  padding: 0 8px;
+  font-size: 8px;
+}
+
+.cd-hud-frame.cd-hud--compact {
+  padding: 8px 10px;
+}
+
+/* Floating / AR style */
+.cd-hud--floating {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: color-mix(in srgb, var(--cd-bg-surface) 70%, transparent);
+}
+
+/* Reduced motion (no extra pulses etc.) */
+@media (prefers-reduced-motion: reduce) {
+  .cd-hud-frame,
+  .cd-hud-bar {
+    box-shadow: none;
+  }
+}

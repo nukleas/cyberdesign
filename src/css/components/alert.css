@@ -34,7 +34,7 @@
 .cd-alert__content { flex: 1; min-width: 0; }
 
 .cd-alert__title {
-  font-size: 10px;
+  font-size: var(--cd-text-sm);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -42,7 +42,7 @@
 }
 
 .cd-alert__body {
-  font-size: 11px;
+  font-size: var(--cd-text-base);
   opacity: 0.8;
 }
 
@@ -107,8 +107,8 @@
   gap: 8px;
 }
 
-.cd-alert--sm .cd-alert__title { font-size: 8px; margin-bottom: 2px; }
-.cd-alert--sm .cd-alert__body  { font-size: 10px; }
+.cd-alert--sm .cd-alert__title { font-size: var(--cd-text-xs); margin-bottom: 2px; }
+.cd-alert--sm .cd-alert__body  { font-size: var(--cd-text-sm); }
 .cd-alert--sm .cd-alert__icon  { font-size: 12px; }
 
 /* Inline (no left bar, more compact) */

@@ -73,9 +73,12 @@ npx serve . -p 4980      # serve from repo root; open http://localhost:4980/test
 | `--cd-bg-panel` | card / panel background |
 | `--cd-text` | primary text |
 | `--cd-text-secondary` | dimmed text |
+| `--cd-text-muted` | secondary labels/helpers (improved ~5:1 contrast) |
+| `--cd-text-dim` | decorative/metadata (improved ~3.3:1) |
 | `--cd-accent` | theme accent (orange or cyan) |
 | `--cd-accent-bright` | brighter accent for glows |
 | `--cd-magenta` | secondary accent (fixed) |
 | `--cd-glow` | default glow color (matches accent) |
 | `--cd-border` | border color |
 | `--cd-font-mono` | JetBrains Mono |
+| `--cd-text-xs` / `--cd-text-sm` / `--cd-text-base` etc. | rem-based type scale for a11y |

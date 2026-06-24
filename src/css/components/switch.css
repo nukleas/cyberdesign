@@ -16,7 +16,7 @@
   gap: 10px;
   cursor: pointer;
   font-family: var(--cd-font-mono);
-  font-size: 11px;
+  font-size: var(--cd-text-base);
   color: var(--cd-text-secondary);
   user-select: none;
   transition: color 120ms ease;
@@ -43,8 +43,8 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: 32px;
-  height: 16px;
+  width: 36px; /* enlarged target */
+  height: 18px;
   flex-shrink: 0;
   background: rgba(5, 6, 10, 0.82);
   border: 1px solid var(--cd-border);
@@ -58,9 +58,9 @@
 /* Thumb */
 .cd-switch__thumb {
   position: absolute;
-  left: 2px;
-  width: 10px;
-  height: 10px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
   background: var(--cd-text-dim);
   transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
 }
@@ -75,7 +75,7 @@
 }
 
 .cd-switch__input:checked + .cd-switch__track .cd-switch__thumb {
-  transform: translateX(16px);
+  transform: translateX(18px);
   background: var(--cd-accent);
   box-shadow:
     0 0 6px color-mix(in srgb, var(--cd-accent) 60%, transparent),
@@ -100,15 +100,15 @@
 
 /* Size: small */
 .cd-switch--sm .cd-switch__track {
-  width: 24px;
-  height: 12px;
+  width: 28px;
+  height: 14px;
 }
 
 .cd-switch--sm .cd-switch__thumb {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 .cd-switch--sm .cd-switch__input:checked + .cd-switch__track .cd-switch__thumb {
-  transform: translateX(12px);
+  transform: translateX(14px);
 }

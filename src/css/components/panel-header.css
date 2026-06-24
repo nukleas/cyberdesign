@@ -5,7 +5,7 @@
   background: var(--cd-bg-surface);
   color: var(--cd-accent);
   font-family: var(--cd-font-mono);
-  font-size: 9px;
+  font-size: var(--cd-text-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.18em;

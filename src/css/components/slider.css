@@ -9,7 +9,6 @@
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  outline: none;
   padding: 0;
   margin: 0;
 }
@@ -32,9 +31,9 @@
 .cd-slider::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  width: 12px;
-  height: 18px;
-  margin-top: -8px;
+  width: 14px;
+  height: 20px;
+  margin-top: -9px;
   background: var(--cd-accent-bright, #bdffff);
   border: 1px solid var(--cd-bg);
   border-radius: 0;
@@ -67,8 +66,8 @@
 }
 
 .cd-slider::-moz-range-thumb {
-  width: 12px;
-  height: 18px;
+  width: 14px;
+  height: 20px;
   background: var(--cd-accent-bright, #bdffff);
   border: 1px solid var(--cd-bg);
   border-radius: 0;
@@ -108,7 +107,7 @@
 
 .cd-slider-value {
   font-family: var(--cd-font-mono);
-  font-size: 10px;
+  font-size: var(--cd-text-xs);
   font-variant-numeric: tabular-nums;
   color: var(--cd-accent);
   min-width: 3ch;

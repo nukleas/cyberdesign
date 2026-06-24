@@ -1,0 +1,164 @@
+/* ── Images & Media Frames ─────────────────────────────────────────────────── */
+/*
+  Cyberpunk-styled image treatments and containers.
+  Use on <img> or <picture> elements, or wrap for frames.
+
+  Base:
+  <img class="cd-img" src="..." alt="...">
+
+  Framed / bordered:
+  <div class="cd-img-frame">
+    <img class="cd-img" src="..." />
+  </div>
+
+  Effects (apply to the img or wrapper):
+  .cd-img-glitch
+  .cd-img-scan   (adds CRT scan overlay)
+  .cd-img-crt    (scan + subtle flicker feel)
+  .cd-img-holo   (holographic glow + slight perspective on hover)
+
+  Compose with existing:
+  - .cd-glow, .cd-glow-card
+  - .cd-corners or .cd-aug-panel for clipped frames
+  - .cd-interference for noise over images
+  - .cd-vectorbg for SVG illustrations instead of photos
+
+  All respect --cd-* tokens and reduced-motion.
+*/
+
+.cd-img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--cd-border);
+  background: var(--cd-bg-panel);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cd-accent) 6%, transparent);
+  object-fit: cover;
+  image-rendering: auto;
+}
+
+/* Neon / accent border variant */
+.cd-img--neon {
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 20%, transparent),
+    0 0 12px color-mix(in srgb, var(--cd-accent) 18%, transparent);
+}
+
+/* Frame wrapper — adds outer structure, glow, and optional corners */
+.cd-img-frame {
+  position: relative;
+  display: inline-block;
+  padding: 3px;
+  background: var(--cd-bg);
+  border: 1px solid var(--cd-border-glow);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--cd-accent) 8%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 12%, transparent),
+    0 0 16px color-mix(in srgb, var(--cd-accent) 10%, transparent);
+}
+
+.cd-img-frame .cd-img {
+  border: 1px solid var(--cd-border-dim);
+  box-shadow: none;
+  width: 100%;
+  height: 100%;
+}
+
+.cd-img-frame--glow {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--cd-accent) 12%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 25%, transparent),
+    0 0 24px var(--cd-accent-glow);
+}
+
+/* Glitch effect — digital distortion / signal noise on the image */
+.cd-img-glitch {
+  position: relative;
+  overflow: hidden;
+}
+
+.cd-img-glitch img {
+  animation: cd-img-glitch-jitter 0.4s linear infinite alternate;
+  filter: contrast(1.1) saturate(1.05);
+}
+
+@keyframes cd-img-glitch-jitter {
+  0%   { transform: translate(0, 0); filter: hue-rotate(0deg) contrast(1.05); }
+  20%  { transform: translate(-1px, 1px); filter: hue-rotate(-8deg) contrast(1.15); }
+  40%  { transform: translate(1px, -1px); filter: hue-rotate(6deg) contrast(1.1); }
+  60%  { transform: translate(-2px, 0); filter: hue-rotate(4deg) contrast(1.2); }
+  80%  { transform: translate(1px, 1px); filter: hue-rotate(-5deg) contrast(1.08); }
+  100% { transform: translate(0, -1px); filter: hue-rotate(0deg) contrast(1.05); }
+}
+
+/* Scan / CRT overlay effect */
+.cd-img-scan,
+.cd-img-crt {
+  position: relative;
+}
+
+.cd-img-scan::after,
+.cd-img-crt::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--cd-scanline-color) 2px,
+    var(--cd-scanline-color) 4px
+  );
+  mix-blend-mode: multiply;
+  z-index: 2;
+}
+
+.cd-img-crt::after {
+  opacity: 0.65;
+}
+
+/* Holographic / projection style */
+.cd-img-holo {
+  position: relative;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.cd-img-holo:hover {
+  transform: perspective(600px) rotateX(3deg) rotateY(-4deg) translateY(-1px);
+  box-shadow:
+    0 10px 20px color-mix(in srgb, var(--cd-accent) 12%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 30%, transparent),
+    0 0 18px var(--cd-accent-glow);
+}
+
+.cd-img-holo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 20%,
+    color-mix(in srgb, var(--cd-accent) 8%, transparent) 40%,
+    transparent 70%
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+/* Size helpers for frames */
+.cd-img-frame--sm .cd-img { max-height: 120px; }
+.cd-img-frame--lg .cd-img { max-height: 420px; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cd-img-glitch img {
+    animation: none;
+  }
+  .cd-img-holo:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,156 @@
+/* ── Gauge / Radial Meter ──────────────────────────────────────────────────── */
+/*
+  Circular/radial progress gauges with neon cyberpunk styling.
+
+  Usage:
+  <div class="cd-gauge" style="--value: 78;">
+    <div class="cd-gauge__track"></div>
+    <div class="cd-gauge__fill"></div>
+    <div class="cd-gauge__center">
+      <div class="cd-gauge__value">78</div>
+      <div class="cd-gauge__label">INTEGRITY</div>
+    </div>
+    <!-- optional ticks via CSS or children -->
+  </div>
+
+  The --value (0-100) drives the conic fill. Color via current --cd-accent (or override).
+
+  Modifiers / variants:
+  .cd-gauge--small
+  .cd-gauge--danger / --success (changes accent locally)
+  .cd-gauge--radar (concentric rings + sweep)
+
+  Works great inside .cd-hud-frame or .cd-glow-card.
+*/
+
+.cd-gauge {
+  --size: 128px;
+  --thickness: 12px;
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cd-gauge__track,
+.cd-gauge__fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.cd-gauge__track {
+  background: conic-gradient(
+    var(--cd-border) 0deg 360deg
+  );
+  border: 1px solid var(--cd-border-dim);
+}
+
+.cd-gauge__fill {
+  background: conic-gradient(
+    var(--cd-accent) 0deg calc(var(--value, 0) * 3.6deg),
+    transparent calc(var(--value, 0) * 3.6deg) 360deg
+  );
+  transition: background 300ms ease;
+  box-shadow: 0 0 8px var(--cd-accent-glow);
+}
+
+/* Center content */
+.cd-gauge__center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% - var(--thickness) * 2 - 8px);
+  height: calc(100% - var(--thickness) * 2 - 8px);
+  background: var(--cd-bg-panel);
+  border-radius: 50%;
+  border: 1px solid var(--cd-border-dim);
+  text-align: center;
+}
+
+.cd-gauge__value {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cd-accent);
+  text-shadow: 0 0 6px var(--cd-accent-glow);
+  font-variant-numeric: tabular-nums;
+}
+
+.cd-gauge__label {
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--cd-text-muted);
+  margin-top: 2px;
+}
+
+/* Size variants */
+.cd-gauge--small {
+  --size: 92px;
+  --thickness: 9px;
+}
+
+.cd-gauge--small .cd-gauge__value {
+  font-size: 20px;
+}
+
+.cd-gauge--small .cd-gauge__label {
+  font-size: 7px;
+}
+
+/* Color variants (override accent locally) */
+.cd-gauge--danger { --cd-accent: var(--cd-neon-red); }
+.cd-gauge--success { --cd-accent: var(--cd-neon-green); }
+.cd-gauge--warn   { --cd-accent: var(--cd-amber); }
+
+/* Radar / sweep style */
+.cd-gauge--radar .cd-gauge__track {
+  background:
+    radial-gradient(circle at 50% 50%,
+      transparent 48%,
+      var(--cd-border-dim) 48%,
+      var(--cd-border-dim) 50%,
+      transparent 50%
+    ),
+    conic-gradient(var(--cd-border) 0deg 360deg);
+}
+
+.cd-gauge--radar .cd-gauge__fill {
+  background: conic-gradient(
+    color-mix(in srgb, var(--cd-accent) 85%, transparent) 0deg calc(var(--value, 0) * 3.6deg),
+    transparent calc(var(--value, 0) * 3.6deg) 360deg
+  );
+  box-shadow: 0 0 12px var(--cd-accent-glow);
+}
+
+/* Optional tick marks (add as children or via ::before multiple) */
+.cd-gauge__ticks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cd-gauge__tick {
+  position: absolute;
+  left: 50%;
+  top: 4px;
+  width: 1px;
+  height: 6px;
+  background: var(--cd-accent);
+  transform-origin: 50% calc(var(--size) / 2 - 4px);
+  box-shadow: 0 0 2px var(--cd-accent-glow);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cd-gauge__fill {
+    transition: none;
+  }
+}

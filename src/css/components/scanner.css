@@ -1,0 +1,125 @@
+/* ── Scanner / Sweep Line ──────────────────────────────────────────────────── */
+/*
+  Animated glowing scan/sweep line (lidar, radar, document scanner, "analyzing").
+
+  Usage (standalone or over content):
+  <div class="cd-scanner" style="--sweep-duration: 2.2s;">
+    <div class="cd-scanner__line"></div>
+    <!-- your content here, e.g. image or panel -->
+  </div>
+
+  Or apply to existing panels: <div class="cd-hud-frame cd-scanner">...</div>
+
+  The line sweeps left-to-right (or top-to-bottom in vertical).
+
+  Modifiers: --vertical, --fast, --slow, --ping (fainter return sweep)
+*/
+
+.cd-scanner {
+  position: relative;
+  overflow: hidden;
+}
+
+.cd-scanner__line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--cd-accent) 15%,
+    var(--cd-accent) 85%,
+    transparent
+  );
+  box-shadow:
+    0 0 6px var(--cd-accent-glow),
+    0 0 18px var(--cd-accent-glow);
+  animation: cd-scanner-sweep var(--sweep-duration, 2.4s) ease-in-out infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cd-scanner--vertical .cd-scanner__line {
+  width: 100%;
+  height: 2px;
+  top: 0;
+  left: 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--cd-accent) 15%,
+    var(--cd-accent) 85%,
+    transparent
+  );
+  animation: cd-scanner-sweep-vertical var(--sweep-duration, 2.4s) ease-in-out infinite;
+}
+
+.cd-scanner--ping .cd-scanner__line {
+  opacity: 0.6;
+  box-shadow: 0 0 10px var(--cd-accent-glow);
+}
+
+@keyframes cd-scanner-sweep {
+  0%   { left: -10%; }
+  45%  { left: 105%; }
+  55%  { left: 105%; }
+  100% { left: -10%; }
+}
+
+@keyframes cd-scanner-sweep-vertical {
+  0%   { top: -10%; }
+  45%  { top: 105%; }
+  55%  { top: 105%; }
+  100% { top: -10%; }
+}
+
+/* Optional trailing glow bar */
+.cd-scanner::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--cd-accent) 8%, transparent) 50%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: cd-scanner-trail var(--sweep-duration, 2.4s) ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+.cd-scanner--vertical::after {
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--cd-accent) 8%, transparent) 50%,
+    transparent
+  );
+  animation: cd-scanner-trail-vertical var(--sweep-duration, 2.4s) ease-in-out infinite;
+}
+
+@keyframes cd-scanner-trail {
+  0%   { transform: translateX(-30%); }
+  50%  { transform: translateX(110%); }
+  100% { transform: translateX(110%); }
+}
+
+@keyframes cd-scanner-trail-vertical {
+  0%   { transform: translateY(-30%); }
+  50%  { transform: translateY(110%); }
+  100% { transform: translateY(110%); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cd-scanner__line,
+  .cd-scanner::after {
+    animation: none;
+    opacity: 0.3;
+  }
+}

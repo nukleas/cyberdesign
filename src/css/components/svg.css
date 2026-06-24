@@ -1,0 +1,104 @@
+/* ── SVG & Vector Art Components ───────────────────────────────────────────── */
+/*
+  Base styles and helpers for inline <svg> cyberpunk vector art and icons.
+
+  Use with the existing .cd-vectorbg for animated backgrounds,
+  or standalone for icons, reticles, wireframes, HUD elements.
+
+  Examples in the test harness under Decorative → Vector backgrounds & icons.
+
+  All SVGs should use currentColor or var(--cd-*) for theming.
+*/
+
+.cd-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Icon base — sized, colored via currentColor or accent */
+.cd-svg-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  stroke: currentColor;
+  fill: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.cd-svg-icon--accent {
+  color: var(--cd-accent);
+  stroke: var(--cd-accent);
+}
+
+.cd-svg-icon--secondary {
+  color: var(--cd-accent-secondary);
+  stroke: var(--cd-accent-secondary);
+}
+
+.cd-svg-icon--sm { width: 0.875em; height: 0.875em; }
+.cd-svg-icon--lg { width: 1.5em; height: 1.5em; }
+
+/* Common cyberpunk icon styles */
+.cd-svg-icon circle,
+.cd-svg-icon path,
+.cd-svg-icon line,
+.cd-svg-icon rect,
+.cd-svg-icon polygon {
+  transition: stroke 120ms ease, fill 120ms ease;
+}
+
+.cd-svg-icon:hover {
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
+/* Grid / circuit pattern helper (apply to <g> or use as pattern fill) */
+.cd-svg-grid {
+  stroke: var(--cd-accent);
+  stroke-opacity: 0.15;
+  stroke-width: 1;
+}
+
+/* Reticle / target helper classes for SVGs */
+.cd-svg-reticle {
+  stroke: var(--cd-accent);
+  stroke-opacity: 0.6;
+}
+
+.cd-svg-reticle--secondary {
+  stroke: var(--cd-accent-secondary);
+  stroke-opacity: 0.55;
+}
+
+/* Wireframe / low-poly look */
+.cd-svg-wire {
+  stroke: var(--cd-accent);
+  stroke-opacity: 0.4;
+  stroke-width: 1.25;
+  fill: var(--cd-accent);
+  fill-opacity: 0.03;
+}
+
+/* Neon glow on SVG elements (add to <g> or specific paths) */
+.cd-svg-neon {
+  filter: drop-shadow(0 0 1px var(--cd-accent)) drop-shadow(0 0 3px var(--cd-accent-glow));
+}
+
+.cd-svg-neon--secondary {
+  filter: drop-shadow(0 0 1px var(--cd-accent-secondary)) drop-shadow(0 0 3px var(--cd-accent-secondary-glow, var(--cd-accent-secondary)));
+}
+
+/* Reduced motion — disable any SVG animations if added */
+@media (prefers-reduced-motion: reduce) {
+  .cd-svg-icon,
+  .cd-vectorbg svg * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

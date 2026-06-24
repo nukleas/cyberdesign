@@ -1,0 +1,67 @@
+/* ── Accessibility layer (opt-in) ──────────────────────────────────────────
+   Add the class `cd-a11y` to any container you want bumped for readability.
+   It overrides three things, and ONLY inside `.cd-a11y` — defaults are untouched:
+     1. Type scale  — captions/body cross the 12px floor (was 10–12px).
+     2. Muted text  — low-contrast greys lifted toward AAA (defaults already AA).
+     3. Body glow   — text-shadow on small/running text dampened, NOT removed.
+   The art stays: neon hues, uppercase, pixel corners, and the big glowing
+   stat/gauge/HUD readouts are left alone. */
+
+.cd-a11y {
+  /* 1 ── Type scale — same ratios, shifted up ~+2px so nothing sits below 12px */
+  --cd-text-xs:   0.75rem;    /* 10px → 12px */
+  --cd-text-sm:   0.8125rem;  /* 11px → 13px */
+  --cd-text-base: 0.875rem;   /* 12px → 14px */
+  --cd-text-md:   0.9375rem;  /* 13px → 15px */
+  --cd-text-lg:   1rem;       /* 14px → 16px */
+
+  /* 2 ── Muted text lifted toward AAA on --cd-bg, keeping the warm/cool tone */
+  --cd-text-muted:     #b3aaa0;
+  --cd-text-muted-alt: #9aa6bd;
+  --cd-text-dim:       #968d84;
+  --cd-text-secondary: #b6c3dd;
+}
+
+/* 3 ── Dampen glow on running / small text (keep it, just stop the smear).
+        currentColor keeps each glow on its own hue. */
+.cd-a11y .cd-text-glow,
+.cd-a11y .text-glow-orange,
+.cd-a11y .text-glow-amber,
+.cd-a11y .text-glow-magenta,
+.cd-a11y .text-glow-green,
+.cd-a11y .text-glow-red,
+.cd-a11y .text-glow-cyan,
+.cd-a11y .text-glow-blue {
+  text-shadow: 0 0 3px color-mix(in srgb, currentColor 32%, transparent);
+}
+
+/* Interactive running text: tabs, breadcrumbs, terminal lines — soften only */
+.cd-a11y .cd-tabs__trigger:focus-visible,
+.cd-a11y .cd-tabs__trigger.is-active,
+.cd-a11y .cd-breadcrumb__link:hover,
+.cd-a11y .cd-breadcrumb__link:focus-visible {
+  text-shadow: 0 0 3px var(--cd-accent-glow);
+}
+.cd-a11y .cd-terminal__line--error {
+  text-shadow: 0 0 2px rgba(255, 69, 108, 0.4);
+}
+
+/* Note: .cd-stat__value, gauge centre readouts, HUD values and the glitch
+   logo are intentionally left glowing — they're display type, not content. */
+
+/* Stronger, always-on focus ring — an offset halo so it reads against busy
+   neon borders without relying on colour alone. */
+.cd-a11y :focus-visible {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--cd-accent) 22%, transparent);
+}
+
+/* Respect users who ask for less motion: kill the glitch/scan loops inside
+   the a11y scope as a belt-and-braces over the components' own guards. */
+@media (prefers-reduced-motion: reduce) {
+  .cd-a11y .cd-glitch-text,
+  .cd-a11y [class*="cd-logo-glitch"] {
+    animation: none !important;
+  }
+}
