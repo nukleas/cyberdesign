@@ -67,7 +67,7 @@
 /* Chevron indicator */
 .cd-dropdown__trigger::after {
   content: '▾';
-  font-size: 10px;
+  font-size: var(--cd-text-sm);
   color: var(--cd-text-dim);
   transition: transform 0.15s, color 0.15s;
   line-height: 1;
@@ -85,10 +85,10 @@
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 7px 14px;
+  padding: 9px 14px; /* larger tap target */
   background: none;
   border: none;
-  font: 700 9px/1 var(--cd-font-mono);
+  font: 700 var(--cd-text-xs)/1 var(--cd-font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--cd-text-secondary);
@@ -102,6 +102,12 @@
 .cd-dropdown__item:hover {
   background: var(--cd-accent-subtle);
   color: var(--cd-accent);
+}
+
+.cd-dropdown__item:focus-visible {
+  background: var(--cd-accent-subtle);
+  color: var(--cd-accent);
+  outline-offset: 0; /* tighter for menu items */
 }
 
 .cd-dropdown__item:active {
@@ -134,7 +140,7 @@
 /* Item shortcut hint — right-aligned */
 .cd-dropdown__item-kbd {
   margin-left: auto;
-  font-size: 8px;
+  font-size: var(--cd-text-xs);
   color: var(--cd-text-dim);
   letter-spacing: 0.05em;
 }
@@ -151,7 +157,7 @@
 
 .cd-dropdown__label {
   padding: 6px 14px 3px;
-  font-size: 8px;
+  font-size: var(--cd-text-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.18em;

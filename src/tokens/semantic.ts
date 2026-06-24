@@ -53,4 +53,11 @@ export const semanticTokens: Record<string, string> = {
 
   // Font
   'font-mono': '"JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace',
+
+  // Typography scale (rem-based for accessibility + user font scaling)
+  'text-xs':  '0.625rem',   // ~10px — dense labels, badges, kbd
+  'text-sm':  '0.6875rem',  // ~11px — current "body"/inputs (transition)
+  'text-base':'0.75rem',    // ~12px — improved readable body, modals
+  'text-md':  '0.8125rem',  // ~13px — larger headings/titles
+  'text-lg':  '0.875rem',   // ~14px — prominent display
 };

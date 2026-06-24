@@ -97,7 +97,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font: 700 9px/1 var(--cd-font-mono);
+  font: 700 var(--cd-text-xs)/1 var(--cd-font-mono);
   color: var(--cd-text-muted);
   letter-spacing: 0.05em;
   flex-shrink: 0;

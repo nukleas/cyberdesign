@@ -1,0 +1,209 @@
+/* ── Interference / Corruption Overlay ─────────────────────────────────────── */
+/*
+  Dramatic animated static/noise + data corruption effects for cyberpunk "damaged signal",
+  hacked feeds, low-bandwidth, or corrupted data states.
+
+  Usage (compose freely):
+  <div class="cd-interference cd-interference--heavy cd-interference--glitch">
+    <div class="cd-interference__noise"></div>
+    <div class="cd-interference__content" data-text="CORRUPTED FEED">
+      ...your content (text, logs, panels, even images)...
+    </div>
+  </div>
+
+  Or direct on text:
+  <span class="cd-corrupt-text" data-text="SYSTEM FAILURE">SYSTEM FAILURE</span>
+
+  Modifiers:
+    --light     subtle static
+    --heavy     intense, fast noise + stronger corruption
+    --glitch    enables the text/data corruption effect (requires data-text attr on child)
+    --intense   extra aggressive version (combine with heavy)
+
+  Works great over .cd-terminal, .cd-hud-frame, .cd-glow-card, images, or raw text blocks.
+  Noise uses screen blend + theme accent for colored glitch tint.
+*/
+
+.cd-interference {
+  position: relative;
+  overflow: hidden;
+}
+
+/* The noise layer — multiple moving grain fields for realistic analog/digital static */
+.cd-interference__noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    /* fine vertical scan */
+    linear-gradient(rgba(255,255,255,0.035) 50%, transparent 50%),
+    /* horizontal grain */
+    linear-gradient(90deg, rgba(255,255,255,0.025) 50%, transparent 50%),
+    /* colored interference tint using theme colors */
+    linear-gradient(45deg,
+      color-mix(in srgb, var(--cd-accent-secondary) 8%, transparent) 0%,
+      transparent 40%,
+      color-mix(in srgb, var(--cd-accent) 6%, transparent) 60%,
+      transparent 100%);
+  background-size: 2px 3px, 3px 2px, 120px 120px;
+  animation: cd-interference-noise 65ms steps(3) infinite;
+  mix-blend-mode: screen;
+  opacity: 0.65;
+  filter: contrast(1.15) saturate(0.8);
+}
+
+.cd-interference--light .cd-interference__noise {
+  opacity: 0.28;
+  animation-duration: 120ms;
+  filter: contrast(1.05);
+}
+
+.cd-interference--heavy .cd-interference__noise {
+  opacity: 0.92;
+  animation-duration: 42ms;
+  background-size: 1.5px 2px, 2px 1.5px, 80px 80px;
+  filter: contrast(1.4) saturate(1.1);
+}
+
+.cd-interference--intense .cd-interference__noise {
+  opacity: 1;
+  animation-duration: 28ms;
+  filter: contrast(1.6) hue-rotate(8deg);
+}
+
+/* Block-level corruption effect (when --glitch modifier is present) */
+.cd-interference--glitch .cd-interference__content,
+.cd-interference--glitch .cd-interference__text {
+  position: relative;
+  display: block;
+}
+
+/* Primary corruption layer — aggressive clipping + offset + color bleed */
+.cd-interference--glitch .cd-interference__content::before,
+.cd-interference--glitch .cd-interference__text::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--cd-accent-secondary);
+  overflow: hidden;
+  animation: cd-interference-corrupt 1.35s steps(5) infinite;
+  opacity: 0.75;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  z-index: 3;
+  text-shadow:
+    1px 0 0 var(--cd-accent),
+    -1px 0 0 var(--cd-neon-red);
+}
+
+/* Secondary echo layer for richer glitch (double vision / RGB split feel) */
+.cd-interference--glitch .cd-interference__content::after,
+.cd-interference--glitch .cd-interference__text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--cd-accent);
+  overflow: hidden;
+  animation: cd-interference-corrupt 1.35s steps(5) infinite 0.15s;
+  opacity: 0.45;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 4;
+  transform: translate(1.5px, 0);
+}
+
+/* Direct .cd-corrupt-text utility (no wrapper needed) */
+.cd-corrupt-text {
+  position: relative;
+  display: inline-block;
+}
+
+.cd-corrupt-text::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  color: var(--cd-neon-red);
+  animation: cd-interference-corrupt 1.1s steps(4) infinite;
+  opacity: 0.8;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  text-shadow: 2px 0 0 var(--cd-accent-secondary);
+  z-index: 1;
+}
+
+.cd-corrupt-text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  color: var(--cd-accent-secondary);
+  animation: cd-interference-corrupt 1.1s steps(4) infinite 0.08s;
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Much more aggressive corruption keyframes */
+@keyframes cd-interference-noise {
+  0%   { background-position: 0 0, 0 0, 0 0; }
+  100% { background-position: 2px 3px, 3px 2px, 80px 80px; }
+}
+
+@keyframes cd-interference-corrupt {
+  0% {
+    clip-path: inset(0 0 82% 0);
+    transform: translate(0, -1.5px) scale(1);
+  }
+  15% {
+    clip-path: inset(18% 0 55% 0);
+    transform: translate(2px, 0.5px) scale(1.01);
+  }
+  32% {
+    clip-path: inset(48% 0 22% 0);
+    transform: translate(-2.5px, -1px);
+  }
+  48% {
+    clip-path: inset(8% 0 71% 0);
+    transform: translate(1.5px, 1.5px) scale(0.995);
+  }
+  65% {
+    clip-path: inset(35% 0 38% 0);
+    transform: translate(-1px, 0);
+  }
+  82% {
+    clip-path: inset(62% 0 12% 0);
+    transform: translate(3px, -0.5px);
+  }
+  100% {
+    clip-path: inset(0 0 82% 0);
+    transform: translate(0, -1.5px) scale(1);
+  }
+}
+
+/* Reduced motion — keep subtle static but kill the wild animation */
+@media (prefers-reduced-motion: reduce) {
+  .cd-interference__noise {
+    animation: none;
+    opacity: 0.18;
+    background-size: 3px 3px, 4px 4px, 200px 200px;
+  }
+  .cd-interference--heavy .cd-interference__noise {
+    opacity: 0.32;
+  }
+  .cd-interference--glitch .cd-interference__content::before,
+  .cd-interference--glitch .cd-interference__content::after,
+  .cd-corrupt-text::before,
+  .cd-corrupt-text::after {
+    animation: none;
+    opacity: 0.25;
+    transform: none;
+    clip-path: none;
+  }
+}

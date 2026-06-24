@@ -13,9 +13,9 @@ export const palette = {
   textPrimary:    '#e8e4e0', // ocint warm off-white
   textPrimaryAlt: '#f2f7ff', // robostrudel cool white
   textSecondary:  '#a7b7d6', // robostrudel --text-secondary
-  textMuted:      '#706860', // ocint --color-text-muted
-  textMutedAlt:   '#687797', // robostrudel --text-muted
-  textDim:        '#4a4440', // ocint --color-text-dim
+  textMuted:      '#8a8078', // bumped for WCAG AA 4.5:1+ (was #706860)
+  textMutedAlt:   '#7a8599', // bumped for WCAG AA (was #687797, cooler variant)
+  textDim:        '#6a625c', // bumped for ~3.3:1 large/decorative text (was #4a4440)
 
   // Orange family (ocint primary accent)
   orange:  '#ff8800',  // normalized from #f80

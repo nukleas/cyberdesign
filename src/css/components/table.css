@@ -9,7 +9,7 @@
   width: 100%;
   border-collapse: collapse;
   font-family: var(--cd-font-mono);
-  font-size: 11px;
+  font-size: var(--cd-text-base);
   color: var(--cd-text);
 }
 
@@ -21,7 +21,7 @@
 .cd-table th {
   padding: 8px 12px;
   text-align: left;
-  font-size: 9px;
+  font-size: var(--cd-text-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -77,11 +77,11 @@
 .cd-table--compact th,
 .cd-table--compact td {
   padding: 5px 10px;
-  font-size: 10px;
+  font-size: var(--cd-text-xs);
 }
 
 .cd-table--compact th {
-  font-size: 8px;
+  font-size: var(--cd-text-xs);
 }
 
 .cd-table--bordered td,
@@ -97,7 +97,7 @@
 .cd-table td[data-status]::before {
   content: '●';
   margin-right: 6px;
-  font-size: 8px;
+  font-size: var(--cd-text-xs); /* bumped; decorative */
 }
 
 .cd-table td[data-status="ok"]::before    { color: var(--cd-green); }

@@ -22,13 +22,12 @@
   background: none;
   border: none;
   cursor: pointer;
-  font: 700 9px/1 var(--cd-font-mono);
+  font: 700 var(--cd-text-xs)/1 var(--cd-font-mono);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--cd-text-muted);
   white-space: nowrap;
   transition: color 0.15s;
-  outline: none;
 }
 
 /* Neon underline indicator */
@@ -48,6 +47,11 @@
 
 .cd-tabs__trigger:hover { color: var(--cd-text-secondary); }
 
+.cd-tabs__trigger:focus-visible {
+  color: var(--cd-text);
+  text-shadow: 0 0 6px var(--cd-accent-glow);
+}
+
 .cd-tabs__trigger[aria-selected="true"],
 .cd-tabs__trigger.is-active {
   color: var(--cd-accent);
@@ -61,7 +65,7 @@
 
 /* Badge count on a tab */
 .cd-tabs__trigger .cd-badge {
-  font-size: 8px;
+  font-size: var(--cd-text-xs);
   padding: 1px 5px;
   height: auto;
   line-height: 1.4;
@@ -89,7 +93,7 @@
 }
 
 .cd-tabs--pills .cd-tabs__trigger {
-  height: 28px;
+  height: 30px;
   padding: 0 12px;
   border: 1px solid var(--cd-border-mid);
   color: var(--cd-text-secondary);

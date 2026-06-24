@@ -18,7 +18,7 @@ function colors(canvas) {
     border:   css(el, '--cd-border')      || '#26324c',
     borderDim:css(el, '--cd-border-dim')  || '#1e1e24',
     text:     css(el, '--cd-text')        || '#e8e4e0',
-    muted:    css(el, '--cd-text-muted')  || '#706860',
+    muted:    css(el, '--cd-text-muted')  || '#8a8078',
     accent:   css(el, '--cd-accent')      || '#ff8800',
     secondary:css(el, '--cd-accent-secondary') || '#ff2bd6',
     green:    css(el, '--cd-neon-green')  || '#52ff9f',
@@ -72,7 +72,7 @@ export function CdLineChart(canvas, opts = {}) {
   };
 
   let { ctx, w, h } = setupCanvas(canvas);
-  const font = `700 9px ${css(document.documentElement, '--cd-font-mono') || 'monospace'}`;
+  const font = `700 10px ${css(document.documentElement, '--cd-font-mono') || 'monospace'}`;
 
   function draw() {
     const c = colors(canvas);
@@ -367,7 +367,7 @@ export function CdRadar(svg, opts = {}) {
         'text-anchor': 'middle',
         'dominant-baseline': 'middle',
         fill: c.muted,
-        'font-size': '8',
+        'font-size': '10',
         'font-family': 'monospace',
         'font-weight': '700',
         'letter-spacing': '0.1em',
@@ -446,7 +446,7 @@ export function CdBarChart(canvas, opts = {}) {
   };
 
   let { ctx, w, h } = setupCanvas(canvas);
-  const font = `700 9px ${css(document.documentElement, '--cd-font-mono') || 'monospace'}`;
+  const font = `700 10px ${css(document.documentElement, '--cd-font-mono') || 'monospace'}`;
 
   function draw() {
     const c = colors(canvas);

@@ -9,4 +9,8 @@ export const cyanTheme: Record<string, string> = {
   'border-glow':         'rgba(71, 246, 255, 0.20)',
   'scrollbar-thumb':     'rgba(71, 246, 255, 0.20)',
   'panel-shadow':        'inset 0 0 0 1px rgba(71, 246, 255, 0.04), 0 0 24px rgba(71, 246, 255, 0.07)',
+  // complement: magenta — CMY pairing
+  'accent-secondary':        '#ff2bd6',
+  'accent-secondary-glow':   'rgba(255, 43, 214, 0.32)',
+  'accent-secondary-subtle': 'rgba(255, 43, 214, 0.12)',
 };

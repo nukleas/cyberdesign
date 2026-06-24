@@ -7,7 +7,7 @@
   min-width: 20px;
   height: 20px;
   padding: 0 5px;
-  font: 700 9px/1 var(--cd-font-mono);
+  font: 700 var(--cd-text-xs)/1 var(--cd-font-mono);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--cd-text-secondary);
@@ -32,7 +32,7 @@
   min-width: 28px;
   height: 28px;
   padding: 0 8px;
-  font-size: 11px;
+  font-size: var(--cd-text-base);
 }
 
 /* Key combination group — wraps multiple .cd-kbd with a + separator */
@@ -47,7 +47,7 @@
 
 /* Separator between keys */
 .cd-kbd-group__sep {
-  font-size: 9px;
+  font-size: var(--cd-text-xs);
   color: var(--cd-text-dim);
   font-family: var(--cd-font-mono);
   line-height: 1;

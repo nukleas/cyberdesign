@@ -54,6 +54,14 @@ agent, this sync adds **thin React binding components** under `src/react/` (one 
 - **Gauge**: just pass `value` (0–100); the wrapper sets the `--value` CSS var.
 - **Scanner/Interference** are transparent overlays — wrap real content in a sized `bg-panel` div.
 
+## State
+
+- An **opt-in accessibility layer** (`src/css/a11y.css`, `.cd-a11y` scope) is wired into the bundle
+  via `build.ts` and ships in `dist/cyberdesign.css` → `_ds_bundle.css` → the synced `styles.css`.
+  It overrides type scale + muted-text contrast + glow ONLY inside `.cd-a11y`; defaults are untouched,
+  so all 42 component renderHashes are unchanged by it (a styling-only re-sync — no re-grading needed).
+  Origin: the claude.ai/design web agent's `templates/accessible-theme/` suggestion, folded upstream.
+
 ## Re-sync risks
 
 - The wrapper `.tsx` files in `src/react/` and their `.d.ts` are the API contract. If a CSS component

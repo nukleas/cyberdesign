@@ -9,4 +9,8 @@ export const orangeTheme: Record<string, string> = {
   'border-glow':         'rgba(255, 136, 0, 0.20)',
   'scrollbar-thumb':     'rgba(255, 136, 0, 0.20)',
   'panel-shadow':        'inset 0 0 0 1px rgba(255, 136, 0, 0.04), 0 0 24px rgba(255, 136, 0, 0.07)',
+  // complement: magenta (default — no override needed but explicit for clarity)
+  'accent-secondary':        '#ff2bd6',
+  'accent-secondary-glow':   'rgba(255, 43, 214, 0.32)',
+  'accent-secondary-subtle': 'rgba(255, 43, 214, 0.12)',
 };
