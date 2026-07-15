@@ -1,0 +1,112 @@
+/* ── Popover / Hover Card ──────────────────────────────────────────────────── */
+
+.cd-popover {
+  position: relative;
+  display: inline-block;
+}
+
+.cd-popover__content {
+  position: absolute;
+  z-index: 600;
+  min-width: 200px;
+  max-width: 320px;
+  padding: 12px;
+  background: var(--cd-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 30%, transparent);
+  color: var(--cd-text);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 0 16px color-mix(in srgb, var(--cd-accent) 18%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px) scale(0.98);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.cd-popover.is-open > .cd-popover__content,
+.cd-popover:focus-within > .cd-popover__content {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* Placement */
+.cd-popover__content--bottom {
+  top: calc(100% + 6px);
+  left: 0;
+}
+
+.cd-popover__content--bottom-end {
+  top: calc(100% + 6px);
+  right: 0;
+  left: auto;
+}
+
+.cd-popover__content--top {
+  bottom: calc(100% + 6px);
+  left: 0;
+  transform: translateY(-4px) scale(0.98);
+}
+
+.cd-popover.is-open > .cd-popover__content--top {
+  transform: translateY(0) scale(1);
+}
+
+.cd-popover__content--right {
+  left: calc(100% + 6px);
+  top: 0;
+  transform: translateX(4px) scale(0.98);
+}
+
+.cd-popover.is-open > .cd-popover__content--right {
+  transform: translateX(0) scale(1);
+}
+
+.cd-popover__title {
+  margin: 0 0 4px;
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cd-accent);
+}
+
+.cd-popover__description {
+  margin: 0;
+  font-size: var(--cd-text-xs);
+  color: var(--cd-text-muted);
+  line-height: 1.5;
+}
+
+/* Hover card — open on hover of host */
+.cd-hover-card {
+  position: relative;
+  display: inline-block;
+}
+
+.cd-hover-card__content {
+  position: absolute;
+  z-index: 600;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 220px;
+  max-width: 300px;
+  padding: 12px;
+  background: var(--cd-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 30%, transparent);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  color: var(--cd-text);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px color-mix(in srgb, var(--cd-accent) 15%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.12s ease 80ms;
+}
+
+.cd-hover-card:hover > .cd-hover-card__content,
+.cd-hover-card:focus-within > .cd-hover-card__content {
+  opacity: 1;
+  pointer-events: auto;
+}

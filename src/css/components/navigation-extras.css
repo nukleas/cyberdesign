@@ -1,0 +1,280 @@
+/* ── Menubar / Navigation Menu / Context Menu / Sidebar ────────────────────── */
+
+.cd-menubar {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid var(--cd-border);
+  background: color-mix(in srgb, var(--cd-bg-panel) 80%, transparent);
+  font-family: var(--cd-font-mono);
+}
+
+.cd-menubar__item {
+  position: relative;
+}
+
+.cd-menubar__trigger {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  color: var(--cd-text-muted);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.cd-menubar__trigger:hover,
+.cd-menubar__item.is-open > .cd-menubar__trigger {
+  color: var(--cd-accent);
+  background: var(--cd-accent-subtle);
+}
+
+.cd-menubar__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 500;
+  min-width: 160px;
+  padding: 4px 0;
+  background: var(--cd-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 28%, transparent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.cd-menubar__item.is-open > .cd-menubar__menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.cd-menubar__action {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: none;
+  background: transparent;
+  color: var(--cd-text-secondary);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.cd-menubar__action:hover {
+  background: var(--cd-accent-subtle);
+  color: var(--cd-accent);
+}
+
+/* Navigation menu (horizontal links) */
+.cd-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--cd-font-mono);
+}
+
+.cd-nav-menu__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  color: var(--cd-text-muted);
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  cursor: pointer;
+  background: transparent;
+}
+
+.cd-nav-menu__link:hover,
+.cd-nav-menu__link.is-active {
+  color: var(--cd-accent);
+  border-color: color-mix(in srgb, var(--cd-accent) 30%, transparent);
+  background: var(--cd-accent-subtle);
+}
+
+/* Context menu */
+.cd-context-menu {
+  position: fixed;
+  z-index: 1100;
+  min-width: 180px;
+  padding: 4px 0;
+  background: var(--cd-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 30%, transparent);
+  font-family: var(--cd-font-mono);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px color-mix(in srgb, var(--cd-accent) 15%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.97);
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
+
+.cd-context-menu.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.cd-context-menu__item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: none;
+  background: transparent;
+  color: var(--cd-text-secondary);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.cd-context-menu__item:hover:not(:disabled) {
+  background: var(--cd-accent-subtle);
+  color: var(--cd-accent);
+}
+
+.cd-context-menu__item--danger:hover:not(:disabled) {
+  background: rgba(255, 69, 108, 0.1);
+  color: var(--cd-neon-red);
+}
+
+.cd-context-menu__item:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cd-context-menu__sep {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--cd-border-dim);
+}
+
+.cd-context-menu__kbd {
+  margin-left: auto;
+  font-size: var(--cd-text-xs);
+  color: var(--cd-text-dim);
+}
+
+/* Sidebar layout */
+.cd-sidebar-layout {
+  display: flex;
+  width: 100%;
+  min-height: 280px;
+  border: 1px solid var(--cd-border);
+  background: var(--cd-bg);
+  font-family: var(--cd-font-mono);
+  overflow: hidden;
+}
+
+.cd-sidebar {
+  flex: 0 0 auto;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  background: var(--cd-bg-panel);
+  border-right: 1px solid var(--cd-border);
+  transition: width 0.18s ease, opacity 0.15s ease;
+}
+
+.cd-sidebar--collapsed {
+  width: 52px;
+}
+
+.cd-sidebar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--cd-border-dim);
+  min-height: 48px;
+}
+
+.cd-sidebar__title {
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cd-accent);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.cd-sidebar--collapsed .cd-sidebar__title {
+  display: none;
+}
+
+.cd-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px;
+  flex: 1;
+  overflow: auto;
+}
+
+.cd-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--cd-text-muted);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.cd-sidebar__link:hover,
+.cd-sidebar__link.is-active {
+  color: var(--cd-accent);
+  background: var(--cd-accent-subtle);
+  border-color: color-mix(in srgb, var(--cd-accent) 22%, transparent);
+}
+
+.cd-sidebar__link-icon {
+  flex-shrink: 0;
+  width: 1.25em;
+  text-align: center;
+}
+
+.cd-sidebar--collapsed .cd-sidebar__link-label {
+  display: none;
+}
+
+.cd-sidebar__main {
+  flex: 1;
+  min-width: 0;
+  padding: 16px;
+  overflow: auto;
+  color: var(--cd-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-sidebar { transition: none; }
+}

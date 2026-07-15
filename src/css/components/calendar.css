@@ -1,0 +1,135 @@
+/* ── Calendar / Date grid ──────────────────────────────────────────────────── */
+
+.cd-calendar {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: var(--cd-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 28%, transparent);
+  font-family: var(--cd-font-mono);
+  color: var(--cd-text);
+  user-select: none;
+  min-width: 260px;
+}
+
+.cd-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.cd-calendar__title {
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cd-accent);
+}
+
+.cd-calendar__nav {
+  display: flex;
+  gap: 4px;
+}
+
+.cd-calendar__nav-btn {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--cd-border);
+  background: rgba(5, 6, 10, 0.55);
+  color: var(--cd-text-muted);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  cursor: pointer;
+}
+
+.cd-calendar__nav-btn:hover {
+  color: var(--cd-accent);
+  border-color: color-mix(in srgb, var(--cd-accent) 45%, transparent);
+}
+
+.cd-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cd-calendar__weekday {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cd-text-dim);
+  padding: 4px 0;
+}
+
+.cd-calendar__day {
+  aspect-ratio: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--cd-text-secondary);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-xs);
+  cursor: pointer;
+  min-width: 32px;
+  min-height: 32px;
+}
+
+.cd-calendar__day:hover:not(:disabled):not(.is-outside) {
+  border-color: color-mix(in srgb, var(--cd-accent) 35%, transparent);
+  color: var(--cd-accent);
+}
+
+.cd-calendar__day.is-outside {
+  color: var(--cd-text-dim);
+  opacity: 0.45;
+}
+
+.cd-calendar__day.is-today {
+  border-color: color-mix(in srgb, var(--cd-accent) 40%, transparent);
+}
+
+.cd-calendar__day.is-selected {
+  background: var(--cd-accent-subtle);
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  color: var(--cd-accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--cd-accent) 20%, transparent);
+}
+
+.cd-calendar__day:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+/* Date picker shell */
+.cd-date-picker {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 280px;
+}
+
+.cd-date-picker__panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 600;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.cd-date-picker.is-open > .cd-date-picker__panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}

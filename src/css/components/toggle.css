@@ -1,0 +1,99 @@
+/* ── Toggle / Toggle Group / Button Group ──────────────────────────────────── */
+
+.cd-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--cd-border);
+  background: rgba(5, 6, 10, 0.55);
+  color: var(--cd-text-muted);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  user-select: none;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease, box-shadow 120ms ease;
+}
+
+.cd-toggle:hover:not(:disabled):not([data-state='on']) {
+  color: var(--cd-accent);
+  border-color: var(--cd-border-glow);
+}
+
+.cd-toggle:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.cd-toggle[data-state='on'],
+.cd-toggle.is-on {
+  color: var(--cd-accent);
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  background: var(--cd-accent-subtle);
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--cd-accent) 18%, transparent),
+    inset 0 -2px 0 color-mix(in srgb, var(--cd-accent) 20%, transparent);
+}
+
+.cd-toggle--sm {
+  height: 26px;
+  min-width: 26px;
+  padding: 0 8px;
+  font-size: var(--cd-text-xs);
+}
+
+.cd-toggle--outline {
+  background: transparent;
+}
+
+.cd-toggle-group {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.cd-toggle-group > .cd-toggle {
+  border-radius: 0;
+}
+
+.cd-toggle-group > .cd-toggle:not(:first-child) {
+  margin-left: -1px;
+}
+
+.cd-toggle-group > .cd-toggle:hover,
+.cd-toggle-group > .cd-toggle[data-state='on'] {
+  z-index: 1;
+}
+
+/* Button group */
+.cd-btn-group {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.cd-btn-group > .cd-btn {
+  border-radius: 0;
+}
+
+.cd-btn-group > .cd-btn:not(:first-child) {
+  margin-left: -1px;
+}
+
+.cd-btn-group > .cd-btn:hover,
+.cd-btn-group > .cd-btn:focus-visible {
+  z-index: 1;
+}
+
+.cd-btn-group--vertical {
+  flex-direction: column;
+}
+
+.cd-btn-group--vertical > .cd-btn:not(:first-child) {
+  margin-left: 0;
+  margin-top: -1px;
+}

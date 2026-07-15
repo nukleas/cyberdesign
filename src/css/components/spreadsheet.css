@@ -1,0 +1,314 @@
+/* ── Spreadsheet — editable cyber grid ─────────────────────────────────────── */
+
+.cd-sheetgrid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  background: var(--cd-bg);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 28%, transparent);
+  font-family: var(--cd-font-mono);
+  color: var(--cd-text);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 6%, transparent),
+    0 0 24px color-mix(in srgb, var(--cd-accent) 8%, transparent);
+  outline: none;
+}
+
+.cd-sheetgrid:focus-visible {
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 20%, transparent),
+    0 0 20px color-mix(in srgb, var(--cd-accent) 15%, transparent);
+}
+
+/* Formula / address bar */
+.cd-sheetgrid__bar {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  min-height: 32px;
+  border-bottom: 1px solid color-mix(in srgb, var(--cd-accent) 22%, transparent);
+  background: color-mix(in srgb, var(--cd-bg-panel) 85%, transparent);
+}
+
+.cd-sheetgrid__addr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  padding: 0 10px;
+  border-right: 1px solid var(--cd-border-dim);
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--cd-accent);
+  text-transform: uppercase;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.cd-sheetgrid__fx-label {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  border-right: 1px solid var(--cd-border-dim);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cd-text-dim);
+  user-select: none;
+}
+
+.cd-sheetgrid__fx-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--cd-text);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  padding: 0 10px;
+  outline: none;
+}
+
+.cd-sheetgrid__fx-input:focus {
+  background: color-mix(in srgb, var(--cd-accent) 6%, transparent);
+}
+
+.cd-sheetgrid__fx-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Scrollable grid body */
+.cd-sheetgrid__viewport {
+  overflow: auto;
+  max-height: var(--cd-sheetgrid-max-height, 420px);
+  position: relative;
+}
+
+.cd-sheetgrid__table {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  width: max-content;
+  min-width: 100%;
+}
+
+/* Corner + headers */
+.cd-sheetgrid__corner,
+.cd-sheetgrid__col-head,
+.cd-sheetgrid__row-head {
+  position: sticky;
+  z-index: 2;
+  background: color-mix(in srgb, var(--cd-bg-panel) 96%, transparent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cd-text-dim);
+  user-select: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--cd-accent) 20%, transparent);
+  border-right: 1px solid var(--cd-border-dim);
+}
+
+.cd-sheetgrid__corner {
+  left: 0;
+  top: 0;
+  z-index: 4;
+  width: 40px;
+  min-width: 40px;
+  height: 28px;
+  background: color-mix(in srgb, var(--cd-bg-panel) 98%, var(--cd-accent) 2%);
+}
+
+.cd-sheetgrid__col-head {
+  top: 0;
+  z-index: 3;
+  height: 28px;
+  width: var(--cd-sheetgrid-col-width, 96px);
+  min-width: var(--cd-sheetgrid-col-width, 96px);
+  text-align: center;
+  color: var(--cd-accent);
+  background: color-mix(in srgb, var(--cd-accent) 5%, var(--cd-bg-panel));
+}
+
+.cd-sheetgrid__col-head.is-active {
+  color: var(--cd-accent-bright, var(--cd-accent));
+  background: color-mix(in srgb, var(--cd-accent) 12%, var(--cd-bg-panel));
+  box-shadow: inset 0 -2px 0 var(--cd-accent);
+}
+
+.cd-sheetgrid__row-head {
+  left: 0;
+  z-index: 3;
+  width: 40px;
+  min-width: 40px;
+  text-align: center;
+  padding: 0 4px;
+  color: var(--cd-text-muted);
+  border-bottom: 1px solid var(--cd-border-dim);
+}
+
+.cd-sheetgrid__row-head.is-active {
+  color: var(--cd-accent);
+  background: color-mix(in srgb, var(--cd-accent) 10%, var(--cd-bg-panel));
+  box-shadow: inset -2px 0 0 var(--cd-accent);
+}
+
+/* Cells */
+.cd-sheetgrid__cell {
+  position: relative;
+  width: var(--cd-sheetgrid-col-width, 96px);
+  min-width: var(--cd-sheetgrid-col-width, 96px);
+  height: 28px;
+  max-width: var(--cd-sheetgrid-col-width, 96px);
+  padding: 0;
+  border-right: 1px solid var(--cd-border-dim);
+  border-bottom: 1px solid var(--cd-border-dim);
+  background: rgba(5, 6, 10, 0.55);
+  vertical-align: middle;
+  cursor: cell;
+}
+
+.cd-sheetgrid__cell-display {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 28px;
+  font-size: var(--cd-text-sm);
+  color: var(--cd-text-secondary);
+  pointer-events: none;
+}
+
+.cd-sheetgrid__cell--number .cd-sheetgrid__cell-display {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--cd-accent);
+}
+
+.cd-sheetgrid__cell--formula .cd-sheetgrid__cell-display {
+  color: var(--cd-neon-cyan, var(--cd-cyan, #47f6ff));
+}
+
+.cd-sheetgrid__cell--error .cd-sheetgrid__cell-display {
+  color: var(--cd-neon-red);
+}
+
+/* Selection states */
+.cd-sheetgrid__cell.is-active {
+  z-index: 1;
+  outline: 2px solid var(--cd-accent);
+  outline-offset: -2px;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cd-accent) 30%, transparent),
+    0 0 12px color-mix(in srgb, var(--cd-accent) 25%, transparent),
+    inset 0 0 8px color-mix(in srgb, var(--cd-accent) 8%, transparent);
+  background: color-mix(in srgb, var(--cd-accent) 8%, rgba(5, 6, 10, 0.7));
+}
+
+.cd-sheetgrid__cell.is-active .cd-sheetgrid__cell-display {
+  color: var(--cd-text);
+}
+
+.cd-sheetgrid__cell.is-selected:not(.is-active) {
+  background: color-mix(in srgb, var(--cd-accent) 14%, rgba(5, 6, 10, 0.6));
+}
+
+.cd-sheetgrid__cell.is-selected:not(.is-active)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 25%, transparent);
+  pointer-events: none;
+}
+
+/* Editing */
+.cd-sheetgrid__cell.is-editing {
+  outline: 2px solid var(--cd-accent-bright, var(--cd-accent));
+  outline-offset: -2px;
+  background: rgba(5, 6, 10, 0.95);
+  z-index: 2;
+  box-shadow: 0 0 16px color-mix(in srgb, var(--cd-accent) 30%, transparent);
+}
+
+.cd-sheetgrid__cell-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  margin: 0;
+  padding: 0 8px;
+  background: transparent;
+  color: var(--cd-text);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.cd-sheetgrid__cell-input--number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Compact density */
+.cd-sheetgrid--compact .cd-sheetgrid__corner,
+.cd-sheetgrid--compact .cd-sheetgrid__col-head {
+  height: 24px;
+}
+
+.cd-sheetgrid--compact .cd-sheetgrid__cell {
+  height: 24px;
+}
+
+.cd-sheetgrid--compact .cd-sheetgrid__cell-display {
+  line-height: 24px;
+  font-size: var(--cd-text-xs);
+  padding: 0 6px;
+}
+
+.cd-sheetgrid--compact .cd-sheetgrid__cell-input {
+  font-size: var(--cd-text-xs);
+  padding: 0 6px;
+}
+
+/* Read-only dim */
+.cd-sheetgrid--readonly .cd-sheetgrid__cell {
+  cursor: default;
+}
+
+.cd-sheetgrid--readonly .cd-sheetgrid__fx-input {
+  cursor: default;
+}
+
+/* Status strip under grid */
+.cd-sheetgrid__status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 22px;
+  padding: 0 10px;
+  border-top: 1px solid var(--cd-border-dim);
+  background: color-mix(in srgb, var(--cd-bg-panel) 70%, transparent);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cd-text-dim);
+}
+
+.cd-sheetgrid__status strong {
+  color: var(--cd-accent);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-sheetgrid__cell.is-active {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cd-accent) 40%, transparent);
+  }
+}

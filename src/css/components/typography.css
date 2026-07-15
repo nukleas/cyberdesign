@@ -1,0 +1,122 @@
+/* ── Typography primitives ─────────────────────────────────────────────────── */
+
+.cd-typography {
+  font-family: var(--cd-font-mono);
+  color: var(--cd-text);
+}
+
+.cd-h1,
+.cd-h2,
+.cd-h3,
+.cd-h4 {
+  margin: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cd-text);
+  line-height: 1.25;
+}
+
+.cd-h1 {
+  font-size: 1.75rem;
+  letter-spacing: 0.06em;
+  color: var(--cd-accent);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--cd-accent) 30%, transparent);
+}
+
+.cd-h2 {
+  font-size: 1.35rem;
+  color: var(--cd-accent);
+}
+
+.cd-h3 {
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+}
+
+.cd-h4 {
+  font-size: var(--cd-text-md);
+  letter-spacing: 0.12em;
+  color: var(--cd-text-secondary);
+}
+
+.cd-p {
+  margin: 0;
+  font-size: var(--cd-text-base);
+  line-height: 1.65;
+  color: var(--cd-text-secondary);
+}
+
+.cd-lead {
+  margin: 0;
+  font-size: var(--cd-text-md);
+  line-height: 1.6;
+  color: var(--cd-text);
+}
+
+.cd-muted {
+  margin: 0;
+  font-size: var(--cd-text-sm);
+  color: var(--cd-text-muted);
+  line-height: 1.5;
+}
+
+.cd-small {
+  font-size: var(--cd-text-xs);
+  color: var(--cd-text-dim);
+  letter-spacing: 0.06em;
+}
+
+.cd-code {
+  font-family: var(--cd-font-mono);
+  font-size: 0.9em;
+  padding: 1px 5px;
+  background: color-mix(in srgb, var(--cd-bg) 80%, transparent);
+  border: 1px solid var(--cd-border-dim);
+  color: var(--cd-accent);
+}
+
+.cd-pre {
+  margin: 0;
+  padding: 12px 14px;
+  overflow: auto;
+  background: rgba(5, 6, 10, 0.9);
+  border: 1px solid var(--cd-border);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  line-height: 1.55;
+  color: var(--cd-text-secondary);
+}
+
+.cd-blockquote {
+  margin: 0;
+  padding: 8px 14px;
+  border-left: 2px solid var(--cd-accent);
+  color: var(--cd-text-muted);
+  font-style: italic;
+  font-size: var(--cd-text-sm);
+  line-height: 1.55;
+}
+
+.cd-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--cd-text-secondary);
+  font-size: var(--cd-text-sm);
+  line-height: 1.65;
+}
+
+.cd-list li::marker {
+  color: var(--cd-accent);
+}
+
+.cd-inline-link {
+  color: var(--cd-accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--cd-accent) 35%, transparent);
+}
+
+.cd-inline-link:hover {
+  border-bottom-color: var(--cd-accent);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--cd-accent) 30%, transparent);
+}

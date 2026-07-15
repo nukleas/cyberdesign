@@ -1,0 +1,68 @@
+/* ── Card (structured surface — Header / Title / Description / Content / Footer) ─ */
+
+.cd-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--cd-bg-panel);
+  border: 1px solid var(--cd-border);
+  color: var(--cd-text);
+  font-family: var(--cd-font-mono);
+  box-shadow: var(--cd-panel-shadow, none);
+}
+
+.cd-card--glow {
+  border-color: color-mix(in srgb, var(--cd-accent) 30%, transparent);
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--cd-accent) 12%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--cd-accent) 6%, transparent);
+}
+
+.cd-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--cd-border-dim);
+}
+
+.cd-card__header--row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cd-card__title {
+  margin: 0;
+  font-size: var(--cd-text-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--cd-accent);
+}
+
+.cd-card__description {
+  margin: 0;
+  font-size: var(--cd-text-xs);
+  color: var(--cd-text-muted);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.cd-card__content {
+  padding: 14px 16px;
+  flex: 1;
+}
+
+.cd-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 14px;
+  border-top: 1px solid var(--cd-border-dim);
+}
+
+.cd-card__footer--end {
+  justify-content: flex-end;
+}

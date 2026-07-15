@@ -1,0 +1,48 @@
+/* ── Toast viewport / Sonner-style stack ───────────────────────────────────── */
+
+.cd-toaster {
+  position: fixed;
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: min(100vw - 24px, 380px);
+  width: 100%;
+  pointer-events: none;
+}
+
+.cd-toaster--top-right {
+  top: 16px;
+  right: 16px;
+}
+
+.cd-toaster--top-left {
+  top: 16px;
+  left: 16px;
+}
+
+.cd-toaster--bottom-right {
+  bottom: 16px;
+  right: 16px;
+}
+
+.cd-toaster--bottom-left {
+  bottom: 16px;
+  left: 16px;
+}
+
+.cd-toaster--top-center {
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cd-toaster--bottom-center {
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.cd-toaster > * {
+  pointer-events: auto;
+}

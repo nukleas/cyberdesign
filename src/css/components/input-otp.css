@@ -1,0 +1,53 @@
+/* ── Input OTP ─────────────────────────────────────────────────────────────── */
+
+.cd-input-otp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--cd-font-mono);
+}
+
+.cd-input-otp__slot {
+  width: 36px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--cd-border);
+  background: rgba(5, 6, 10, 0.82);
+  color: var(--cd-text);
+  font-size: var(--cd-text-lg);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+  caret-color: var(--cd-accent);
+}
+
+.cd-input-otp__slot:focus {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: 2px;
+  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--cd-accent) 20%, transparent);
+}
+
+.cd-input-otp__slot.is-filled {
+  border-color: color-mix(in srgb, var(--cd-accent) 40%, transparent);
+  color: var(--cd-accent);
+}
+
+.cd-input-otp__slot:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cd-input-otp__sep {
+  color: var(--cd-text-dim);
+  font-weight: 700;
+}
+
+.cd-input-otp--sm .cd-input-otp__slot {
+  width: 28px;
+  height: 32px;
+  font-size: var(--cd-text-base);
+}

@@ -1,0 +1,69 @@
+/* ── Carousel ──────────────────────────────────────────────────────────────── */
+
+.cd-carousel {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  font-family: var(--cd-font-mono);
+}
+
+.cd-carousel__viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.cd-carousel__track {
+  display: flex;
+  transition: transform 0.28s ease;
+}
+
+.cd-carousel__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.cd-carousel__slide-inner {
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cd-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 22%, transparent);
+  color: var(--cd-text);
+  padding: 20px;
+}
+
+.cd-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.cd-carousel__dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex: 1;
+}
+
+.cd-carousel__dot {
+  width: 8px;
+  height: 8px;
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 40%, transparent);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.cd-carousel__dot.is-active {
+  background: var(--cd-accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--cd-accent) 40%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-carousel__track { transition: none; }
+}
