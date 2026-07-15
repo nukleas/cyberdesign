@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Select } from './Select';
+import { Select, type SelectProps } from './Select';
 
 const meta = {
   title: 'Form/Select',
@@ -16,7 +16,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => (
+  render: (args: SelectProps) => (
     <Select {...args} defaultValue="cyan" style={{ width: 220 }}>
       <option value="orange">Orange</option>
       <option value="cyan">Cyan</option>

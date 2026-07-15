@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Textarea } from './Textarea';
+import { Textarea, type TextareaProps } from './Textarea';
 
 const meta = {
   title: 'Form/Textarea',
@@ -11,7 +11,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => <Textarea {...args} style={{ width: 320 }} />,
+  render: (args: TextareaProps) => <Textarea {...args} style={{ width: 320 }} />,
 };
 
 export const Error: Story = {

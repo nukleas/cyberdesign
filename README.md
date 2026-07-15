@@ -1,6 +1,8 @@
 # cyberdesign monorepo
 
-Unified cyber/terminal design system for [ocint](../ocint) and [robostrudel](../robostrudel).
+![CI](https://github.com/nukleas/cyberdesign/actions/workflows/ci.yml/badge.svg)
+
+Unified cyber/terminal design system for [ocint](https://ocint.app) and [robostrudel](../robostrudel).
 
 | Package | Path | Publish name | What it is |
 | --- | --- | --- | --- |
@@ -40,6 +42,10 @@ pnpm build:css
 pnpm demo
 # open http://localhost:4980/test/
 ```
+
+### CI
+
+Every push/PR builds both packages, typechecks, and builds Storybook (`.github/workflows/ci.yml`). The repo is private, so there's no hosted preview — instead, download the `storybook-static` artifact from the workflow run in the Actions tab and open its `index.html` locally to preview without running the build yourself. A `package-dist` artifact with both packages' built output is attached the same way.
 
 ## Consuming
 

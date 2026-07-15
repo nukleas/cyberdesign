@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { NativeSelect } from './NativeSelect';
+import { NativeSelect, type NativeSelectProps } from './NativeSelect';
 
 const meta = {
   title: 'Form/NativeSelect',
@@ -11,7 +11,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: (args) => (
+  render: (args: NativeSelectProps) => (
     <NativeSelect {...args} defaultValue="a" style={{ width: 200 }}>
       <option value="a">Alpha</option>
       <option value="b">Bravo</option>
