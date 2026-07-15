@@ -1,0 +1,55 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+# react-cyberdesign
+
+React component library for **[cyberdesign](https://github.com/nukleas/cyberdesign)** —
+a dark cyberpunk / terminal design system with dual accent themes.
+
+## Philosophy
+
+Components expose **semantic props** in the style of shadcn and Mantine:
+
+| Prop | Role | Examples |
+| --- | --- | --- |
+| `variant` | Visual emphasis / layout mode | `primary`, `danger`, `pills`, `underline` |
+| `size` | Density scale | `sm`, `md`, `lg`, `xl` |
+| `color` | Palette family | `orange`, `cyan`, `magenta`, … |
+| Native attrs | Full HTML surface | `disabled`, `onClick`, `aria-*` |
+
+The **look** always comes from cyberdesign CSS (`cd-*` classes + `--cd-*` tokens).
+These React components only map props → classes and structure — they never invent styles.
+
+## Quick start
+
+```tsx
+import { ThemeProvider, Button, Input, GlowCard } from 'react-cyberdesign';
+import 'react-cyberdesign/styles.css';
+
+export function App() {
+  return (
+    <ThemeProvider theme="orange">
+      <GlowCard color="cyan">
+        <Input placeholder="Callsign" accent />
+        <Button variant="primary">Connect</Button>
+      </GlowCard>
+    </ThemeProvider>
+  );
+}
+```
+
+## Themes
+
+Set a theme with `ThemeProvider` (or put `theme-orange` / `theme-cyan` on `<html>`).
+Accent-driven components (`Button variant="primary"`, `--cd-accent`) follow the active theme.
+
+Use the **Theme** control in the Storybook toolbar to preview all accent families.
+
+## Source of truth
+
+| Layer | Location |
+| --- | --- |
+| Tokens + CSS | `~/Code/cyberdesign` |
+| React API (this package) | `src/components/*` |
+| Prop docs | Storybook autodocs (JSDoc on props) |

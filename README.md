@@ -1,110 +1,90 @@
-# cyberdesign
+# cyberdesign monorepo
 
-Unified cyber/terminal design system. Provides shared design tokens, glow utilities, CRT effects, and 28 component primitives in a dark cyberpunk aesthetic with dual-theme support (orange and cyan accents). Used by [ocint](../ocint) and [robostrudel](../robostrudel).
+Unified cyber/terminal design system for [ocint](../ocint) and [robostrudel](../robostrudel).
 
-## Outputs
+| Package | Path | Publish name | What it is |
+| --- | --- | --- | --- |
+| CSS core | [`packages/cyberdesign`](./packages/cyberdesign) | `cyberdesign` | Tokens, CSS (`cd-*`), thin React class bindings |
+| React + Storybook | [`packages/react-cyberdesign`](./packages/react-cyberdesign) | `react-cyberdesign` | Full React API, semantic props, Storybook |
 
-| Import path | File | Contents |
-|---|---|---|
-| `cyberdesign` or `cyberdesign/css` | `dist/cyberdesign.css` | Full bundle — variables + base + utilities + all components |
-| `cyberdesign/vars` | `dist/cyberdesign-vars-only.css` | CSS variables only (`:root`, `.theme-orange`, `.theme-cyan`) |
-| `cyberdesign/tailwind` | `dist/tailwind-theme.css` | Variables + `@theme inline` block for Tailwind v4 |
-| `cyberdesign/react` | `src/react/index.ts` | React components (GlowCard) |
-| `cyberdesign/tokens` | `src/tokens/index.ts` | TypeScript token constants |
-
-## Quick start
-
-Add as a local dependency:
-
-```json
-"cyberdesign": "file:../cyberdesign"
-```
-
-Then run `npm install` and import:
-
-```css
-@import "cyberdesign/dist/cyberdesign.css";
-```
-
-Add the theme class to `<html>`:
-
-```html
-<html class="theme-orange">   <!-- or theme-cyan -->
-```
-
-## Consuming in ocint (Tailwind v4)
-
-```css
-/* globals.css */
-@import "cyberdesign/dist/tailwind-theme.css";
-@import "cyberdesign/dist/cyberdesign.css";
-```
-
-```tsx
-// app/layout.tsx
-<html lang="en" className="theme-orange">
-```
-
-## Consuming in robostrudel (vanilla CSS)
-
-```html
-<link rel="stylesheet" href="../cyberdesign/dist/cyberdesign.css">
-<html class="theme-cyan">
-```
-
-Optionally alias to legacy var names in your own CSS:
-
-```css
-:root { --neon: var(--cd-accent); }
-```
-
-## Build
+## Setup
 
 ```bash
-npm run build    # generate dist/
-npm run dev      # watch mode
+pnpm install
+pnpm build          # CSS first, then React (styles copied into react dist)
 ```
 
-Preview the component demo:
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `pnpm build` | Build both packages |
+| `pnpm build:css` | Build CSS tokens + bundle only |
+| `pnpm build:react` | Build React library (needs CSS dist) |
+| `pnpm dev` | Watch-rebuild CSS |
+| `pnpm storybook` | Storybook for React components → http://localhost:6006 |
+| `pnpm demo` | Static CSS harness → serve `packages/cyberdesign` on :4980 |
+| `pnpm typecheck` | Typecheck React package |
+
+### Storybook
 
 ```bash
-npx serve . -p 4980
+pnpm build:css      # once (or after CSS changes)
+pnpm storybook      # http://localhost:6006
+```
+
+### CSS visual harness
+
+```bash
+pnpm build:css
+pnpm demo
 # open http://localhost:4980/test/
 ```
 
-## Token architecture
+## Consuming
 
-```
-src/tokens/base.ts       raw hex palette (backgrounds, text, color families)
-src/tokens/semantic.ts   purpose-mapped --cd-* tokens (bg, text, accent, glow…)
-src/tokens/themes/       orange.ts + cyan.ts accent-family overrides
-        │
-        └─▶ build.ts ──▶ dist/cyberdesign.css
-                    └──▶ dist/cyberdesign-vars-only.css
-                    └──▶ dist/tailwind-theme.css
+### CSS only
+
+```bash
+pnpm add cyberdesign
+# or local: "cyberdesign": "workspace:*" / "file:../cyberdesign/packages/cyberdesign"
 ```
 
-The semantic token `--cd-accent` resolves to orange or cyan depending on which theme class is on `<html>`.
+```css
+@import "cyberdesign/css";
+```
 
-## Components
+```html
+<html class="theme-orange">
+```
 
-**Form & input**
-`cd-input` · `cd-textarea` · `cd-input-group` · `cd-input-addon` · `cd-select` · `cd-checkbox` · `cd-radio` · `cd-switch` · `cd-slider` · `cd-form-label` · `cd-field` · `cd-tooltip` · `cd-progress`
+### React components
 
-**Display primitives**
-`cd-badge` · `cd-btn` · `cd-glow-card` · `cd-panel-header`
+```bash
+pnpm add react-cyberdesign
+```
 
-**Data & layout**
-`cd-table` · `cd-tabs` · `cd-alert` · `cd-skeleton` · `cd-kbd` · `cd-avatar` · `cd-breadcrumb` · `cd-spinner`
+```tsx
+import { ThemeProvider, Button, GlowCard } from 'react-cyberdesign';
+import 'react-cyberdesign/styles.css';
 
-**Overlay & navigation**
-`cd-modal` · `cd-toast` · `cd-accordion` · `cd-pagination` · `cd-dropdown`
+export function App() {
+  return (
+    <ThemeProvider theme="cyan">
+      <GlowCard>
+        <Button variant="primary">Run</Button>
+      </GlowCard>
+    </ThemeProvider>
+  );
+}
+```
 
-**Charts & data viz**
-`cd-stat` · `cd-hbar-chart` · `cd-histogram` · `cd-sparkline` · `cd-activity-grid` · `cd-timeline` · canvas shells (`src/js/charts.js`)
+## Workspace layout
 
-**Decorative**
-`cd-clip-*` · `cd-step-*` · `cd-aug-panel` · `cd-aug-btn` · `cd-corners` · `cd-vectorbg`
+```
+packages/
+  cyberdesign/           # CSS source of truth (tokens → dist/*.css)
+  react-cyberdesign/     # React bindings + Storybook over cyberdesign CSS
+```
 
-**Utilities** (`utilities.css`)
-`.cd-glow-*` · `.cd-text-glow` · `.cd-scanlines` · `.cd-pixel-grid` · `.cd-glass` · `.cd-label` · `.cd-glitch`
+Visual styles always live in `cyberdesign`. React only maps props → `cd-*` classes.

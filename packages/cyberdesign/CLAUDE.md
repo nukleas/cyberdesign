@@ -1,6 +1,6 @@
 # cyberdesign — developer context
 
-Standalone npm package providing the shared design system for ocint and robostrudel. Pure CSS + TypeScript tokens + one React component (GlowCard). No runtime framework dependency.
+CSS package in the cyberdesign monorepo (`packages/cyberdesign`). Shared design system for ocint and robostrudel. Pure CSS + TypeScript tokens + thin React class bindings under `src/react/`. Full React API + Storybook live in `../react-cyberdesign`.
 
 ## Architecture
 
@@ -60,9 +60,13 @@ test/index.html     visual demo harness — 31 sections, live theme toggle
 
 ## Dev workflow
 
+From monorepo root:
+
 ```bash
-npm run dev              # watch mode — rebuilds dist/ on every src/ change
-npx serve . -p 4980      # serve from repo root; open http://localhost:4980/test/
+pnpm build:css           # one-shot build
+pnpm dev                 # watch mode — rebuilds dist/ on every src/ change
+pnpm demo                # serve this package; open http://localhost:4980/test/
+pnpm storybook           # React Storybook (packages/react-cyberdesign)
 ```
 
 ## Key CSS variables

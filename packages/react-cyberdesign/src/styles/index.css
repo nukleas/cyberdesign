@@ -1,0 +1,3 @@
+/* Re-export the full cyberdesign bundle for local/Storybook use.
+   Consumers of the published package should import `react-cyberdesign/styles.css`. */
+@import "cyberdesign/css";

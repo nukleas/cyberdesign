@@ -1,0 +1,67 @@
+{
+  "name": "cyberdesign",
+  "version": "0.1.0",
+  "description": "Unified cyber/terminal design system — shared tokens, glow utilities, and component primitives",
+  "license": "MIT",
+  "author": "Nader Heidari <nukleas2001@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nukleas/cyberdesign.git",
+    "directory": "packages/cyberdesign"
+  },
+  "bugs": {
+    "url": "https://github.com/nukleas/cyberdesign/issues"
+  },
+  "homepage": "https://github.com/nukleas/cyberdesign/tree/master/packages/cyberdesign#readme",
+  "keywords": [
+    "design-system",
+    "css",
+    "cyberpunk",
+    "tokens",
+    "tailwind"
+  ],
+  "type": "module",
+  "files": [
+    "src/",
+    "dist/",
+    "build.ts"
+  ],
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": "./dist/cyberdesign.css",
+    "./css": "./dist/cyberdesign.css",
+    "./vars": "./dist/cyberdesign-vars-only.css",
+    "./tailwind": "./dist/tailwind-theme.css",
+    "./react": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./src/react/index.ts"
+    },
+    "./tokens": "./src/tokens/index.ts"
+  },
+  "scripts": {
+    "build": "tsx build.ts && tsc -p tsconfig.types.json",
+    "dev": "tsx --watch build.ts",
+    "demo": "npx --yes serve . -p 4980"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "tsx": "^4",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "tailwindcss": ">=4"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "tailwindcss": {
+      "optional": true
+    }
+  }
+}

@@ -1,65 +1,25 @@
 {
-  "name": "cyberdesign",
-  "version": "0.1.0",
-  "description": "Unified cyber/terminal design system — shared tokens, glow utilities, and component primitives",
+  "name": "cyberdesign-monorepo",
+  "private": true,
+  "description": "Monorepo for cyberdesign (CSS) and react-cyberdesign (React + Storybook)",
   "license": "MIT",
   "author": "Nader Heidari <nukleas2001@gmail.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nukleas/cyberdesign.git"
   },
-  "bugs": {
-    "url": "https://github.com/nukleas/cyberdesign/issues"
-  },
-  "homepage": "https://github.com/nukleas/cyberdesign#readme",
-  "keywords": [
-    "design-system",
-    "css",
-    "cyberpunk",
-    "tokens",
-    "tailwind"
-  ],
-  "type": "module",
-  "files": [
-    "src/",
-    "dist/",
-    "build.ts"
-  ],
-  "types": "./dist/types/index.d.ts",
-  "exports": {
-    ".": "./dist/cyberdesign.css",
-    "./css": "./dist/cyberdesign.css",
-    "./vars": "./dist/cyberdesign-vars-only.css",
-    "./tailwind": "./dist/tailwind-theme.css",
-    "./react": {
-      "types": "./dist/types/index.d.ts",
-      "default": "./src/react/index.ts"
-    },
-    "./tokens": "./src/tokens/index.ts"
-  },
+  "packageManager": "pnpm@11.2.2",
   "scripts": {
-    "build": "tsx build.ts && tsc -p tsconfig.types.json",
-    "dev": "tsx --watch build.ts"
+    "build": "pnpm -r --filter cyberdesign --filter react-cyberdesign run build",
+    "build:css": "pnpm --filter cyberdesign run build",
+    "build:react": "pnpm --filter react-cyberdesign run build",
+    "dev": "pnpm --filter cyberdesign run dev",
+    "storybook": "pnpm --filter react-cyberdesign run storybook",
+    "build-storybook": "pnpm --filter react-cyberdesign run build-storybook",
+    "typecheck": "pnpm --filter react-cyberdesign run typecheck",
+    "demo": "pnpm --filter cyberdesign run demo"
   },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
-    "tsx": "^4",
-    "typescript": "^5"
-  },
-  "peerDependencies": {
-    "react": ">=18",
-    "tailwindcss": ">=4"
-  },
-  "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    },
-    "tailwindcss": {
-      "optional": true
-    }
+  "engines": {
+    "node": ">=20"
   }
 }

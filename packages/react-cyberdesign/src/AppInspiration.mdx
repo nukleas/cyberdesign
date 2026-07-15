@@ -1,0 +1,65 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="App Patterns/Inspiration" />
+
+# Inspiration: ocint & robostrudel
+
+cyberdesign was extracted so **ocint** (civic intel dashboard) and **robostrudel**
+(AI music REPL) can share one terminal/cyber visual language. This library pulls the
+reusable **app patterns** back up as typed components.
+
+## ocint (`~/Code/ocint`)
+
+| App pattern | Component(s) | Source cues |
+| --- | --- | --- |
+| Column section titles | `SectionHeader` | `▸ INTEL FEED` / `▸ METRICS` |
+| Metric tiles | `Stat` / `StatGrid` + `GlowCard` | `StatsPanel` |
+| Category / near filters | `Chip` / `ChipRow` | feed filter bar |
+| Live system indicator | `StatusDot` | header `SYS.ACTIVE` |
+| Situation severity | `StatusPill` | `SituationHero` |
+| Feed list rows | `Feed` / `FeedItem` | `IntelFeed` |
+| Category breakdown | `HBar` | stats “BY CATEGORY” |
+| Mobile tabs | `BottomNav` | `MobileTabBar` |
+| Header clock | `Clock` | `Header` live time |
+| Side detail panel | `Sheet` | `ItemDetailDrawer` |
+
+Domain-specific (stay in ocint for now): Mapbox map chrome, time histogram scrubber,
+dossier sections, location picker.
+
+## robostrudel (`~/Code/robostrudel`)
+
+| App pattern | Component(s) | Source cues |
+| --- | --- | --- |
+| Play / stop cluster | `Transport` | header transport group |
+| AI chat rail | `Chat` / `ChatMessage` | `.ai-panel` |
+| Quick prompt chips | `Chip` in `Chat` prompts | `.ai-quick` |
+| Footer status | `StatusBar` | `.status-bar` + prompt cursor |
+| Live / paused | `StatusDot` | `.live.active` / paused |
+| Panel title bar | `PanelHeader` | shared sweep header |
+| Command palette | `Command` | command-palette.ts |
+| File / corpus rows | `Item` / `FeedItem` | corpus entry list |
+
+Domain-specific (stay in robostrudel): CodeMirror editor, audio visualizer, MIDI lab,
+file tree, BPM/gain sliders, recording pipeline.
+
+## Composition recipes
+
+**Dashboard column (ocint-like)**
+
+```tsx
+<SectionHeader title="Metrics" actions={<StatusDot status="live">SYS.ACTIVE</StatusDot>} />
+<StatGrid>
+  <Stat label="Today" value={142} variant="accent" />
+  <Stat label="7 day" value={891} />
+</StatGrid>
+```
+
+**Music shell (robostrudel-like)**
+
+```tsx
+<Transport playing={playing} onPlay={…} onStop={…} />
+<Chat title="AI" messages={…} prompts={…} onSubmit={…} />
+<StatusBar message="ready" meta="track.strudel" />
+```
+
+See Storybook → **App Patterns / Overview** for interactive slices.
