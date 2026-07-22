@@ -2,7 +2,9 @@
 
 ![CI](https://github.com/nukleas/cyberdesign/actions/workflows/ci.yml/badge.svg)
 
-Unified cyber/terminal design system for [ocint](https://ocint.app) and [robostrudel](../robostrudel).
+A cyber/terminal design system — neon glow, CRT scanlines, augmented clip-path panels, five accent
+themes. Used across our other projects, and built to be a good citizen as a standalone dependency
+too.
 
 | Package | Path | Publish name | What it is |
 | --- | --- | --- | --- |
@@ -45,7 +47,7 @@ pnpm demo
 
 ### CI
 
-Every push/PR builds both packages, typechecks, and builds Storybook (`.github/workflows/ci.yml`). The repo is private, so there's no hosted preview — instead, download the `storybook-static` artifact from the workflow run in the Actions tab and open its `index.html` locally to preview without running the build yourself. A `package-dist` artifact with both packages' built output is attached the same way.
+Every push/PR builds both packages, typechecks, and builds Storybook (`.github/workflows/ci.yml`). A `.github/workflows/pages.yml` workflow builds and deploys a hosted landing page, Storybook, and visual demo via GitHub Pages once the repo has Pages enabled. Until then, download the `storybook-static` artifact from a CI run in the Actions tab and open its `index.html` locally to preview without running the build yourself. A `package-dist` artifact with both packages' built output is attached the same way.
 
 ## Consuming
 

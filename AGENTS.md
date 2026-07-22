@@ -8,7 +8,7 @@ packages/
   react-cyberdesign/     name: react-cyberdesign    Full React API + Storybook
 ```
 
-Root is private (`cyberdesign-monorepo`). Do not publish the root package.
+Root is unpublished (`cyberdesign-monorepo`, `"private": true`). Do not publish the root package.
 
 ## Package roles
 

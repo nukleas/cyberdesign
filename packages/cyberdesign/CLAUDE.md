@@ -1,6 +1,6 @@
 # cyberdesign — developer context
 
-CSS package in the cyberdesign monorepo (`packages/cyberdesign`). Shared design system for ocint and robostrudel. Pure CSS + TypeScript tokens + thin React class bindings under `src/react/`. Full React API + Storybook live in `../react-cyberdesign`.
+CSS package in the cyberdesign monorepo (`packages/cyberdesign`). Design system used across our other projects. Pure CSS + TypeScript tokens + thin React class bindings under `src/react/`. Full React API + Storybook live in `../react-cyberdesign`.
 
 ## Architecture
 
