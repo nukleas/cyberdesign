@@ -40,7 +40,7 @@ export const List: Story = {
             badge={<Badge color={item.color}>{item.cat}</Badge>}
             time="now"
             title={item.title}
-            subtitle="Orange County"
+            subtitle="Regional"
           />
         ))}
       </Feed>

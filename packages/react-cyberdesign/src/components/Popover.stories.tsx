@@ -26,9 +26,9 @@ export const Hover: Story = {
   args: { trigger: null },
   render: () => (
     <HoverCard
-      trigger={<span style={{ color: 'var(--cd-accent)', borderBottom: '1px dashed var(--cd-accent)', cursor: 'help' }}>@ocint</span>}
-      title="OCINT"
-      description="Orange County intelligence feed — live civic telemetry."
+      trigger={<span style={{ color: 'var(--cd-accent)', borderBottom: '1px dashed var(--cd-accent)', cursor: 'help' }}>@console</span>}
+      title="CONSOLE"
+      description="Regional intelligence feed — live civic telemetry."
     />
   ),
 };

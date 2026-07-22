@@ -11,8 +11,8 @@ export interface StatusDotProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Live/system status indicator — ocint `SYS.ACTIVE` pulse and
- * robostrudel Live/Paused dots.
+ * Live/system status indicator — dashboard-app `SYS.ACTIVE` pulse and
+ * AI-shell Live/Paused dots.
  */
 export function StatusDot({
   status = 'live',

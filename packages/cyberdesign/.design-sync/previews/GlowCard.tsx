@@ -39,8 +39,8 @@ const Card = ({ color, title, body, active }: any) => (
 
 export const AccentColors = () => (
   <Frame>
-    <Card color="orange" title="Orange" body="Default ocint accent. Hover me." />
-    <Card color="cyan" title="Cyan" body="Robostrudel accent. Hover me." />
+    <Card color="orange" title="Orange" body="Default orange accent. Hover me." />
+    <Card color="cyan" title="Cyan" body="Cyan accent. Hover me." />
     <Card color="magenta" title="Magenta — active" body="Secondary accent, active state." active />
   </Frame>
 );

@@ -58,7 +58,7 @@ export const FormControlsGallery: Story = {
           <Label>Endpoint</Label>
           <InputGroup>
             <InputGroupAddon>https://</InputGroupAddon>
-            <Input placeholder="api.ocint.local" />
+            <Input placeholder="api.internal.local" />
             <InputGroupAddon>/v1</InputGroupAddon>
           </InputGroup>
         </Field>

@@ -404,7 +404,7 @@
   height: 100%;
 }
 
-/* Inset top + bottom neon gradient accent lines (robostrudel visualizer pattern) */
+/* Inset top + bottom neon gradient accent lines (AI-shell visualizer pattern) */
 .cd-chart::before {
   content: '';
   position: absolute;

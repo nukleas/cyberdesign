@@ -89,7 +89,7 @@
   animation: cd-skel-shimmer 1.5s linear infinite;
 }
 
-/* Backward-compat aliases for ocint class names */
+/* Backward-compat aliases for dashboard-app class names */
 .animate-pulse-glow { animation: cd-pulse-glow 2s ease-in-out infinite; }
 .animate-flicker    { animation: cd-flicker 3s ease-in-out infinite; }
 

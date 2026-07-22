@@ -12,7 +12,7 @@ export interface SectionHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>,
 }
 
 /**
- * Panel section title row — ocint pattern (`▸ INTEL FEED` / `▸ METRICS`).
+ * Panel section title row — dashboard-app pattern (`▸ INTEL FEED` / `▸ METRICS`).
  * Lighter than {@link PanelHeader}; use inside sidebars and column panels.
  */
 export function SectionHeader({

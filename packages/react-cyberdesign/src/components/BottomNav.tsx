@@ -17,7 +17,7 @@ export interface BottomNavProps extends Omit<HTMLAttributes<HTMLElement>, 'onCha
 }
 
 /**
- * Mobile bottom tab bar — ocint MAP / FEED / STATS / TIME pattern.
+ * Mobile bottom tab bar — dashboard-app MAP / FEED / STATS / TIME pattern.
  */
 export function BottomNav({
   items,

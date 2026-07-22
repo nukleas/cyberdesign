@@ -49,7 +49,7 @@ export const Dot = () => (
     <Breadcrumb
       variant="dot"
       items={[
-        { label: 'ocint', href: '#' },
+        { label: 'console', href: '#' },
         { label: 'settings', href: '#' },
         { label: 'api-keys' },
       ]}

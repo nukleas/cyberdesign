@@ -27,11 +27,11 @@ type Story = StoryObj<typeof meta>;
 export const Scale: Story = {
   render: () => (
     <Typography style={{ maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <H1>OCINT</H1>
+      <H1>CONSOLE</H1>
       <H2>Situation room</H2>
       <H3>Harbor sector</H3>
       <H4>Telemetry</H4>
-      <Lead>Live civic intelligence for Orange County operators.</Lead>
+      <Lead>Live civic intelligence for regional operators.</Lead>
       <P>
         Ingest pipelines normalize crime, fire, weather, and port feeds into a single terminal
         surface. Query with <InlineCode>near:me</InlineCode> or open the{' '}

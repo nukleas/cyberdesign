@@ -13,7 +13,7 @@ export interface FeedItemProps extends Omit<ButtonHTMLAttributes<HTMLButtonEleme
 }
 
 /**
- * Intel-feed list row — ocint feed cards with badge, title, meta, time.
+ * Intel-feed list row — dashboard-app feed cards with badge, title, meta, time.
  */
 export function FeedItem({
   badge,

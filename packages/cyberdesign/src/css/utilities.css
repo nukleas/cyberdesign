@@ -74,7 +74,7 @@
 .text-glow-cyan    { text-shadow: 0 0 6px rgba(71,246,255,0.6), 0 0 12px rgba(71,246,255,0.3); }
 .text-glow-blue    { text-shadow: 0 0 6px rgba(106,168,255,0.6), 0 0 12px rgba(106,168,255,0.3); }
 
-/* ── 3D offset shadow (robostrudel pattern) ─────────────── */
+/* ── 3D offset shadow (AI-shell app pattern) ─────────────── */
 
 .cd-shadow-3d {
   box-shadow:
@@ -105,7 +105,7 @@
   mix-blend-mode: multiply;
 }
 
-/* ── Pixel grid background (robostrudel pattern) ────────── */
+/* ── Pixel grid background (AI-shell app pattern) ────────── */
 
 .cd-pixel-grid {
   background-image:

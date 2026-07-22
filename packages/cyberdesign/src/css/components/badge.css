@@ -26,7 +26,7 @@
 .cd-badge--purple  { color: #9d7cff; border-color: rgba(157,124,255,0.25);background: rgba(157,124,255,0.06); }
 .cd-badge--yellow  { color: #f7ff5a; border-color: rgba(247,255,90,0.25); background: rgba(247,255,90,0.06); }
 
-/* Backward-compat aliases for ocint's category badge classes */
+/* Backward-compat aliases for the dashboard app's category badge classes */
 .badge-government { color: #ffaa00; border-color: rgba(255,170,0,0.25);  background: rgba(255,170,0,0.06); }
 .badge-event      { color: #ff2bd6; border-color: rgba(255,43,214,0.25); background: rgba(255,43,214,0.06); }
 .badge-crime      { color: #ff456c; border-color: rgba(255,69,108,0.25); background: rgba(255,69,108,0.06); }

@@ -17,7 +17,7 @@ import { Clock } from './Clock';
 import { Tooltip } from './Tooltip';
 
 /**
- * Full AI chat workspace — robostrudel-inspired layout with message hover actions,
+ * Full AI chat workspace — AI-shell-inspired layout with message hover actions,
  * code insert/run, composer tools, and a paired editor pane.
  */
 const meta = {
@@ -268,7 +268,7 @@ function AiChatWorkspace() {
         }}
       >
         <div style={{ fontWeight: 700, letterSpacing: '0.2em', color: 'var(--cd-accent)', fontSize: 12 }}>
-          ROBOSTRUDEL
+          AI SHELL
         </div>
         <Transport
           playing={playing}

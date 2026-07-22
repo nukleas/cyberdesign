@@ -41,7 +41,7 @@
   cursor: not-allowed;
 }
 
-/* Left-accent variant (robostrudel corpus search pattern) */
+/* Left-accent variant (AI-shell corpus search pattern) */
 .cd-input--accent {
   border-left: 2px solid var(--cd-accent);
   padding-left: 9px;

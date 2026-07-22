@@ -11,7 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    title: 'root@ocint',
+    title: 'root@console',
     controls: true,
     crt: true,
     lines: [

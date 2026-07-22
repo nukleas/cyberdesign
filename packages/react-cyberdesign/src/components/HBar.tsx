@@ -12,7 +12,7 @@ export interface HBarProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Labeled horizontal bar — ocint "BY CATEGORY" breakdown rows.
+ * Labeled horizontal bar — dashboard-app "BY CATEGORY" breakdown rows.
  */
 export function HBar({
   label,

@@ -16,7 +16,7 @@ import { Badge } from './Badge';
 import { Stat, StatGrid } from './Stat';
 
 /**
- * Patterns lifted from **ocint** (intel dashboard) and **robostrudel** (music REPL).
+ * Patterns lifted from a civic-intel-style dashboard app and an AI-shell/REPL-style app.
  * Compose these with existing primitives for app shells.
  */
 const meta = {
@@ -28,8 +28,8 @@ const meta = {
 export default meta;
 type Story = StoryObj;
 
-export const OcintDashboardSlice: Story = {
-  name: 'ocint — dashboard slice',
+export const DashboardSlice: Story = {
+  name: 'dashboard slice',
   render: () => {
     const [filter, setFilter] = useState('all');
     const [tab, setTab] = useState('feed');
@@ -74,7 +74,7 @@ export const OcintDashboardSlice: Story = {
               badge={<Badge color="red">CRIME</Badge>}
               time="2m"
               title="Burglary report — 4th & Harbor"
-              subtitle="Santa Ana · significance 7"
+              subtitle="Sector 4 · significance 7"
             />
             <FeedItem
               selected={selected === '2'}
@@ -82,7 +82,7 @@ export const OcintDashboardSlice: Story = {
               badge={<Badge color="amber">FIRE</Badge>}
               time="14m"
               title="Vegetation fire contained"
-              subtitle="Irvine · 2 units cleared"
+              subtitle="Sector 7 · 2 units cleared"
             />
             <FeedItem
               selected={selected === '3'}
@@ -127,8 +127,8 @@ export const OcintDashboardSlice: Story = {
   },
 };
 
-export const RobostrudelShellSlice: Story = {
-  name: 'robostrudel — shell slice',
+export const AiShellSlice: Story = {
+  name: 'AI-shell slice',
   render: () => {
     const [playing, setPlaying] = useState(false);
     const [input, setInput] = useState('');

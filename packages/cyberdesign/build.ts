@@ -261,7 +261,7 @@ const bundle = [
   '/* Component: Toaster viewport */\n',
   readCss('components/toaster.css'),
   '\n',
-  '/* Component: App patterns (ocint + robostrudel) */\n',
+  '/* Component: App patterns */\n',
   readCss('components/app-patterns.css'),
   '\n',
   '/* Component: Spreadsheet (editable grid) */\n',

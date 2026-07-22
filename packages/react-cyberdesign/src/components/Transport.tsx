@@ -13,7 +13,7 @@ export interface TransportProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Play/Stop transport cluster — robostrudel header transport group.
+ * Play/Stop transport cluster — AI-shell header transport group.
  */
 export function Transport({
   playing = false,

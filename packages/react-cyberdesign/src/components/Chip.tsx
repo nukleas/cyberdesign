@@ -9,8 +9,8 @@ export interface ChipProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /**
- * Compact filter/toggle chip — ocint `NEAR` / `TOP` / category filters
- * and robostrudel quick-prompt style.
+ * Compact filter/toggle chip — dashboard-app `NEAR` / `TOP` / category filters
+ * and AI-shell quick-prompt style.
  */
 export function Chip({
   active = false,

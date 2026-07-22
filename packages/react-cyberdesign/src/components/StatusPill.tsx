@@ -16,7 +16,7 @@ export interface StatusPillProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Situation / severity pill — ocint `DEVELOPING` / `ACTIVE` / `SEV 4 · CRITICAL`.
+ * Situation / severity pill — dashboard-app `DEVELOPING` / `ACTIVE` / `SEV 4 · CRITICAL`.
  */
 export function StatusPill({
   variant = 'default',

@@ -14,7 +14,7 @@ export interface StatusBarProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * App footer status strip — robostrudel status bar with terminal prompt/cursor.
+ * App footer status strip — AI-shell status bar with terminal prompt/cursor.
  */
 export function StatusBar({
   message,

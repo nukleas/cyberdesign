@@ -12,7 +12,7 @@ export interface ClockProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Live clock readout — ocint header date/time strip.
+ * Live clock readout — dashboard-app header date/time strip.
  */
 export function Clock({
   timeZone,
