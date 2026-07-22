@@ -20,6 +20,6 @@
     "demo": "pnpm --filter cyberdesign run demo"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   }
 }
