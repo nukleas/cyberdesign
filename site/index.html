@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="theme-orange">
+<html lang="en" class="theme-green">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,22 +19,98 @@
     .wrap {
       max-width: 880px;
       margin: 0 auto;
-      padding: 0 24px 80px;
+      padding: 32px 24px 80px;
+      position: relative;
     }
 
     h1, h2 { margin: 0; font-weight: 700; }
+
+    /* ── Viewport corner frame ── */
+    .frame {
+      position: relative;
+      padding: 32px 0 40px;
+    }
+    .frame::before,
+    .frame::after,
+    .frame-bl,
+    .frame-br {
+      content: '';
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px var(--cd-accent-glow));
+    }
+    .frame::before {
+      top: 0; left: 0;
+      border-top: 2px solid var(--cd-accent);
+      border-left: 2px solid var(--cd-accent);
+    }
+    .frame::after {
+      top: 0; right: 0;
+      border-top: 2px solid var(--cd-accent-secondary);
+      border-right: 2px solid var(--cd-accent-secondary);
+    }
+    .frame-bl {
+      bottom: 0; left: 0;
+      border-bottom: 2px solid var(--cd-accent-secondary);
+      border-left: 2px solid var(--cd-accent-secondary);
+    }
+    .frame-br {
+      bottom: 0; right: 0;
+      border-bottom: 2px solid var(--cd-accent);
+      border-right: 2px solid var(--cd-accent);
+    }
 
     /* ── Hero ── */
     .hero {
       padding: 64px 0 40px;
       border-bottom: 1px solid var(--cd-border-dim);
     }
-    .hero .cd-badge { margin-bottom: 16px; }
+    .hero .cd-badge { margin-bottom: 20px; }
+    .hero-meta {
+      font-size: var(--cd-text-xs);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cd-text-dim);
+      margin-bottom: 18px;
+    }
+    .hero-meta strong {
+      color: var(--cd-accent-secondary);
+      font-weight: 700;
+      text-shadow: 0 0 10px var(--cd-accent-secondary-glow);
+    }
     .hero h1 {
-      font-size: 40px;
-      letter-spacing: 0.04em;
+      position: relative;
+      font-size: clamp(56px, 12vw, 116px);
+      font-weight: 800;
+      line-height: 0.92;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      isolation: isolate;
+    }
+    .hero h1::before {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      z-index: -1;
       color: var(--cd-accent);
-      text-shadow: 0 0 12px var(--cd-accent-glow);
+      filter: blur(28px);
+      opacity: 0.65;
+    }
+    .hero h1 .t-dim { color: var(--cd-text); }
+    .hero h1 .t-glow {
+      color: var(--cd-accent);
+      text-shadow:
+        0 0 10px var(--cd-accent-glow),
+        0 0 30px color-mix(in srgb, var(--cd-accent) 60%, transparent),
+        0 0 70px color-mix(in srgb, var(--cd-accent) 40%, transparent),
+        0 0 140px color-mix(in srgb, var(--cd-accent) 25%, transparent);
+    }
+    .hero em {
+      font-style: normal;
+      color: var(--cd-accent-secondary);
+      text-shadow: 0 0 8px var(--cd-accent-secondary-glow);
     }
     .hero p {
       max-width: 60ch;
@@ -50,16 +126,54 @@
     }
 
     /* ── Section headers ── */
-    .section { margin-top: 48px; }
+    .section { margin-top: 80px; }
     .section-header {
-      font-size: var(--cd-text-xs);
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      gap: 18px;
+      margin-bottom: 36px;
+      padding-bottom: 20px;
+      overflow: hidden;
+    }
+    .section-header__num {
+      font-size: 13px;
       font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--cd-text-dim);
+      padding-bottom: 10px;
+    }
+    .section-header__title {
+      margin: 0;
+      font-size: clamp(30px, 6vw, 48px);
+      font-weight: 800;
+      line-height: 1;
       text-transform: uppercase;
-      letter-spacing: 0.3em;
-      color: var(--cd-text-muted);
-      margin-bottom: 20px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--cd-border-dim);
+      letter-spacing: 0.02em;
+      color: var(--cd-accent);
+      text-shadow:
+        0 0 10px var(--cd-accent-glow),
+        0 0 32px color-mix(in srgb, var(--cd-accent) 45%, transparent);
+    }
+    .section-header::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cd-accent) 0%, color-mix(in srgb, var(--cd-accent) 15%, transparent) 55%, transparent 100%);
+      box-shadow: 0 0 10px var(--cd-accent-glow);
+    }
+    .section-header__sweep {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 22%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #fff 50%, transparent);
+      mix-blend-mode: screen;
+      opacity: 0.9;
     }
 
     /* ── Explore grid ── */
@@ -140,24 +254,32 @@
 </head>
 <body>
   <div class="wrap">
-    <header class="hero">
-      <span class="cd-badge cd-badge--orange">v0.1.0 // ONLINE</span>
-      <h1>cyberdesign</h1>
-      <p>
-        A cyber/terminal design system — neon glow, CRT scanlines, augmented
-        clip-path panels, JetBrains Mono. Used across our other projects, and
-        built for anyone who wants their UI to look like a control room
-        instead of a spreadsheet. CSS tokens and components, thin React
-        bindings, full Storybook.
-      </p>
-      <div class="hero-actions">
-        <a class="cd-btn cd-btn--primary" href="./storybook/">Browse components</a>
-        <a class="cd-btn" href="https://github.com/nukleas/cyberdesign">View on GitHub</a>
-      </div>
-    </header>
+    <div class="frame">
+      <span class="frame-bl"></span>
+      <span class="frame-br"></span>
+      <header class="hero">
+        <span class="cd-badge cd-badge--green">v0.1.0 // ONLINE</span>
+        <div class="hero-meta">SYSTEM // <strong>FIVE THEMES</strong> // REV 2026.07.22</div>
+        <h1 class="cd-animate-logo-glitch" data-text="cyberdesign"><span class="t-dim">cyber</span><span class="t-glow">design</span></h1>
+        <p>
+          A cyber/terminal design system — <em>neon glow</em>, CRT scanlines,
+          augmented clip-path panels, JetBrains Mono. Used across our other
+          projects, and built for anyone who wants their UI to look like a
+          <em>control room</em> instead of a spreadsheet. CSS tokens and
+          components, thin React bindings, full Storybook.
+        </p>
+        <div class="hero-actions">
+          <a class="cd-btn cd-btn--primary" href="./storybook/">Browse components</a>
+          <a class="cd-btn" href="https://github.com/nukleas/cyberdesign">View on GitHub</a>
+        </div>
+      </header>
 
     <section class="section">
-      <div class="section-header">Explore</div>
+      <div class="section-header">
+        <span class="section-header__num">01</span>
+        <h2 class="section-header__title cd-animate-logo-glitch">Explore</h2>
+        <span class="section-header__sweep cd-animate-sweep"></span>
+      </div>
       <div class="grid">
         <a class="cd-aug-panel" href="./storybook/">
           <h2>Storybook</h2>
@@ -175,7 +297,11 @@
     </section>
 
     <section class="section">
-      <div class="section-header">What it is</div>
+      <div class="section-header">
+        <span class="section-header__num">02</span>
+        <h2 class="section-header__title cd-animate-logo-glitch">What it is</h2>
+        <span class="section-header__sweep cd-animate-sweep"></span>
+      </div>
       <ul class="facts">
         <li>60+ components — forms, overlays, navigation, charts, terminal &amp; HUD families</li>
         <li>Five accent themes, class-switched on &lt;html&gt;: orange, cyan, green, red, steel</li>
@@ -186,7 +312,11 @@
     </section>
 
     <section class="section">
-      <div class="section-header">Themes</div>
+      <div class="section-header">
+        <span class="section-header__num">03</span>
+        <h2 class="section-header__title cd-animate-logo-glitch">Themes</h2>
+        <span class="section-header__sweep cd-animate-sweep"></span>
+      </div>
       <div class="themes">
         <span class="theme-chip"><span class="swatch" style="background:#ff8800"></span>orange</span>
         <span class="theme-chip"><span class="swatch" style="background:#47f6ff"></span>cyan</span>
@@ -200,6 +330,7 @@
       <span>MIT licensed</span>
       <a href="https://github.com/nukleas/cyberdesign">github.com/nukleas/cyberdesign</a>
     </footer>
+    </div>
   </div>
 </body>
 </html>
