@@ -38,6 +38,14 @@
   color: var(--cd-text);
   font-family: var(--cd-font-mono);
   filter: drop-shadow(0 0 20px var(--cd-accent-glow)) drop-shadow(0 0 2px var(--cd-accent));
+  -webkit-clip-path: polygon(
+    var(--cd-clip-lg) 0%,
+    100% 0%,
+    100% calc(100% - var(--cd-clip-lg)),
+    calc(100% - var(--cd-clip-lg)) 100%,
+    0% 100%,
+    0% var(--cd-clip-lg)
+  );
   clip-path: polygon(
     var(--cd-clip-lg) 0%,
     100% 0%,
@@ -126,6 +134,7 @@
   .cd-modal-overlay { padding: 0; align-items: flex-end; }
   .cd-modal {
     max-width: 100%;
+    -webkit-clip-path: polygon(var(--cd-clip-lg) 0%, 100% 0%, 100% 100%, 0% 100%, 0% var(--cd-clip-lg));
     clip-path: polygon(var(--cd-clip-lg) 0%, 100% 0%, 100% 100%, 0% 100%, 0% var(--cd-clip-lg));
   }
 }

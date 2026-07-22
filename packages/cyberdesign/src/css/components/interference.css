@@ -158,30 +158,37 @@
 
 @keyframes cd-interference-corrupt {
   0% {
+    -webkit-clip-path: inset(0 0 82% 0);
     clip-path: inset(0 0 82% 0);
     transform: translate(0, -1.5px) scale(1);
   }
   15% {
+    -webkit-clip-path: inset(18% 0 55% 0);
     clip-path: inset(18% 0 55% 0);
     transform: translate(2px, 0.5px) scale(1.01);
   }
   32% {
+    -webkit-clip-path: inset(48% 0 22% 0);
     clip-path: inset(48% 0 22% 0);
     transform: translate(-2.5px, -1px);
   }
   48% {
+    -webkit-clip-path: inset(8% 0 71% 0);
     clip-path: inset(8% 0 71% 0);
     transform: translate(1.5px, 1.5px) scale(0.995);
   }
   65% {
+    -webkit-clip-path: inset(35% 0 38% 0);
     clip-path: inset(35% 0 38% 0);
     transform: translate(-1px, 0);
   }
   82% {
+    -webkit-clip-path: inset(62% 0 12% 0);
     clip-path: inset(62% 0 12% 0);
     transform: translate(3px, -0.5px);
   }
   100% {
+    -webkit-clip-path: inset(0 0 82% 0);
     clip-path: inset(0 0 82% 0);
     transform: translate(0, -1.5px) scale(1);
   }
@@ -204,6 +211,7 @@
     animation: none;
     opacity: 0.25;
     transform: none;
+    -webkit-clip-path: none;
     clip-path: none;
   }
 }

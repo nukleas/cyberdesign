@@ -18,6 +18,14 @@
   padding: 4px 0;
   font-family: var(--cd-font-mono);
   box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 16px var(--cd-accent-glow);
+  -webkit-clip-path: polygon(
+    var(--cd-clip-sm) 0%,
+    100% 0%,
+    100% calc(100% - var(--cd-clip-sm)),
+    calc(100% - var(--cd-clip-sm)) 100%,
+    0% 100%,
+    0% var(--cd-clip-sm)
+  );
   clip-path: polygon(
     var(--cd-clip-sm) 0%,
     100% 0%,
@@ -37,6 +45,14 @@
 .cd-dropdown__menu--right {
   left: auto;
   right: 0;
+  -webkit-clip-path: polygon(
+    var(--cd-clip-sm) 0%,
+    100% 0%,
+    100% calc(100% - var(--cd-clip-sm)),
+    calc(100% - var(--cd-clip-sm)) 100%,
+    0% 100%,
+    0% var(--cd-clip-sm)
+  );
   clip-path: polygon(
     var(--cd-clip-sm) 0%,
     100% 0%,
