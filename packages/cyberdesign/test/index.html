@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="theme-orange">
+<html lang="en" class="theme-green">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,16 +19,68 @@
 
     /* ── Page header ── */
     .page-header {
-      padding: 20px 24px 0;
+      padding: 32px 24px 20px;
+      position: relative;
+    }
+    .page-header::before,
+    .page-header::after {
+      content: '';
+      position: absolute;
+      top: 12px;
+      width: 24px;
+      height: 24px;
+      pointer-events: none;
+      filter: drop-shadow(0 0 6px var(--cd-accent-glow));
+    }
+    .page-header::before {
+      left: 24px;
+      border-top: 2px solid var(--cd-accent);
+      border-left: 2px solid var(--cd-accent);
+    }
+    .page-header::after {
+      right: 24px;
+      border-top: 2px solid var(--cd-accent-secondary);
+      border-right: 2px solid var(--cd-accent-secondary);
+    }
+    .page-meta {
+      font-size: var(--cd-text-xs);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cd-text-dim);
+      margin-bottom: 10px;
+    }
+    .page-meta strong {
+      color: var(--cd-accent-secondary);
+      text-shadow: 0 0 8px var(--cd-accent-secondary-glow);
     }
     .page-title {
-      font-size: 18px;
-      letter-spacing: 0.25em;
+      position: relative;
+      isolation: isolate;
+      font-size: clamp(36px, 7vw, 64px);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: 0.01em;
       text-transform: uppercase;
-      color: var(--cd-accent);
-      margin-bottom: 4px;
+      margin-bottom: 10px;
     }
-    .page-subtitle { font-size: 11px; color: var(--cd-text-muted); letter-spacing: 0.08em; }
+    .page-title::before {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      color: var(--cd-accent);
+      filter: blur(22px);
+      opacity: 0.6;
+    }
+    .page-title .t-dim { color: var(--cd-text); }
+    .page-title .t-glow {
+      color: var(--cd-accent);
+      text-shadow:
+        0 0 8px var(--cd-accent-glow),
+        0 0 24px color-mix(in srgb, var(--cd-accent) 55%, transparent),
+        0 0 60px color-mix(in srgb, var(--cd-accent) 35%, transparent);
+    }
+    .page-subtitle { font-size: 12px; color: var(--cd-text-muted); letter-spacing: 0.08em; }
 
     /* ── Main nav — sticky ── */
     #main-nav {
@@ -159,11 +211,12 @@
 <!-- Theme toggle -->
 <div id="theme-toggle">
   <button class="cd-btn cd-btn--primary" onclick="toggleTheme()">Toggle Theme</button>
-  <span id="theme-label" style="font-size:var(--cd-text-xs);color:var(--cd-text-muted);display:block;text-align:center;margin-top:4px;letter-spacing:0.1em;text-transform:uppercase;">theme-orange</span>
+  <span id="theme-label" style="font-size:var(--cd-text-xs);color:var(--cd-text-muted);display:block;text-align:center;margin-top:4px;letter-spacing:0.1em;text-transform:uppercase;">theme-green</span>
 </div>
 
 <div class="page-header">
-  <h1 class="page-title cd-glitch-text">cyberdesign</h1>
+  <div class="page-meta">SYSTEM // <strong>TOKEN HARNESS</strong> // LIVE THEME TOGGLE</div>
+  <h1 class="page-title cd-animate-logo-glitch" data-text="cyberdesign"><span class="t-dim">cyber</span><span class="t-glow">design</span></h1>
   <p class="page-subtitle">Design token harness — tokens, utilities, animations, components</p>
 </div>
 
@@ -755,10 +808,12 @@
               </div>
 
               <div style="display:flex; gap:8px;">
-                <div class="cd-gauge cd-gauge--small" style="--value: 41; flex:1;">
-                  <div class="cd-gauge__track"></div>
-                  <div class="cd-gauge__fill"></div>
-                  <div class="cd-gauge__center"><div class="cd-gauge__value">41</div><div class="cd-gauge__label" style="font-size:6px;">WALL</div></div>
+                <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+                  <div class="cd-gauge cd-gauge--small" style="--value: 41;">
+                    <div class="cd-gauge__track"></div>
+                    <div class="cd-gauge__fill"></div>
+                    <div class="cd-gauge__center"><div class="cd-gauge__value">41</div><div class="cd-gauge__label" style="font-size:6px;">WALL</div></div>
+                  </div>
                 </div>
                 <div class="cd-hud-frame" style="flex:1; font-size:9px; padding:8px; display:flex; flex-direction:column; justify-content:center;">
                   <div class="cd-hud__label">LATENCY</div>
