@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-orange">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cyberdesign — cyber/terminal design system</title>
+  <meta name="description" content="A cyberpunk/terminal design system: neon glow, CRT scanlines, augmented clip-path panels, five accent themes. CSS tokens + components, thin React bindings, full Storybook.">
+  <link rel="stylesheet" href="./dist/cyberdesign.css">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: var(--cd-bg);
+      color: var(--cd-text);
+      font-family: var(--cd-font-mono);
+    }
+
+    .wrap {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    h1, h2 { margin: 0; font-weight: 700; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 64px 0 40px;
+      border-bottom: 1px solid var(--cd-border-dim);
+    }
+    .hero .cd-badge { margin-bottom: 16px; }
+    .hero h1 {
+      font-size: 40px;
+      letter-spacing: 0.04em;
+      color: var(--cd-accent);
+      text-shadow: 0 0 12px var(--cd-accent-glow);
+    }
+    .hero p {
+      max-width: 60ch;
+      margin: 16px 0 28px;
+      color: var(--cd-text-secondary);
+      font-size: var(--cd-text-base);
+      line-height: 1.6;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ── Section headers ── */
+    .section { margin-top: 48px; }
+    .section-header {
+      font-size: var(--cd-text-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--cd-text-muted);
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--cd-border-dim);
+    }
+
+    /* ── Explore grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .grid a.cd-aug-panel {
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+    .grid h2 {
+      font-size: var(--cd-text-sm);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cd-accent);
+      margin-bottom: 8px;
+    }
+    .grid p {
+      margin: 0;
+      font-size: var(--cd-text-sm);
+      color: var(--cd-text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── Facts list ── */
+    .facts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: var(--cd-text-sm);
+      color: var(--cd-text-secondary);
+    }
+    .facts li { list-style: none; }
+    .facts li::before {
+      content: '// ';
+      color: var(--cd-accent);
+    }
+
+    /* ── Theme swatches ── */
+    .themes {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .theme-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      font-size: var(--cd-text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: 1px solid var(--cd-border);
+      color: var(--cd-text-secondary);
+    }
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 64px;
+      padding-top: 20px;
+      border-top: 1px solid var(--cd-border-dim);
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--cd-text-xs);
+      color: var(--cd-text-dim);
+      letter-spacing: 0.04em;
+    }
+    footer a { color: var(--cd-text-muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <span class="cd-badge cd-badge--orange">v0.1.0 // ONLINE</span>
+      <h1>cyberdesign</h1>
+      <p>
+        A cyber/terminal design system — neon glow, CRT scanlines, augmented
+        clip-path panels, JetBrains Mono. Powers <strong>ocint</strong> and
+        <strong>robostrudel</strong>, and any other project that wants to look
+        like a control room instead of a spreadsheet. CSS tokens and
+        components, thin React bindings, full Storybook.
+      </p>
+      <div class="hero-actions">
+        <a class="cd-btn cd-btn--primary" href="./storybook/">Browse components</a>
+        <a class="cd-btn" href="https://github.com/nukleas/cyberdesign">View on GitHub</a>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-header">Explore</div>
+      <div class="grid">
+        <a class="cd-aug-panel" href="./storybook/">
+          <h2>Storybook</h2>
+          <p>Every component, every variant, with live controls.</p>
+        </a>
+        <a class="cd-aug-panel" href="./demo/">
+          <h2>Token harness</h2>
+          <p>Full CSS bundle, all components, live theme toggle — no build step.</p>
+        </a>
+        <a class="cd-aug-panel" href="./examples/">
+          <h2>Neuromancer console</h2>
+          <p>A full-screen composed security console built entirely from the kit.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">What it is</div>
+      <ul class="facts">
+        <li>60+ components — forms, overlays, navigation, charts, terminal &amp; HUD families</li>
+        <li>Five accent themes, class-switched on &lt;html&gt;: orange, cyan, green, red, steel</li>
+        <li>JetBrains Mono throughout; augmented clip-path corners instead of border-radius</li>
+        <li>Pure CSS core (<code>cyberdesign</code>) + thin React bindings (<code>react-cyberdesign</code>)</li>
+        <li>MIT licensed</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <div class="section-header">Themes</div>
+      <div class="themes">
+        <span class="theme-chip"><span class="swatch" style="background:#ff8800"></span>orange</span>
+        <span class="theme-chip"><span class="swatch" style="background:#47f6ff"></span>cyan</span>
+        <span class="theme-chip"><span class="swatch" style="background:#52ff9f"></span>green</span>
+        <span class="theme-chip"><span class="swatch" style="background:#ff456c"></span>red</span>
+        <span class="theme-chip"><span class="swatch" style="background:#9fb4c7"></span>steel</span>
+      </div>
+    </section>
+
+    <footer>
+      <span>MIT licensed</span>
+      <a href="https://github.com/nukleas/cyberdesign">github.com/nukleas/cyberdesign</a>
+    </footer>
+  </div>
+</body>
+</html>
