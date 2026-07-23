@@ -1,4 +1,4 @@
-import { copyFileSync, mkdirSync, existsSync, readFileSync } from 'node:fs';
+import { copyFileSync, cpSync, mkdirSync, existsSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -30,6 +30,8 @@ function resolveCyberdesignRoot() {
 const cyberdesignRoot = resolveCyberdesignRoot();
 const cssSrc = resolve(cyberdesignRoot, 'dist/cyberdesign.css');
 const cssDest = resolve(root, 'dist/styles.css');
+const fontsSrc = resolve(cyberdesignRoot, 'dist/fonts');
+const fontsDest = resolve(root, 'dist/fonts');
 
 if (!existsSync(cssSrc)) {
   console.error(
@@ -41,3 +43,8 @@ if (!existsSync(cssSrc)) {
 mkdirSync(resolve(root, 'dist'), { recursive: true });
 copyFileSync(cssSrc, cssDest);
 console.log(`✓ copied cyberdesign.css → dist/styles.css`);
+
+if (existsSync(fontsSrc)) {
+  cpSync(fontsSrc, fontsDest, { recursive: true });
+  console.log(`✓ copied fonts/ → dist/fonts/`);
+}

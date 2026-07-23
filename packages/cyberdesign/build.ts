@@ -1,4 +1,4 @@
-import { writeFileSync, readFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, readFileSync, mkdirSync, cpSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { semanticTokens } from './src/tokens/semantic.js';
@@ -13,6 +13,10 @@ const DIST = join(ROOT, 'dist');
 const SRC_CSS = join(ROOT, 'src/css');
 
 mkdirSync(DIST, { recursive: true });
+
+// Self-hosted font — no external CDN dependency at runtime
+cpSync(join(ROOT, 'src/fonts'), join(DIST, 'fonts'), { recursive: true });
+console.log('✓ dist/fonts/ (self-hosted JetBrains Mono)');
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 

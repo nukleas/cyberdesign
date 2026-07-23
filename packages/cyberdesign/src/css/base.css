@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'JetBrains Mono';
-  src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono@latest/fonts/webfonts/JetBrainsMono[wght].woff2') format('woff2-variations');
+  src: url('./fonts/JetBrainsMono-Variable.woff2') format('woff2');
   font-weight: 100 800;
   font-style: normal;
   font-display: swap;
