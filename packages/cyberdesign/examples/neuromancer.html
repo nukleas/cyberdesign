@@ -154,7 +154,7 @@
     /* Stat overlays positioned around the reticle */
     .hero-stats {
       position: absolute; inset: 0; pointer-events: none;
-      padding: 10px 14px;
+      padding: 10px 14px 22px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-template-rows: 1fr 1fr;
@@ -187,8 +187,10 @@
     /* Coord readout centered at bottom of hero */
     .hero-coord {
       position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-      font-size: 7px; color: var(--cd-text-dim); letter-spacing: 0.25em;
+      max-width: calc(100% - 20px);
+      font-size: 6px; color: var(--cd-text-dim); letter-spacing: 0.06em;
       text-transform: uppercase; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
     }
 
     /* ── Center stream panel ────────────────────────────────────────────────── */
@@ -261,23 +263,25 @@
 
     /* ── Event table ────────────────────────────────────────────────────────── */
     .event-table {
-      width: 100%; border-collapse: collapse;
+      width: 100%; table-layout: fixed; border-collapse: collapse;
     }
     .event-table th {
-      font-size: 7px; letter-spacing: 0.2em; text-transform: uppercase;
+      font-size: 6px; letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--cd-text-dim); font-weight: 400;
-      padding: 3px 10px; text-align: left;
+      padding: 3px 4px; text-align: left;
       border-bottom: 1px solid var(--cd-border-dim);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     .event-table td {
-      font-size: 9px; color: var(--cd-text-secondary);
-      padding: 4px 10px; border-bottom: 1px solid var(--cd-border-dim);
+      font-size: 8px; color: var(--cd-text-secondary);
+      padding: 4px 4px; border-bottom: 1px solid var(--cd-border-dim);
       vertical-align: middle; line-height: 1.2;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     .event-table tr:last-child td { border-bottom: none; }
     .event-table tr:hover td { background: var(--cd-bg-panel); }
-    .event-table .ts { font-size: 8px; color: var(--cd-text-dim); white-space: nowrap; }
-    .event-table .src { font-size: 9px; font-weight: 700; color: var(--cd-text); }
+    .event-table .ts { font-size: 7px; color: var(--cd-text-dim); }
+    .event-table .src { font-size: 8px; font-weight: 700; color: var(--cd-text); }
     .event-table .msg { color: var(--cd-text-muted); }
     .event-table .sev-crit { color: #ff4444; }
     .event-table .sev-high { color: #ffaa00; }
@@ -556,7 +560,7 @@
 
       <!-- Bottom coord readout -->
       <div class="hero-coord">
-        LAT 35.6762° N · LON 139.6503° E · ALT 0.0m · CHIBA NODE
+        CHIBA NODE // 35.6762°N 139.6503°E
       </div>
     </div>
   </div>
@@ -676,11 +680,11 @@
       <table class="event-table">
         <thead>
           <tr>
-            <th style="width:68px">TIME</th>
-            <th style="width:64px">SEV</th>
-            <th style="width:100px">SOURCE</th>
+            <th style="width:32px">TIME</th>
+            <th style="width:26px">SEV</th>
+            <th style="width:40px">SOURCE</th>
             <th>EVENT</th>
-            <th style="width:60px">VECTOR</th>
+            <th style="width:24px">VEC</th>
           </tr>
         </thead>
         <tbody>

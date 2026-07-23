@@ -36,11 +36,12 @@ jobs:
       - name: Assemble site
         run: |
           set -e
-          mkdir -p pages_dist/dist pages_dist/demo pages_dist/examples
+          mkdir -p pages_dist/dist pages_dist/demo pages_dist/examples pages_dist/src/js
           cp site/index.html pages_dist/index.html
           cp -r packages/cyberdesign/dist/. pages_dist/dist/
           cp packages/cyberdesign/test/index.html pages_dist/demo/index.html
           cp packages/cyberdesign/examples/neuromancer.html pages_dist/examples/index.html
+          cp -r packages/cyberdesign/src/js/. pages_dist/src/js/
           cp -r packages/react-cyberdesign/storybook-static pages_dist/storybook
 
       - uses: actions/configure-pages@v5
