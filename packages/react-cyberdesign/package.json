@@ -13,6 +13,9 @@
     "url": "https://github.com/nukleas/cyberdesign/issues"
   },
   "homepage": "https://github.com/nukleas/cyberdesign/tree/master/packages/react-cyberdesign#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [
     "react",
     "component-library",
