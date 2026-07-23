@@ -79,6 +79,7 @@ pnpm typecheck
 | `dist/index.js` / `.cjs` | Library bundle |
 | `dist/index.d.ts` | Types |
 | `dist/styles.css` | Copied full cyberdesign CSS bundle |
+| `dist/fonts/` | Copied self-hosted JetBrains Mono (referenced by `dist/styles.css`) |
 
 Consumers:
 

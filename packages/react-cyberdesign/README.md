@@ -15,20 +15,17 @@ Visual styles come from cyberdesign CSS (`cd-*` classes, `--cd-*` tokens). This 
 
 ## Install
 
-This package lives in the cyberdesign monorepo next to the CSS package.
+Not yet published to npm. Clone the [monorepo](../../README.md), run `pnpm build` there to build
+both packages, then consume via a `file:` dependency:
 
 ```bash
-# monorepo workspace (preferred during development)
-pnpm add react-cyberdesign --filter <your-app>
-
-# or from a local path
 pnpm add file:../cyberdesign/packages/react-cyberdesign
-
-# styles (required once in your app)
-import 'react-cyberdesign/styles.css';
 ```
 
-Ensure cyberdesign CSS is built first (`pnpm build:css` from monorepo root).
+```tsx
+// styles (required once in your app)
+import 'react-cyberdesign/styles.css';
+```
 
 ## Quick start
 
@@ -90,14 +87,13 @@ Example (Button):
 
 ## Develop
 
-```bash
-# one-time: build design tokens/CSS
-(cd ../cyberdesign && npm install && npm run build)
+From the monorepo root (this is a pnpm workspace):
 
-npm install
-npm run storybook    # http://localhost:6006
-npm run build        # dist/ ESM + CJS + types + styles.css
-npm run typecheck
+```bash
+pnpm install
+pnpm build        # CSS first, then React (dist/ ESM + CJS + types + styles.css)
+pnpm storybook    # http://localhost:6006
+pnpm typecheck
 ```
 
 ## Package layout

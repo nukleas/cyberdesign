@@ -1,7 +1,7 @@
 {
   "name": "react-cyberdesign",
   "version": "0.1.0",
-  "description": "React component library for the cyberdesign system — semantic props, dual-theme cyberpunk UI",
+  "description": "React component library for the cyberdesign system — semantic props, five-theme cyberpunk UI",
   "license": "MIT",
   "author": "Nader Heidari <nukleas2001@gmail.com>",
   "repository": {

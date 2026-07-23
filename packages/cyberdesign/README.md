@@ -6,8 +6,11 @@ Part of the [cyberdesign monorepo](../../README.md). For the full React API and 
 
 ## Install
 
+Not yet published to npm — consume via a `file:` dependency after cloning and building the
+[monorepo](../../README.md#consuming):
+
 ```bash
-pnpm add cyberdesign
+pnpm add file:../cyberdesign/packages/cyberdesign
 ```
 
 ```css

@@ -6,6 +6,11 @@ A cyber/terminal design system — neon glow, CRT scanlines, augmented clip-path
 themes. Used across our other projects, and built to be a good citizen as a standalone dependency
 too.
 
+**[Live site](https://nukleas.github.io/cyberdesign/)** ·
+**[Storybook](https://nukleas.github.io/cyberdesign/storybook/)** ·
+**[Demo](https://nukleas.github.io/cyberdesign/demo/)** ·
+**[Examples](https://nukleas.github.io/cyberdesign/examples/)**
+
 | Package | Path | Publish name | What it is |
 | --- | --- | --- | --- |
 | CSS core | [`packages/cyberdesign`](./packages/cyberdesign) | `cyberdesign` | Tokens, CSS (`cd-*`), thin React class bindings |
@@ -47,16 +52,24 @@ pnpm demo
 
 ### CI
 
-Every push/PR builds both packages, typechecks, and builds Storybook (`.github/workflows/ci.yml`). A `.github/workflows/pages.yml` workflow builds and deploys a hosted landing page, Storybook, and visual demo via GitHub Pages once the repo has Pages enabled. Until then, download the `storybook-static` artifact from a CI run in the Actions tab and open its `index.html` locally to preview without running the build yourself. A `package-dist` artifact with both packages' built output is attached the same way.
+Every push/PR builds both packages, typechecks, and builds Storybook (`.github/workflows/ci.yml`). A `.github/workflows/pages.yml` workflow builds and deploys the [live site](https://nukleas.github.io/cyberdesign/) (landing page, Storybook, demo, and examples) to GitHub Pages on every push to `master`. If you'd rather preview a specific commit without waiting on a deploy, download the `storybook-static` artifact from that CI run in the Actions tab and open its `index.html` locally. A `package-dist` artifact with both packages' built output is attached the same way.
 
 ## Consuming
 
-### CSS only
+Not yet published to npm — consume via a `file:` dependency (this is how our other projects use
+it today):
 
 ```bash
-pnpm add cyberdesign
-# or local: "cyberdesign": "workspace:*" / "file:../cyberdesign/packages/cyberdesign"
+git clone https://github.com/nukleas/cyberdesign.git
+cd cyberdesign && pnpm install && pnpm build
 ```
+
+```json
+"cyberdesign": "file:../cyberdesign/packages/cyberdesign",
+"react-cyberdesign": "file:../cyberdesign/packages/react-cyberdesign"
+```
+
+### CSS only
 
 ```css
 @import "cyberdesign/css";
@@ -67,10 +80,6 @@ pnpm add cyberdesign
 ```
 
 ### React components
-
-```bash
-pnpm add react-cyberdesign
-```
 
 ```tsx
 import { ThemeProvider, Button, GlowCard } from 'react-cyberdesign';

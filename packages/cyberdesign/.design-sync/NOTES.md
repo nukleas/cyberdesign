@@ -1,6 +1,6 @@
 # design-sync notes — cyberdesign
 
-cyberdesign is a **CSS-first** design system: 34 CSS component stylesheets + tokens + 5 themes,
+cyberdesign is a **CSS-first** design system: 48 CSS component stylesheets + tokens + 5 themes,
 historically with only one React component (`GlowCard`). To make it usable by the claude.ai/design
 agent, this sync adds **thin React binding components** under `src/react/` (one per CSS component,
 ~39 files) — the official React API for the `cd-*` class contract. The look ships via the full
@@ -68,8 +68,8 @@ agent, this sync adds **thin React binding components** under `src/react/` (one 
   gains/loses a modifier, update the matching wrapper + re-emit types.
 - Declaration emission (`dist/types/`) is gitignored (under `dist/`) but reproduced by the build —
   the committed `tsconfig.types.json` + package.json `types`/`build` script carry it forward.
-- Fonts load from a remote CDN (`@font-face` → jsdelivr JetBrains Mono); shows as `[FONT_REMOTE]`,
-  nothing to ship, but designs need network access for the brand font.
+- Fonts are self-hosted (`@font-face` → `src/fonts/JetBrainsMono-Variable.woff2`, copied into
+  `dist/fonts/` by the build) — no network dependency for the brand font.
 - **Only partially verified statically:** Tooltip (hover-only tip never shows in capture), and the
   animated components (Ticker/Scanner/Interference) are screenshot mid-animation. These are graded on
   trigger/static state, which is the best a static render can show.
