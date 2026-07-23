@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 
 /**
- * Cyber terminal button. Semantic props mirror shadcn/Mantine style:
+ * Cyber terminal button. Semantic props:
  * `variant` for emphasis, `size` for density, plus native button attributes.
  */
 const meta = {

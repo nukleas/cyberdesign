@@ -3,8 +3,9 @@
 React component library built on **cyberdesign** (workspace package at `../cyberdesign`).
 CSS-first design system; this package is the official React API with semantic props and Storybook docs.
 
-**Goal:** full shadcn/ui base-component parity (see Storybook → *Shadcn parity*), plus cyber extras
-(Terminal, HUD, GlowCard, etc.). Visual styles always live in cyberdesign CSS; React only maps props.
+**Goal:** a complete, production-ready component set — standard UI primitives plus cyber-only
+extras (Terminal, HUD, GlowCard, etc.). Visual styles always live in cyberdesign CSS; React only
+maps props.
 
 ## Architecture
 
@@ -25,7 +26,7 @@ react-cyberdesign/
 1. **Never invent styling.** Only emit `cd-*` classes that exist in cyberdesign
    (`../cyberdesign/src/css/components/*.css`). No inline styles except CSS variable hooks
    the CSS contract already uses (e.g. gauge `--value`).
-2. **Semantic props** like shadcn/Mantine: `variant`, `size`, `color`, boolean modifiers.
+2. **Semantic props**: `variant`, `size`, `color`, boolean modifiers.
    Map them to BEM modifiers: `cd-btn--primary`, `cd-input--sm`.
 3. **Extend native HTML attributes**; always merge `className` and spread `...rest`.
    `Omit` colliding names (`title`, `color`, `size` when types differ).

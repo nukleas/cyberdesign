@@ -1,12 +1,12 @@
 # react-cyberdesign
 
-React component library for **[cyberdesign](../cyberdesign)** — dark cyberpunk / terminal UI with semantic props in the style of shadcn and Mantine.
+React component library for **[cyberdesign](../cyberdesign)** — dark cyberpunk / terminal UI with semantic props.
 
 Visual styles come from cyberdesign CSS (`cd-*` classes, `--cd-*` tokens). This package provides typed React components, a theme provider, and Storybook documentation.
 
 ## Features
 
-- **Shadcn base parity** — Dialog, Sheet, Card, Calendar, Command, Sidebar, Toggle, …
+- **90+ components** — Dialog, Sheet, Card, Calendar, Command, Sidebar, Toggle, and every standard UI primitive you'd expect
 - **Cyber extras** — GlowCard, Terminal, HUD, Gauge, Scanner, Interference
 - **Semantic props** — `variant`, `size`, `color`, plus native HTML attributes
 - **Multi themes** — `orange` · `cyan` · `green` · `red` · `steel`

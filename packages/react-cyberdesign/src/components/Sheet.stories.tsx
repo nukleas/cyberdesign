@@ -46,7 +46,7 @@ export const Right: Story = {
           }
         >
           <p style={{ margin: 0, color: 'var(--cd-text-secondary)', fontSize: 12 }}>
-            Side panels map to shadcn Sheet. Use Drawer for bottom mobile sheets.
+            Side panels slide in from any edge. Use Drawer for bottom mobile sheets.
           </p>
         </Sheet>
       </>

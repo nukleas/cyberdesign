@@ -7,7 +7,7 @@ const meta = {
   title: 'Overlay/Dialog',
   component: Dialog,
   tags: ['autodocs'],
-  parameters: { docs: { description: { component: 'Alias of `Modal` (shadcn Dialog name).' } } },
+  parameters: { docs: { description: { component: 'Alias of `Modal` under the more familiar `Dialog` name.' } } },
 } satisfies Meta<typeof Dialog>;
 export default meta;
 type Story = StoryObj<typeof meta>;
