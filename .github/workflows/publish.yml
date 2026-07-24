@@ -54,12 +54,12 @@ jobs:
       - run: pnpm typecheck
 
       - name: Publish cyberdesign
-        run: pnpm --filter cyberdesign publish --no-git-checks
+        run: pnpm --filter @nukleas/cyberdesign publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish react-cyberdesign
-        run: pnpm --filter react-cyberdesign publish --no-git-checks
+        run: pnpm --filter @nukleas/react-cyberdesign publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

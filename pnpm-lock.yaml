@@ -38,7 +38,7 @@ importers:
 
   packages/react-cyberdesign:
     dependencies:
-      cyberdesign:
+      '@nukleas/cyberdesign':
         specifier: workspace:*
         version: link:../cyberdesign
     devDependencies:

@@ -13,8 +13,8 @@ too.
 
 | Package | Path | Publish name | What it is |
 | --- | --- | --- | --- |
-| CSS core | [`packages/cyberdesign`](./packages/cyberdesign) | `cyberdesign` | Tokens, CSS (`cd-*`), thin React class bindings |
-| React + Storybook | [`packages/react-cyberdesign`](./packages/react-cyberdesign) | `react-cyberdesign` | Full React API, semantic props, Storybook |
+| CSS core | [`packages/cyberdesign`](./packages/cyberdesign) | [`@nukleas/cyberdesign`](https://www.npmjs.com/package/@nukleas/cyberdesign) | Tokens, CSS (`cd-*`), thin React class bindings |
+| React + Storybook | [`packages/react-cyberdesign`](./packages/react-cyberdesign) | [`@nukleas/react-cyberdesign`](https://www.npmjs.com/package/@nukleas/react-cyberdesign) | Full React API, semantic props, Storybook |
 
 ## Setup
 
@@ -56,23 +56,21 @@ Every push/PR builds both packages, typechecks, and builds Storybook (`.github/w
 
 ## Consuming
 
-Not yet published to npm — consume via a `file:` dependency (this is how our other projects use
-it today):
-
 ```bash
-git clone https://github.com/nukleas/cyberdesign.git
-cd cyberdesign && pnpm install && pnpm build
+pnpm add @nukleas/cyberdesign @nukleas/react-cyberdesign
 ```
 
+Working on this monorepo itself, or want a live local link instead of the published version?
+
 ```json
-"cyberdesign": "file:../cyberdesign/packages/cyberdesign",
-"react-cyberdesign": "file:../cyberdesign/packages/react-cyberdesign"
+"@nukleas/cyberdesign": "file:../cyberdesign/packages/cyberdesign",
+"@nukleas/react-cyberdesign": "file:../cyberdesign/packages/react-cyberdesign"
 ```
 
 ### CSS only
 
 ```css
-@import "cyberdesign/css";
+@import "@nukleas/cyberdesign/css";
 ```
 
 ```html
@@ -82,8 +80,8 @@ cd cyberdesign && pnpm install && pnpm build
 ### React components
 
 ```tsx
-import { ThemeProvider, Button, GlowCard } from 'react-cyberdesign';
-import 'react-cyberdesign/styles.css';
+import { ThemeProvider, Button, GlowCard } from '@nukleas/react-cyberdesign';
+import '@nukleas/react-cyberdesign/styles.css';
 
 export function App() {
   return (

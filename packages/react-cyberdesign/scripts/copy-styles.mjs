@@ -8,15 +8,15 @@ const root = resolve(__dirname, '..');
 /** Resolve cyberdesign package root from workspace, node_modules, or monorepo sibling. */
 function resolveCyberdesignRoot() {
   const candidates = [
-    resolve(root, 'node_modules/cyberdesign'),
+    resolve(root, 'node_modules/@nukleas/cyberdesign'),
     resolve(root, '../cyberdesign'),
-    resolve(root, '../../node_modules/cyberdesign'),
+    resolve(root, '../../node_modules/@nukleas/cyberdesign'),
   ];
   for (const dir of candidates) {
     if (existsSync(resolve(dir, 'package.json'))) {
       try {
         const pkg = JSON.parse(readFileSync(resolve(dir, 'package.json'), 'utf8'));
-        if (pkg.name === 'cyberdesign') return dir;
+        if (pkg.name === '@nukleas/cyberdesign') return dir;
       } catch {
         /* continue */
       }

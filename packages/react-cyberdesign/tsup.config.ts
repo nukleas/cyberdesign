@@ -6,7 +6,7 @@ export default defineConfig({
   dts: true,
   sourcemap: true,
   clean: true,
-  external: ['react', 'react-dom', 'react/jsx-runtime', 'cyberdesign'],
+  external: ['react', 'react-dom', 'react/jsx-runtime', '@nukleas/cyberdesign'],
   treeshake: true,
   splitting: false,
   minify: false,

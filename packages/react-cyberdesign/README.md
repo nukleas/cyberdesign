@@ -15,16 +15,13 @@ Visual styles come from cyberdesign CSS (`cd-*` classes, `--cd-*` tokens). This 
 
 ## Install
 
-Not yet published to npm. Clone the [monorepo](../../README.md), run `pnpm build` there to build
-both packages, then consume via a `file:` dependency:
-
 ```bash
-pnpm add file:../cyberdesign/packages/react-cyberdesign
+pnpm add @nukleas/react-cyberdesign
 ```
 
 ```tsx
 // styles (required once in your app)
-import 'react-cyberdesign/styles.css';
+import '@nukleas/react-cyberdesign/styles.css';
 ```
 
 ## Quick start
@@ -38,8 +35,8 @@ import {
   Label,
   GlowCard,
   Badge,
-} from 'react-cyberdesign';
-import 'react-cyberdesign/styles.css';
+} from '@nukleas/react-cyberdesign';
+import '@nukleas/react-cyberdesign/styles.css';
 
 export function App() {
   return (
@@ -111,8 +108,8 @@ src/
 
 | Package | Responsibility |
 | --- | --- |
-| `cyberdesign` | Tokens, CSS components, Tailwind theme export |
-| `react-cyberdesign` | React API, docs, theme provider |
+| `@nukleas/cyberdesign` | Tokens, CSS components, Tailwind theme export |
+| `@nukleas/react-cyberdesign` | React API, docs, theme provider |
 
 When CSS gains a new modifier, update the matching React prop map here and add/adjust a story.
 

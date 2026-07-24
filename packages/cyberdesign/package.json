@@ -1,5 +1,5 @@
 {
-  "name": "cyberdesign",
+  "name": "@nukleas/cyberdesign",
   "version": "0.1.0",
   "description": "Unified cyber/terminal design system — shared tokens, glow utilities, and component primitives",
   "license": "MIT",

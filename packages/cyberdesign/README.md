@@ -6,15 +6,12 @@ Part of the [cyberdesign monorepo](../../README.md). For the full React API and 
 
 ## Install
 
-Not yet published to npm — consume via a `file:` dependency after cloning and building the
-[monorepo](../../README.md#consuming):
-
 ```bash
-pnpm add file:../cyberdesign/packages/cyberdesign
+pnpm add @nukleas/cyberdesign
 ```
 
 ```css
-@import "cyberdesign/css";
+@import "@nukleas/cyberdesign/css";
 ```
 
 ```html
@@ -34,8 +31,8 @@ pnpm demo   # http://localhost:4980/test/
 
 | Import | Contents |
 | --- | --- |
-| `cyberdesign` / `cyberdesign/css` | Full CSS bundle |
-| `cyberdesign/vars` | CSS variables only |
-| `cyberdesign/tailwind` | Variables + Tailwind v4 `@theme` |
-| `cyberdesign/react` | Thin React class wrappers (prefer `react-cyberdesign` for apps) |
-| `cyberdesign/tokens` | TypeScript token constants |
+| `@nukleas/cyberdesign` / `@nukleas/cyberdesign/css` | Full CSS bundle |
+| `@nukleas/cyberdesign/vars` | CSS variables only |
+| `@nukleas/cyberdesign/tailwind` | Variables + Tailwind v4 `@theme` |
+| `@nukleas/cyberdesign/react` | Thin React class wrappers (prefer `@nukleas/react-cyberdesign` for apps) |
+| `@nukleas/cyberdesign/tokens` | TypeScript token constants |
