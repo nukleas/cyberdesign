@@ -20,10 +20,22 @@
     /* ── Full-screen grid ───────────────────────────────────────────────────── */
     .layout {
       display: grid;
-      grid-template-rows: 28px 1fr 148px 24px;
-      grid-template-columns: 198px 1fr 218px;
-      height: 100vh;
+      grid-template-columns: 198px minmax(0, 1fr) minmax(220px, 260px);
+      grid-template-rows: 28px minmax(0, 1fr) minmax(132px, 0.55fr) 24px;
+      grid-template-areas:
+        "bar bar bar"
+        "entities signal hero"
+        "entities stream hero"
+        "term term term";
+      height: 100dvh;
+      min-width: 0;
     }
+    .status-bar { grid-area: bar; }
+    .entity-panel { grid-area: entities; }
+    .hero-panel { grid-area: hero; min-width: 0; }
+    .signal-panel { grid-area: signal; min-width: 0; overflow: auto; }
+    .stream-panel { grid-area: stream; min-width: 0; }
+    .terminal-bar { grid-area: term; }
 
     /* ── Shared panel base ──────────────────────────────────────────────────── */
     .panel {
@@ -35,9 +47,11 @@
 
     /* ── Top status bar ─────────────────────────────────────────────────────── */
     .status-bar {
-      grid-column: 1 / -1;
       display: flex; align-items: center;
       padding: 0 12px; gap: 0;
+      overflow-x: auto;
+      min-width: 0;
+      min-height: 28px;
       border-bottom: 1px solid var(--cd-accent);
       box-shadow: 0 0 12px var(--cd-accent-glow);
       background: color-mix(in srgb, var(--cd-bg) 96%, var(--cd-accent));
@@ -75,8 +89,7 @@
 
     /* ── Terminal bar (bottom) ──────────────────────────────────────────────── */
     .terminal-bar {
-      grid-column: 1 / -1;
-      display: flex; align-items: center; gap: 8px;
+      display: flex; align-items: center; gap: 8px; min-width: 0;
       padding: 0 12px;
       border-top: 1px solid var(--cd-border-dim);
       background: color-mix(in srgb, var(--cd-bg) 94%, var(--cd-accent));
@@ -99,8 +112,8 @@
 
     /* ── Left panel — Entity registry ──────────────────────────────────────── */
     .entity-panel {
-      grid-row: 2 / 4;
       display: flex; flex-direction: column;
+      min-height: 0;
       border-right: 1px solid var(--cd-border-dim);
     }
     .entity-list { flex: 1; overflow-y: auto; }
@@ -205,8 +218,8 @@
 
     /* ── Right panel — signal scope ─────────────────────────────────────────── */
     .signal-panel {
-      grid-row: 2 / 4;
       display: flex; flex-direction: column;
+      min-height: 0;
     }
     .scope-area {
       padding: 8px 10px;
@@ -320,6 +333,45 @@
       color: var(--cd-text-dim); padding-right: 8px;
     }
     .sector-badge strong { color: var(--cd-accent); }
+
+    @media (max-width: 1100px) {
+      .hide-md { display: none !important; }
+      .layout {
+        grid-template-columns: minmax(160px, 200px) minmax(0, 1fr);
+        grid-template-rows: auto minmax(240px, 1fr) minmax(160px, 0.7fr) auto auto;
+        grid-template-areas:
+          "bar bar"
+          "entities hero"
+          "entities stream"
+          "signal signal"
+          "term term";
+      }
+      .signal-panel { max-height: 42vh; border-left: none; border-top: 1px solid var(--cd-border-dim); }
+    }
+
+    @media (max-width: 700px) {
+      .hide-sm { display: none !important; }
+      html, body { height: auto; overflow: auto; }
+      .layout {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        min-height: 100dvh;
+      }
+      .status-bar { flex-wrap: wrap; height: auto; min-height: 28px; }
+      .entity-panel {
+        max-height: 220px;
+        border-right: none;
+        border-bottom: 1px solid var(--cd-border-dim);
+      }
+      .hero-panel { min-height: 340px; }
+      .hero-stat__value { font-size: 16px; }
+      .signal-panel { max-height: none; }
+      .stream-panel { min-height: 168px; }
+      .panel + .panel { border-left: none; }
+      .terminal-bar { flex-wrap: wrap; height: auto; min-height: 24px; padding: 4px 12px; }
+      .terminal-bar__status { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -334,14 +386,14 @@
       <a class="status-bar__label" href="../">HOME</a>
       <a class="status-bar__val" href="./" style="letter-spacing:0.16em;font-size:8px">EXAMPLES</a>
     </div>
-    <div class="status-bar__seg">
+    <div class="status-bar__seg hide-sm">
       <span class="status-bar__val" style="letter-spacing:0.2em;font-size:9px">MAAS-NEOTEK S.A.</span>
     </div>
-    <div class="status-bar__seg">
+    <div class="status-bar__seg hide-sm">
       <span class="status-bar__label">SYS</span>
       <span class="status-bar__val cd-animate-flicker">WINTERMUTE.OS v7.7</span>
     </div>
-    <div class="status-bar__seg">
+    <div class="status-bar__seg hide-md">
       <span class="status-bar__label">SECTOR</span>
       <span class="status-bar__val--dim">CHIBA-7 · SPRAWL NEXUS</span>
     </div>
@@ -349,15 +401,15 @@
       <span class="status-bar__label">ICE</span>
       <span class="status-bar__val--warn">94.2%</span>
     </div>
-    <div class="status-bar__seg">
+    <div class="status-bar__seg hide-md">
       <div class="cd-spinner cd-spinner--xs"></div>
       <span class="status-bar__label">SCANNING</span>
     </div>
-    <div class="status-bar__seg">
+    <div class="status-bar__seg hide-md">
       <span class="status-bar__label">NODE</span>
       <span class="status-bar__val--dim" style="font-size:8px">192.168.44.0/16</span>
     </div>
-    <div class="status-bar__seg">
+    <div class="status-bar__seg hide-md">
       <span class="status-bar__label">UTC</span>
       <span class="status-bar__val--dim" id="clock">00:00:00</span>
     </div>

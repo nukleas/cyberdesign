@@ -250,6 +250,13 @@
       letter-spacing: 0.04em;
     }
     footer a { color: var(--cd-text-muted); }
+
+    @media (max-width: 600px) {
+      .wrap { padding: 20px 16px 48px; }
+      .hero { padding: 36px 0 24px; }
+      .grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 8px; }
+    }
   </style>
 </head>
 <body>

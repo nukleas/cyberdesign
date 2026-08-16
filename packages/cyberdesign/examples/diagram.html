@@ -186,22 +186,76 @@
     #map-mode[hidden],
     #stack-mode[hidden] { display: none !important; }
 
+    @media (max-width: 1100px) {
+      #theme-group { display: none; }
+    }
+
     @media (max-width: 900px) {
       .nx {
-        grid-template-rows: 36px auto minmax(280px, 1fr) auto 28px;
         grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(280px, 1fr) minmax(96px, 20vh) minmax(88px, 16vh) auto;
+        grid-template-areas:
+          "bar"
+          "scene"
+          "rail"
+          "inspect"
+          "foot";
       }
-      .nx-bar, .nx-foot { grid-column: 1; }
+      .nx-bar { grid-area: bar; }
+      .nx-scene { grid-area: scene; }
+      .nx-rail { grid-area: rail; }
+      .nx-inspect { grid-area: inspect; }
+      .nx-foot { grid-area: foot; }
+      .nx-bar, .nx-foot { grid-column: auto; }
+      .nx-bar {
+        flex-wrap: wrap;
+        align-items: center;
+        height: auto;
+        min-height: 36px;
+        overflow: visible;
+      }
+      .nx-bar .cd-hud-segment {
+        height: auto;
+        min-height: 36px;
+        padding: 0 10px;
+      }
+      .cd-hud-segment--grow {
+        flex-wrap: wrap;
+        width: 100%;
+        margin-left: 0;
+        padding: 4px 8px 6px;
+      }
       .nx-rail {
-        max-height: 168px;
+        max-height: 20vh;
+        overflow: auto;
         border-right: none;
         border-bottom: 1px solid var(--cd-border-dim);
       }
       .nx-inspect {
-        max-height: 200px;
+        max-height: 16vh;
+        overflow: auto;
         border-left: none;
         border-top: 1px solid var(--cd-border-dim);
       }
+      .nx-foot {
+        flex-wrap: wrap;
+        align-items: center;
+        height: auto;
+        min-height: 28px;
+        overflow: visible;
+        gap: 8px;
+        padding: 4px 12px;
+      }
+      .nx-foot .cd-hud-segment,
+      .nx-foot .cd-breadcrumb { height: auto; }
+      .nx-help { margin-left: 0; }
+    }
+
+    @media (max-width: 600px) {
+      #legend,
+      .hide-sm { display: none !important; }
+      .nx-help { display: none; }
+      .cd-hud-bar .cd-btn { padding: 0 8px; }
     }
   </style>
 </head>
@@ -212,11 +266,11 @@
         <a class="cd-hud-segment__label" href="../">SITE</a>
         <span class="cd-hud-segment__value" id="site-name">OCINT</span>
       </div>
-      <div class="cd-hud-segment">
+      <div class="cd-hud-segment hide-sm">
         <span class="cd-hud-segment__label">VIEW</span>
         <span class="cd-hud-segment__value" id="view-name">CAMPUS</span>
       </div>
-      <div class="cd-hud-segment">
+      <div class="cd-hud-segment hide-sm">
         <span class="cd-hud-segment__label">SEL</span>
         <span class="cd-hud-segment__value" id="sel-count">0</span>
       </div>
