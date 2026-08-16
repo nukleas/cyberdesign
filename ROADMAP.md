@@ -22,6 +22,13 @@ Scanner, Interference, Gauge, Ticker, HBar, Clock, Transport, Chat, Typography
 Each ships as CSS (`cd-*` classes) + a thin React wrapper (`cyberdesign/react`) + a full documented
 React component with a Storybook story (`react-cyberdesign`).
 
+## In progress
+
+- **cyberdiagram (Phase 0 spike)**: isometric architecture maps. CSS lives in
+  `packages/cyberdesign/src/css/components/iso.css`; projector in `src/js/iso.js`
+  (`CdIsoScene`). Campus HUD demo: `packages/cyberdesign/examples/diagram.html`.
+  Next is a typed model + `@nukleas/cyberdiagram` package (viewer-first, no editor).
+
 ## Under consideration
 
 - **React chart wrappers**: `charts.css` + `charts.js` already ship CSS and canvas helpers

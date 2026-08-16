@@ -1,0 +1,696 @@
+/* ── Isometric diagram scene ─────────────────────────────────────────────── */
+/*
+  Token-only isometric primitives for architecture / org / stream maps.
+
+  Geometry is SVG (projected in JS). Faces, glow, dim, and labels are CSS.
+  Labels stay upright HUD chips — never skewed with the tile.
+
+  Structure:
+    .cd-iso
+      svg.cd-iso__svg
+        g.cd-iso__world
+          .cd-iso__floor / .cd-iso-district / .cd-iso-edge / .cd-iso-block / .cd-iso-cyl
+      .cd-iso__labels
+        button.cd-iso-label
+*/
+
+.cd-iso {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 42%,
+      color-mix(in srgb, var(--cd-accent) 7%, transparent) 0%,
+      transparent 55%),
+    var(--cd-bg);
+  color: var(--cd-text);
+  font-family: var(--cd-font-mono);
+  user-select: none;
+  touch-action: none;
+  cursor: grab;
+}
+
+.cd-iso:active { cursor: grabbing; }
+
+.cd-iso__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.cd-iso__world {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+/* Floor grid */
+.cd-iso-grid {
+  fill: none;
+  stroke: var(--cd-accent);
+  stroke-opacity: 0.09;
+  stroke-width: 0.8;
+  vector-effect: non-scaling-stroke;
+}
+
+.cd-iso-grid--major {
+  stroke-opacity: 0.18;
+  stroke-width: 1.1;
+}
+
+.cd-iso-floor {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 72%, transparent);
+  stroke: color-mix(in srgb, var(--cd-accent) 22%, var(--cd-border));
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Shared face language — face-split lighting, glass, token only */
+.cd-iso-face {
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  transition: fill 140ms ease, stroke 140ms ease, stroke-opacity 140ms ease, opacity 140ms ease;
+}
+
+.cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 82%, var(--cd-accent) 8%);
+  stroke: color-mix(in srgb, var(--cd-accent) 38%, var(--cd-border));
+  stroke-width: 1.15;
+}
+
+.cd-iso-face--left {
+  fill: color-mix(in srgb, var(--cd-bg) 78%, var(--cd-accent) 4%);
+  stroke: color-mix(in srgb, var(--cd-accent) 22%, var(--cd-border-dim));
+  stroke-width: 1;
+}
+
+.cd-iso-face--right {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 70%, var(--cd-accent) 14%);
+  stroke: color-mix(in srgb, var(--cd-accent) 28%, var(--cd-border));
+  stroke-width: 1;
+}
+
+.cd-iso-inset {
+  fill: none;
+  stroke: color-mix(in srgb, var(--cd-accent) 22%, transparent);
+  stroke-width: 0.7;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+/* Districts — low glass platforms */
+.cd-iso-district .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 58%, var(--cd-accent) 6%);
+  stroke: color-mix(in srgb, var(--cd-accent) 42%, transparent);
+  stroke-width: 1.35;
+}
+
+.cd-iso-district .cd-iso-face--left {
+  fill: color-mix(in srgb, var(--cd-bg) 70%, var(--cd-accent) 6%);
+}
+
+.cd-iso-district .cd-iso-face--right {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 55%, var(--cd-accent) 10%);
+}
+
+.cd-iso-district .cd-iso-hatch {
+  fill: none;
+  stroke: var(--cd-accent);
+  stroke-opacity: 0.08;
+  stroke-width: 0.7;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+/* Kind accents on the roof */
+.cd-iso-node[data-kind='app'] .cd-iso-face--top,
+.cd-iso-node[data-kind='system'] .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 74%, var(--cd-accent) 14%);
+}
+
+.cd-iso-node[data-kind='stream'] .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 60%, var(--cd-accent-secondary) 16%);
+  stroke: color-mix(in srgb, var(--cd-accent-secondary) 50%, transparent);
+}
+
+.cd-iso-node[data-kind='stream'] .cd-iso-face--right {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 55%, var(--cd-accent-secondary) 12%);
+}
+
+.cd-iso-node[data-kind='store'] .cd-iso-face--top,
+.cd-iso-cyl .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 68%, var(--cd-neon-blue) 14%);
+  stroke: color-mix(in srgb, var(--cd-neon-blue) 45%, var(--cd-border));
+}
+
+.cd-iso-node[data-role='hero'] .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 55%, var(--cd-accent) 22%);
+  stroke: var(--cd-accent);
+}
+
+.cd-iso-node[data-role='hero'] {
+  filter: drop-shadow(0 0 8px var(--cd-accent-glow));
+}
+
+/* Cylinder body */
+.cd-iso-cyl-body {
+  fill: color-mix(in srgb, var(--cd-bg) 72%, var(--cd-neon-blue) 10%);
+  stroke: color-mix(in srgb, var(--cd-neon-blue) 40%, var(--cd-border));
+  stroke-width: 1.1;
+  vector-effect: non-scaling-stroke;
+}
+
+.cd-iso-cyl-ring {
+  fill: none;
+  stroke: color-mix(in srgb, var(--cd-neon-blue) 55%, transparent);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+/* Status beacon */
+.cd-iso-beacon {
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.cd-iso-node[data-status='ok'] .cd-iso-beacon {
+  fill: var(--cd-neon-green);
+  stroke: color-mix(in srgb, var(--cd-neon-green) 70%, #000);
+  filter: drop-shadow(0 0 4px var(--cd-neon-green));
+}
+
+.cd-iso-node[data-status='warn'] .cd-iso-beacon {
+  fill: var(--cd-amber);
+  stroke: color-mix(in srgb, var(--cd-amber) 70%, #000);
+  filter: drop-shadow(0 0 4px var(--cd-amber));
+}
+
+.cd-iso-node[data-status='err'] .cd-iso-beacon {
+  fill: var(--cd-neon-red);
+  stroke: color-mix(in srgb, var(--cd-neon-red) 70%, #000);
+  filter: drop-shadow(0 0 4px var(--cd-neon-red));
+}
+
+.cd-iso-node[data-status='unknown'] .cd-iso-beacon {
+  fill: var(--cd-text-dim);
+  stroke: var(--cd-border);
+}
+
+/* Edges / conduits */
+.cd-iso-edge {
+  fill: none;
+  stroke: color-mix(in srgb, var(--cd-accent) 45%, var(--cd-border));
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: stroke;
+  transition: stroke 140ms ease, stroke-opacity 140ms ease, opacity 140ms ease;
+}
+
+.cd-iso-edge[data-kind='sync'] {
+  stroke: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+}
+
+.cd-iso-edge[data-kind='data'] {
+  stroke: color-mix(in srgb, var(--cd-neon-blue) 60%, transparent);
+  stroke-dasharray: 5 4;
+}
+
+.cd-iso-edge[data-kind='stream'] {
+  stroke: color-mix(in srgb, var(--cd-accent-secondary) 70%, transparent);
+  stroke-width: 2;
+  stroke-dasharray: 7 6;
+  animation: cd-iso-dash 1.4s linear infinite;
+}
+
+.cd-iso-edge-glow {
+  fill: none;
+  stroke: color-mix(in srgb, var(--cd-accent-secondary) 28%, transparent);
+  stroke-width: 6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.cd-iso-edge[data-kind='sync'] + .cd-iso-edge-glow,
+.cd-iso-edge-glow[data-kind='sync'] {
+  stroke: color-mix(in srgb, var(--cd-accent) 18%, transparent);
+}
+
+.cd-iso-particle {
+  fill: var(--cd-accent-secondary);
+  stroke: none;
+  filter: drop-shadow(0 0 4px var(--cd-accent-secondary));
+  pointer-events: none;
+}
+
+.cd-iso-particle[data-kind='sync'] {
+  fill: var(--cd-accent);
+  filter: drop-shadow(0 0 4px var(--cd-accent));
+}
+
+.cd-iso-particle[data-kind='report'] {
+  fill: var(--cd-amber);
+  filter: drop-shadow(0 0 4px var(--cd-amber));
+}
+
+.cd-iso-particle[data-kind='settle'] {
+  fill: var(--cd-neon-green);
+  filter: drop-shadow(0 0 4px var(--cd-neon-green));
+}
+
+/* Hex catalog / standard */
+.cd-iso-hex .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 62%, var(--cd-neon-yellow) 16%);
+  stroke: color-mix(in srgb, var(--cd-neon-yellow) 50%, var(--cd-border));
+}
+
+/* Payment rack */
+.cd-iso-rack .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 70%, var(--cd-neon-amber) 12%);
+}
+
+.cd-iso-rack .cd-iso-face--right {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 58%, var(--cd-amber) 10%);
+}
+
+/* External broker wedge */
+.cd-iso-wedge .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 60%, var(--cd-neon-purple) 16%);
+  stroke: color-mix(in srgb, var(--cd-neon-purple) 48%, var(--cd-border));
+}
+
+/* Standing actor */
+.cd-iso-actor-head {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 40%, var(--cd-accent) 28%);
+  stroke: var(--cd-accent);
+  stroke-width: 1.1;
+  vector-effect: non-scaling-stroke;
+}
+
+.cd-iso-actor .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 50%, var(--cd-accent) 18%);
+}
+
+/* Zone tints on districts */
+.cd-iso-district[data-zone='treasury'] .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 38%, var(--cd-accent) 14%);
+  stroke: color-mix(in srgb, var(--cd-accent) 48%, transparent);
+}
+
+.cd-iso-district[data-zone='agency'] .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 46%, var(--cd-accent-secondary) 4%);
+  stroke: color-mix(in srgb, var(--cd-accent-secondary) 22%, transparent);
+}
+
+.cd-iso-district[data-zone='public'] .cd-iso-face--top {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 36%, transparent);
+  stroke: color-mix(in srgb, var(--cd-text-dim) 40%, var(--cd-border));
+  stroke-dasharray: 5 4;
+}
+
+/* Classification roof stripe */
+.cd-iso-stripe {
+  pointer-events: none;
+  stroke: none;
+}
+
+.cd-iso-stripe[data-classif='cui'] {
+  fill: color-mix(in srgb, var(--cd-amber) 72%, transparent);
+}
+
+.cd-iso-stripe[data-classif='s'] {
+  fill: color-mix(in srgb, var(--cd-neon-red) 70%, transparent);
+}
+
+/* Dual-track (budgetary / proprietary) split roof */
+.cd-iso-face--track-a {
+  fill: color-mix(in srgb, var(--cd-accent) 28%, var(--cd-bg-panel) 55%);
+  stroke: none;
+  pointer-events: none;
+}
+
+.cd-iso-face--track-b {
+  fill: color-mix(in srgb, var(--cd-neon-blue) 26%, var(--cd-bg-panel) 55%);
+  stroke: none;
+  pointer-events: none;
+}
+
+/* Report / settle / recon / certify conduits */
+.cd-iso-edge[data-kind='report'] {
+  stroke: color-mix(in srgb, var(--cd-amber) 78%, transparent);
+  stroke-width: 2.1;
+  stroke-dasharray: 9 5;
+  animation: cd-iso-dash 1.6s linear infinite;
+}
+
+.cd-iso-edge[data-kind='settle'] {
+  stroke: color-mix(in srgb, var(--cd-neon-green) 72%, transparent);
+  stroke-width: 1.9;
+  stroke-dasharray: 3 6;
+  animation: cd-iso-dash 1.1s linear infinite;
+}
+
+.cd-iso-edge[data-kind='recon'] {
+  stroke: color-mix(in srgb, var(--cd-neon-cyan) 70%, transparent);
+  stroke-dasharray: 2 3 8 3;
+}
+
+.cd-iso-edge[data-kind='certify'] {
+  stroke: color-mix(in srgb, var(--cd-gold) 80%, transparent);
+  stroke-width: 2.2;
+}
+
+.cd-iso-edge[data-classif='cui'] {
+  filter: drop-shadow(0 0 3px var(--cd-amber));
+}
+
+.cd-iso-edge-glow[data-kind='report'] {
+  stroke: color-mix(in srgb, var(--cd-amber) 22%, transparent);
+}
+
+.cd-iso-edge-glow[data-kind='settle'] {
+  stroke: color-mix(in srgb, var(--cd-neon-green) 20%, transparent);
+}
+
+/* Label marks */
+.cd-iso-mark {
+  display: inline-flex;
+  align-items: center;
+  height: 12px;
+  padding: 0 4px;
+  border: 1px solid color-mix(in srgb, var(--cd-border) 80%, transparent);
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cd-iso-mark--cui {
+  color: var(--cd-amber);
+  border-color: color-mix(in srgb, var(--cd-amber) 50%, transparent);
+}
+
+.cd-iso-mark--s {
+  color: var(--cd-neon-red);
+  border-color: color-mix(in srgb, var(--cd-neon-red) 50%, transparent);
+}
+
+.cd-iso-mark--il {
+  color: var(--cd-neon-cyan);
+  border-color: color-mix(in srgb, var(--cd-neon-cyan) 40%, transparent);
+}
+
+.cd-iso-mark--track {
+  color: var(--cd-neon-blue);
+  border-color: color-mix(in srgb, var(--cd-neon-blue) 40%, transparent);
+}
+
+.cd-iso-label[data-kind='standard'] {
+  border-color: color-mix(in srgb, var(--cd-neon-yellow) 40%, transparent);
+}
+
+.cd-iso-label[data-kind='actor'] {
+  transform: translate(-50%, -170%);
+}
+
+.cd-iso-label[data-kind='rack'],
+.cd-iso-label[data-kind='broker'] {
+  border-color: color-mix(in srgb, var(--cd-neon-purple) 36%, transparent);
+}
+
+.cd-iso-label[data-kind='standard'] .cd-iso-label__kind,
+.cd-iso-label[data-kind='actor'] .cd-iso-label__kind,
+.cd-iso-label[data-kind='rack'] .cd-iso-label__kind,
+.cd-iso-label[data-kind='broker'] .cd-iso-label__kind {
+  color: var(--cd-text-muted);
+}
+
+/* Interaction states */
+.cd-iso-node {
+  cursor: pointer;
+}
+
+.cd-iso-node.is-hovered .cd-iso-face--top,
+.cd-iso-node:focus-visible .cd-iso-face--top {
+  stroke: var(--cd-accent);
+  stroke-width: 1.6;
+}
+
+.cd-iso-node.is-hovered,
+.cd-iso-node:focus-visible {
+  filter: drop-shadow(0 0 7px var(--cd-accent-glow));
+}
+
+.cd-iso-node.is-selected {
+  filter: drop-shadow(0 0 10px var(--cd-accent-glow));
+}
+
+.cd-iso-node.is-selected .cd-iso-face--top {
+  stroke: var(--cd-accent-bright);
+  stroke-width: 1.7;
+}
+
+.cd-iso-edge.is-hot,
+.cd-iso-edge.is-related {
+  stroke-opacity: 1;
+  stroke-width: 2.3;
+  filter: drop-shadow(0 0 5px var(--cd-accent-glow));
+}
+
+.cd-iso.is-focusing .cd-iso-node:not(.is-selected):not(.is-related):not(.is-hovered),
+.cd-iso.is-focusing .cd-iso-edge:not(.is-hot):not(.is-related) {
+  opacity: 0.22;
+}
+
+.cd-iso.is-focusing .cd-iso-grid {
+  stroke-opacity: 0.04;
+}
+
+/* Upright HUD labels — HTML overlay, never iso-skewed */
+.cd-iso__labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.cd-iso-label {
+  pointer-events: auto;
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -155%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 168px;
+  padding: 3px 7px 3px 5px;
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 28%, var(--cd-border-dim));
+  background: color-mix(in srgb, var(--cd-bg) 88%, transparent);
+  color: var(--cd-text);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  white-space: nowrap;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: border-color 120ms ease, color 120ms ease, background 120ms ease, opacity 140ms ease;
+}
+
+.cd-iso-label__kind {
+  color: var(--cd-text-dim);
+  letter-spacing: 0.14em;
+  font-size: 8px;
+}
+
+.cd-iso-label__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cd-iso-label[data-kind='team'],
+.cd-iso-label[data-kind='boundary'] {
+  z-index: 1;
+  transform: translate(-10%, -120%);
+  border-color: color-mix(in srgb, var(--cd-accent) 18%, transparent);
+  background: color-mix(in srgb, var(--cd-bg) 55%, transparent);
+  color: var(--cd-text-secondary);
+  letter-spacing: 0.16em;
+}
+.cd-iso-label[data-kind='stream'] {
+  border-color: color-mix(in srgb, var(--cd-accent-secondary) 40%, transparent);
+}
+.cd-iso-label[data-kind='store'] {
+  border-color: color-mix(in srgb, var(--cd-neon-blue) 40%, transparent);
+}
+
+.cd-iso-label.is-hovered,
+.cd-iso-label:focus-visible {
+  color: var(--cd-accent);
+  border-color: var(--cd-accent);
+  background: color-mix(in srgb, var(--cd-bg) 70%, var(--cd-accent) 8%);
+}
+
+.cd-iso-label.is-selected {
+  z-index: 4;
+  color: var(--cd-accent-bright);
+  border-color: var(--cd-accent);
+  box-shadow: 0 0 10px var(--cd-accent-glow);
+}
+
+.cd-iso.is-focusing .cd-iso-label:not(.is-selected):not(.is-related):not(.is-hovered) {
+  opacity: 0.28;
+}
+
+/* Focus labels — buildings stay quiet; city pads stay named */
+.cd-iso--labels-focus .cd-iso-label:not(.is-selected):not(.is-hovered):not(.is-related) {
+  opacity: 0;
+  pointer-events: none;
+}
+.cd-iso--labels-focus .cd-iso-label[data-kind='team']:not(.is-selected):not(.is-hovered):not(.is-related),
+.cd-iso--labels-focus .cd-iso-label[data-kind='boundary']:not(.is-selected):not(.is-hovered):not(.is-related) {
+  opacity: 0.88;
+  pointer-events: auto;
+}
+
+.cd-iso--labels-focus.is-focusing .cd-iso-label.is-related:not(.is-selected):not(.is-hovered) {
+  opacity: 0.7;
+}
+
+/* Stacked plates */
+.cd-iso-plate__deck {
+  fill: color-mix(in srgb, var(--cd-bg-panel) 48%, transparent);
+  stroke: color-mix(in srgb, var(--cd-accent) 32%, var(--cd-border));
+  stroke-width: 1.3;
+  vector-effect: non-scaling-stroke;
+}
+
+.cd-iso-riser {
+  stroke: color-mix(in srgb, var(--cd-accent) 22%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.cd-iso-plate-label {
+  pointer-events: auto;
+  position: absolute;
+  z-index: 3;
+  transform: translate(0, -120%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 40%, transparent);
+  background: color-mix(in srgb, var(--cd-bg) 80%, transparent);
+  color: var(--cd-accent);
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-xs);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+}
+
+.cd-iso-plate-label__idx {
+  color: var(--cd-text-dim);
+  letter-spacing: 0.08em;
+}
+
+.cd-iso-plate-label:hover,
+.cd-iso-plate-label:focus-visible {
+  color: var(--cd-accent-bright);
+  border-color: var(--cd-accent);
+  box-shadow: 0 0 10px var(--cd-accent-glow);
+}
+
+.cd-iso-edge[data-hop='1'] {
+  stroke-width: 2;
+}
+
+.cd-iso-edge[data-span='1'] {
+  stroke-width: 2.15;
+  stroke-opacity: 0.85;
+}
+
+.cd-iso-node[data-kind='stream'] {
+}
+
+/* Scan overlay — compose with existing utility if desired */
+.cd-iso__leaders {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 2;
+}
+
+.cd-iso-leader {
+  fill: none;
+  stroke: color-mix(in srgb, var(--cd-accent) 42%, transparent);
+  stroke-width: 1;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.cd-iso-leader.is-hot {
+  stroke: var(--cd-accent);
+  stroke-opacity: 1;
+}
+
+.cd-iso-leader-dot {
+  fill: color-mix(in srgb, var(--cd-accent) 70%, transparent);
+  stroke: none;
+}
+
+.cd-iso-leader-dot.is-hot {
+  fill: var(--cd-accent-bright);
+}
+
+.cd-iso-label--pin {
+  transform: none;
+  max-width: 148px;
+  padding: 2px 6px;
+  z-index: 3;
+}
+
+.cd-iso--labels-pin .cd-iso-label__kind { display: none; }
+
+.cd-iso-label--pin-left { text-align: left; }
+.cd-iso-label--pin-right { text-align: right; }
+
+.cd-iso--labels-pin .cd-iso-label:not(.cd-iso-label--pin) {
+  opacity: 0;
+}
+
+.cd-iso__scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  z-index: 1;
+}
+
+@keyframes cd-iso-dash {
+  to { stroke-dashoffset: -26; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-iso-edge[data-kind='stream'],
+  .cd-iso-particle {
+    animation: none !important;
+  }
+}

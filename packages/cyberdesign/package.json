@@ -42,7 +42,8 @@
     "./tokens": {
       "types": "./dist/tokens/index.d.ts",
       "default": "./dist/tokens/index.js"
-    }
+    },
+    "./iso": "./src/js/iso.js"
   },
   "scripts": {
     "build": "tsx build.ts && tsc -p tsconfig.build.json",

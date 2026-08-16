@@ -17,10 +17,10 @@ src/css/
   base.css          self-hosted JetBrains Mono @font-face, box-sizing reset, :root defaults
   utilities.css     glow helpers, scanlines, pixel-grid, glass, scrollbar, glitch
   animations.css    @keyframes + animation classes
-  components/       one file per component (48 total)
+  components/       one file per component (iso.css = isometric scene)
 
 src/react/          GlowCard.tsx — only React component
-src/js/             charts.js — canvas chart helpers (CdLineChart, CdBarChart, etc.)
+src/js/             charts.js (canvas) + iso.js (CdIsoScene projector)
 src/fonts/          self-hosted JetBrains Mono variable woff2 + SIL OFL license
 
 dist/               generated, gitignored — run `pnpm build:css` to regenerate
@@ -30,6 +30,7 @@ dist/               generated, gitignored — run `pnpm build:css` to regenerate
   fonts/            copied from src/fonts/
 
 test/index.html     visual demo harness — 31 sections, live theme toggle
+examples/diagram.html  isometric campus HUD (CdIsoScene)
 ```
 
 ## Conventions

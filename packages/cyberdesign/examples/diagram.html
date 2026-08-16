@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-orange">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCINT // CIVIC INTEL</title>
+  <link rel="stylesheet" href="../dist/cyberdesign.css?v=radial3">
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: var(--cd-bg);
+      color: var(--cd-text);
+      font-family: var(--cd-font-mono);
+    }
+
+    .nx {
+      display: grid;
+      grid-template-rows: 36px 1fr 28px;
+      grid-template-columns: 236px 1fr 292px;
+      height: 100%;
+    }
+
+    .nx-bar { grid-column: 1 / -1; }
+
+    .nx-rail, .nx-inspect {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      background: color-mix(in srgb, var(--cd-bg) 92%, transparent);
+      border-right: 1px solid var(--cd-border-dim);
+    }
+    .nx-inspect { border-right: none; border-left: 1px solid var(--cd-border-dim); }
+    #inspect-body.nx-section {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+    }
+
+    .nx-scene { min-width: 0; min-height: 0; position: relative; }
+
+    .nx-foot {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 12px;
+    }
+
+    .nx-section {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--cd-border-dim);
+    }
+
+    .nx-empty {
+      padding: 16px 14px;
+      color: var(--cd-text-muted);
+      font-size: var(--cd-text-sm);
+      letter-spacing: 0.04em;
+    }
+
+    .nx-kv {
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 6px 10px;
+      font-size: var(--cd-text-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .nx-kv dt { color: var(--cd-text-dim); }
+    .nx-kv dd { margin: 0; color: var(--cd-text); }
+
+    .nx-summary {
+      margin: 0 0 12px;
+      color: var(--cd-text-secondary);
+      font-size: var(--cd-text-sm);
+      letter-spacing: 0.03em;
+      line-height: 1.45;
+      text-transform: none;
+    }
+
+    .nx-refs { display: flex; flex-direction: column; }
+    .nx-ref {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--cd-border-dim);
+      color: var(--cd-text);
+      font-size: var(--cd-text-xs);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .nx-ref:hover,
+    .nx-ref:focus-visible {
+      color: var(--cd-accent);
+    }
+    .nx-ref__go { color: var(--cd-accent); flex-shrink: 0; }
+
+    .nx-edge {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      width: 100%;
+      padding: 8px 0;
+      border: 0;
+      border-bottom: 1px solid var(--cd-border-dim);
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      font-size: var(--cd-text-xs);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .nx-edge:hover,
+    .nx-edge:focus-visible {
+      background: var(--cd-accent-subtle);
+    }
+    .nx-edge__kind { color: var(--cd-accent-secondary); font-weight: 700; }
+    .nx-edge__path { color: var(--cd-text-secondary); }
+    .nx-edge__hint { color: var(--cd-text-dim); letter-spacing: 0.1em; }
+
+    .nx-help {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+      color: var(--cd-text-dim);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .nx-command {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 14vh;
+      background: color-mix(in srgb, var(--cd-bg) 55%, transparent);
+    }
+    .nx-command.is-open { display: flex; }
+
+    .nx-legend {
+      display: grid;
+      grid-template-columns: 10px 1fr;
+      gap: 5px 8px;
+      align-items: center;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cd-text-muted);
+    }
+    .nx-swatch {
+      width: 10px;
+      height: 10px;
+      border: 1px solid var(--cd-border);
+    }
+
+    .cd-hud-bar .cd-btn { height: 24px; font-size: 9px; }
+    .cd-hud-bar .cd-btn.is-active,
+    .cd-btn.is-active {
+      color: var(--cd-accent);
+      border-color: var(--cd-border-glow);
+      background: var(--cd-accent-subtle);
+    }
+    .cd-hud-segment--grow { margin-left: auto; border-right: none; display: flex; gap: 6px; align-items: center; }
+    #map-mode[hidden],
+    #stack-mode[hidden] { display: none !important; }
+
+    @media (max-width: 900px) {
+      .nx {
+        grid-template-rows: 36px auto minmax(280px, 1fr) auto 28px;
+        grid-template-columns: 1fr;
+      }
+      .nx-bar, .nx-foot { grid-column: 1; }
+      .nx-rail {
+        max-height: 168px;
+        border-right: none;
+        border-bottom: 1px solid var(--cd-border-dim);
+      }
+      .nx-inspect {
+        max-height: 200px;
+        border-left: none;
+        border-top: 1px solid var(--cd-border-dim);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="nx">
+    <div class="cd-hud-bar cd-hud-bar--top nx-bar">
+      <div class="cd-hud-segment">
+        <span class="cd-hud-segment__label">SITE</span>
+        <span class="cd-hud-segment__value" id="site-name">OCINT</span>
+      </div>
+      <div class="cd-hud-segment">
+        <span class="cd-hud-segment__label">VIEW</span>
+        <span class="cd-hud-segment__value" id="view-name">CAMPUS</span>
+      </div>
+      <div class="cd-hud-segment">
+        <span class="cd-hud-segment__label">SEL</span>
+        <span class="cd-hud-segment__value" id="sel-count">0</span>
+      </div>
+      <div class="cd-hud-segment cd-hud-segment--grow">
+        <div class="cd-btn-group" id="theme-group">
+          <button class="cd-btn cd-btn--sm is-active" data-theme="orange" type="button">ORG</button>
+          <button class="cd-btn cd-btn--sm" data-theme="cyan" type="button">CYN</button>
+          <button class="cd-btn cd-btn--sm" data-theme="green" type="button">GRN</button>
+          <button class="cd-btn cd-btn--sm" data-theme="red" type="button">RED</button>
+          <button class="cd-btn cd-btn--sm" data-theme="steel" type="button">STL</button>
+        </div>
+        <div class="cd-btn-group" id="product-mode">
+          <button class="cd-btn cd-btn--sm is-active" data-product="ocint" type="button">OCINT</button>
+          <button class="cd-btn cd-btn--sm" data-product="sit" type="button">Sit</button>
+        </div>
+        <div class="cd-btn-group" id="map-mode">
+          <button class="cd-btn cd-btn--sm is-active" data-view="cities" type="button">Cities</button>
+          <button class="cd-btn cd-btn--sm" data-view="tower" type="button">Tower</button>
+        </div>
+        <button class="cd-btn cd-btn--sm cd-btn--primary" id="play-a" type="button">Ingest tick</button>
+        <button class="cd-btn cd-btn--sm" id="play-b" type="button">Spin-up</button>
+      </div>
+    </div>
+
+    <aside class="nx-rail">
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Stack</h2>
+      </div>
+      <div class="nx-section">
+        <div class="cd-btn-group" id="stack-mode">
+          <button class="cd-btn cd-btn--sm" data-stack="flat" type="button">Flat</button>
+          <button class="cd-btn cd-btn--sm is-active" data-stack="exploded" type="button">Stack</button>
+        </div>
+        <div class="cd-chip-row" id="stack-layers" style="margin-top:8px;"></div>
+      </div>
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Labels</h2>
+      </div>
+      <div class="nx-section">
+        <div class="cd-btn-group" id="label-mode">
+          <button class="cd-btn cd-btn--sm" data-labels="pin" type="button">Pin</button>
+          <button class="cd-btn cd-btn--sm is-active" data-labels="focus" type="button">Focus</button>
+          <button class="cd-btn cd-btn--sm" data-labels="all" type="button">All</button>
+        </div>
+      </div>
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Kind</h2>
+      </div>
+      <div class="nx-section">
+        <div class="cd-chip-row" id="kind-filters">
+          <button class="cd-chip is-active" data-kind="team" type="button">Zone</button>
+          <button class="cd-chip is-active" data-kind="app" type="button">App</button>
+          <button class="cd-chip is-active" data-kind="store" type="button">Store</button>
+          <button class="cd-chip is-active" data-kind="stream" type="button">Feed</button>
+          <button class="cd-chip is-active" data-kind="standard" type="button">Std</button>
+          <button class="cd-chip is-active" data-kind="actor" type="button">Actor</button>
+          <button class="cd-chip is-active" data-kind="rack" type="button">Plant</button>
+          <button class="cd-chip is-active" data-kind="broker" type="button">Edge</button>
+        </div>
+      </div>
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Legend</h2>
+      </div>
+      <div class="nx-section">
+        <div class="nx-legend" id="legend"></div>
+      </div>
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Registry</h2>
+      </div>
+      <div id="registry" style="overflow:auto; flex:1;"></div>
+    </aside>
+
+    <main class="nx-scene" id="scene" aria-label="OCINT civic intelligence architecture diagram"></main>
+
+    <aside class="nx-inspect" id="inspect">
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Inspector</h2>
+      </div>
+      <div class="nx-empty" id="inspect-body">Select a zone, system, catalog, or conduit.</div>
+    </aside>
+
+    <footer class="cd-hud-bar cd-hud-bar--bottom nx-foot">
+      <ol class="cd-breadcrumb cd-breadcrumb--arrow" id="crumbs">
+        <li class="cd-breadcrumb__item cd-breadcrumb__item--active"><span>Campus</span></li>
+      </ol>
+      <span id="census" style="color: var(--cd-text-muted); font-size: 10px; letter-spacing: 0.12em;">—</span>
+      <div class="nx-help">
+        <span><kbd class="cd-kbd">drag</kbd> pan</span>
+        <span><kbd class="cd-kbd">/</kbd> jump</span>
+        <span><kbd class="cd-kbd">f</kbd> fit</span>
+        <span><kbd class="cd-kbd">esc</kbd> back</span>
+      </div>
+    </footer>
+  </div>
+
+  <div class="nx-command" id="command" hidden>
+    <div class="cd-command" style="width: min(520px, 92vw);">
+      <div class="cd-command__input-wrap">
+        <input class="cd-command__input" id="command-input" placeholder="Jump to Map, Cron, Port, Sit…" autocomplete="off">
+      </div>
+      <div class="cd-command__list" id="command-list"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { CdIsoScene } from '../src/js/iso.js';
+    import { ocint } from '../src/js/scenes/ocint.js';
+    import { sit } from '../src/js/scenes/sit.js';
+
+    const LEGENDS = {
+      ocint: [
+        ['var(--cd-accent)', 'Block · system'],
+        ['var(--cd-neon-blue)', 'Cylinder · cache'],
+        ['var(--cd-neon-yellow)', 'Hex · overlay / places'],
+        ['var(--cd-amber)', 'Rack · cameras / crons'],
+        ['var(--cd-neon-purple)', 'Wedge · dispatch'],
+        ['var(--cd-accent-secondary)', 'Pin · actor'],
+        ['var(--cd-accent-secondary)', 'Magenta · live feed'],
+        ['var(--cd-amber)', 'Amber · ingest'],
+      ],
+      sit: [
+        ['var(--cd-accent)', 'Block · facility / road'],
+        ['var(--cd-neon-blue)', 'Cylinder · feedstock'],
+        ['var(--cd-neon-yellow)', 'Hex · CMS'],
+        ['var(--cd-neon-purple)', 'Wedge · plume'],
+        ['var(--cd-accent-secondary)', 'Pin · crew'],
+        ['var(--cd-accent-secondary)', 'Magenta · PurpleAir'],
+      ],
+    };
+
+    const PRODUCTS = {
+      ocint: {
+        site: 'OCINT',
+        jump: 'Jump to Map, Cron, Port, Sit…',
+        census: (c) => `${c.team || 0} cities · ${c.app || 0} systems · ${c.stream || 0} feeds`,
+        views: {
+          cities: { ...ocint, stack: { mode: 'flat' }, labels: 'focus', flowA: 'ingest', flowB: 'spin', titleA: 'Ingest tick', titleB: 'Spin-up' },
+          tower: { ...ocint, stack: { mode: 'exploded', gap: 3.2 }, labels: 'pin', flowA: 'ingest', flowB: 'spin', titleA: 'Ingest tick', titleB: 'Spin-up' },
+        },
+      },
+      sit: {
+        site: 'SIT · ANAHEIM',
+        hideTower: true,
+        jump: 'Jump to Yard, Evac, Katella, Plume…',
+        census: (c) => `${c.team || 0} areas · ${c.actor || 0} crews · ${c.stream || 0} sensor${(c.stream || 0) === 1 ? '' : 's'}`,
+        views: {
+          cities: { ...sit, stack: { mode: 'flat' }, labels: 'focus', flowA: 'hazmat', flowB: 'air', titleA: 'Hazmat', titleB: 'Air watch' },
+        },
+      },
+    };
+
+    let productId = 'ocint';
+    let viewId = 'cities';
+    let pack = PRODUCTS.ocint.views.cities;
+    let nodes = pack.nodes;
+    let edges = pack.edges;
+    let flows = pack.flows;
+
+    const KIND_BADGE = {
+      team: 'orange', app: 'cyan', store: 'blue', stream: 'magenta',
+      standard: 'yellow', actor: 'purple', rack: 'amber', broker: 'purple',
+    };
+    const KIND_COUNT = 8;
+
+    const scene = CdIsoScene(document.getElementById('scene'), {
+      nodes, edges, flows, layers: pack.layers,
+      stack: { mode: 'flat' },
+      labels: 'focus',
+      onSelect: renderInspect,
+      onScope: renderCrumbs,
+      onStack: renderStack,
+      onFlow: (def, hop) => {
+        const a = document.getElementById('play-a');
+        const b = document.getElementById('play-b');
+        if (hop < 0) {
+          a.textContent = pack.titleA;
+          b.textContent = pack.titleB;
+          return;
+        }
+        const label = `${def.title} ${hop + 1}/${def.edges.length}`;
+        if (def.id === pack.flowA) a.textContent = label;
+        else b.textContent = label;
+      },
+    });
+
+    function currentProduct() {
+      return PRODUCTS[productId];
+    }
+
+    function census() {
+      const c = {};
+      for (const n of nodes) c[n.kind] = (c[n.kind] || 0) + 1;
+      document.getElementById('census').textContent = currentProduct().census(c, viewId);
+    }
+
+    function renderLegend() {
+      const rows = LEGENDS[productId] || LEGENDS.ocint;
+      document.getElementById('legend').innerHTML = rows.map(([color, label]) => `
+        <span class="nx-swatch" style="background:${color}"></span><span>${label}</span>
+      `).join('');
+    }
+
+    function renderRegistry() {
+      const host = document.getElementById('registry');
+      host.innerHTML = nodes.map((n) => `
+        <button type="button" class="entity" data-id="${n.id}" style="
+          display:flex; width:100%; text-align:left; gap:8px; align-items:center;
+          padding:7px 12px; border:0; border-bottom:1px solid var(--cd-border-dim);
+          background:transparent; color:inherit; font:inherit; cursor:pointer;">
+          <span class="cd-badge cd-badge--${KIND_BADGE[n.kind] || 'orange'}">${n.kind}</span>
+          <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase;">${n.label}</span>
+        </button>
+      `).join('');
+      host.querySelectorAll('[data-id]').forEach((btn) => {
+        btn.addEventListener('click', () => scene.select(btn.dataset.id));
+      });
+    }
+
+    function esc(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function labelOf(id) {
+      const n = nodes.find((x) => x.id === id);
+      if (!n) return id;
+      const parent = n.parent && n.kind !== 'team' ? nodes.find((x) => x.id === n.parent) : null;
+      return parent ? `${parent.label} ${n.label}` : n.label;
+    }
+
+    function inspectSection(title, html) {
+      if (!html) return '';
+      return `
+        <div class="cd-section-header" style="margin:14px -12px 0;">
+          <span class="cd-section-header__caret">▸</span>
+          <h3 class="cd-section-header__title">${title}</h3>
+        </div>
+        ${html}
+      `;
+    }
+
+    function renderRefs(items) {
+      if (!items?.length) return '';
+      return `<div class="nx-refs">${items.map((item) => `
+        <a class="nx-ref" href="${esc(item.href)}" target="_blank" rel="noopener noreferrer">
+          <span class="nx-ref__title">${esc(item.title)}</span>
+          <span class="nx-ref__go" aria-hidden="true">↗</span>
+        </a>
+      `).join('')}</div>`;
+    }
+
+    function renderEdges(node, edgeList) {
+      if (!edgeList?.length) return '<div class="nx-empty" style="padding:8px 0;">No edges in this view.</div>';
+      return edgeList.map((e) => {
+        const otherId = e.from === node.id ? e.to : e.from;
+        const other = labelOf(otherId);
+        return `
+          <button type="button" class="nx-edge" data-jump="${esc(otherId)}">
+            <span class="nx-edge__kind">${esc(e.kind)}${e.label ? ' · ' + esc(e.label) : ''}</span>
+            <span class="nx-edge__path">${esc(labelOf(e.from))} → ${esc(labelOf(e.to))}</span>
+            <span class="nx-edge__hint">Open ${esc(other)}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function nodeHaystack(n) {
+      const refs = [...(n.docs || []), ...(n.links || [])].map((r) => `${r.title} ${r.href}`).join(' ');
+      return [n.label, n.id, n.kind, n.summary, JSON.stringify(n.meta || {}), refs].join(' ').toLowerCase();
+    }
+
+    function renderInspect(node, ctx) {
+      document.getElementById('sel-count').textContent = node ? '1' : '0';
+      const body = document.getElementById('inspect-body');
+      if (!node) {
+        body.className = 'nx-empty';
+        body.textContent = 'Select a zone, system, catalog, or conduit.';
+        return;
+      }
+
+      body.className = 'nx-section';
+      body.innerHTML = `
+        <div class="cd-hud-frame" style="margin-bottom:12px;">
+          <div class="cd-hud__label">${esc(node.kind)}${node.zone ? ' · ' + esc(node.zone) : ''}</div>
+          <div class="cd-hud__value">${esc(node.label)}</div>
+        </div>
+        ${node.summary ? `<p class="nx-summary">${esc(node.summary)}</p>` : ''}
+        <dl class="nx-kv">
+          <dt>Id</dt><dd>${esc(node.id)}</dd>
+          <dt>Owner</dt><dd>${esc(node.owner || '—')}</dd>
+          <dt>Status</dt><dd>${esc(node.status || 'unknown')}</dd>
+          ${Object.entries(node.meta || {}).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}
+        </dl>
+        ${inspectSection('Docs', renderRefs(node.docs))}
+        ${inspectSection('Links', renderRefs(node.links))}
+        ${inspectSection('Edges', renderEdges(node, ctx.edges || []))}
+        ${node.kind === 'team' ? '<button class="cd-btn cd-btn--primary" id="drill-btn" type="button" style="margin-top:12px;width:100%;">Enter district</button>' : ''}
+      `;
+      body.querySelector('#drill-btn')?.addEventListener('click', () => scene.setScope(node.id));
+      body.querySelectorAll('[data-jump]').forEach((btn) => {
+        btn.addEventListener('click', () => scene.select(btn.dataset.jump));
+      });
+    }
+
+    function loadView(nextView) {
+      const product = currentProduct();
+      const next = product.views[nextView] ? nextView : 'cities';
+      viewId = next;
+      pack = product.views[next];
+      nodes = pack.nodes;
+      edges = pack.edges;
+      flows = pack.flows;
+      document.getElementById('site-name').textContent = product.site;
+      document.getElementById('play-a').textContent = pack.titleA;
+      document.getElementById('play-b').textContent = pack.titleB;
+      document.getElementById('command-input').placeholder = product.jump;
+      document.getElementById('map-mode').hidden = Boolean(product.hideTower);
+      scene.replaceModel(pack);
+      renderRegistry();
+      renderLegend();
+      census();
+      renderCrumbs(null);
+      document.querySelectorAll('#product-mode .cd-btn').forEach((b) => b.classList.toggle('is-active', b.dataset.product === productId));
+      document.querySelectorAll('#map-mode .cd-btn').forEach((b) => b.classList.toggle('is-active', b.dataset.view === viewId));
+    }
+
+    function loadProduct(id) {
+      productId = PRODUCTS[id] ? id : 'ocint';
+      loadView(currentProduct().hideTower ? 'cities' : viewId);
+    }
+
+    function renderStack(state) {
+      const host = document.getElementById('stack-layers');
+      const hasLayers = (state.layers || []).length > 0;
+      host.hidden = !hasLayers;
+      document.getElementById('stack-mode').hidden = !hasLayers;
+      host.innerHTML = (state.layers || []).map((l, i) => `
+        <button class="cd-chip${state.mode === 'isolate' && state.isolate === l.id ? ' is-active' : ''}" data-layer="${l.id}" type="button">L${i} ${l.title}</button>
+      `).join('');
+      document.querySelectorAll('#stack-mode .cd-btn').forEach((b) => {
+        b.classList.toggle('is-active', b.dataset.stack === (state.mode === 'isolate' ? 'exploded' : state.mode));
+      });
+      document.querySelectorAll('#label-mode .cd-btn').forEach((b) => {
+        b.classList.toggle('is-active', b.dataset.labels === state.labels);
+      });
+      if (state.mode === 'isolate' && state.isolate) {
+        const layer = (state.layers || []).find((l) => l.id === state.isolate);
+        document.getElementById('view-name').textContent = (layer?.title || state.isolate).toUpperCase();
+      } else if (!scene.getScope()) {
+        document.getElementById('view-name').textContent = state.mode === 'flat' ? 'FLAT' : 'STACK';
+      }
+    }
+
+    function renderCrumbs(scopeId) {
+      const ol = document.getElementById('crumbs');
+      const view = document.getElementById('view-name');
+      if (!scopeId) {
+        view.textContent = 'CAMPUS';
+        ol.innerHTML = `<li class="cd-breadcrumb__item cd-breadcrumb__item--active"><span>Campus</span></li>`;
+        return;
+      }
+      const n = nodes.find((x) => x.id === scopeId);
+      view.textContent = (n?.label || scopeId).toUpperCase();
+      ol.innerHTML = `
+        <li class="cd-breadcrumb__item"><a class="cd-breadcrumb__link" href="#" id="crumb-root">Campus</a></li>
+        <li class="cd-breadcrumb__item cd-breadcrumb__item--active"><span>${n?.label || scopeId}</span></li>
+      `;
+      ol.querySelector('#crumb-root')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        scene.setScope(null);
+      });
+    }
+
+    function syncKindFilter() {
+      const kinds = [...document.querySelectorAll('#kind-filters .is-active')].map((b) => b.dataset.kind);
+      scene.setKinds(kinds.length === KIND_COUNT ? [] : kinds);
+    }
+
+    document.getElementById('kind-filters').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-kind]');
+      if (!btn) return;
+      btn.classList.toggle('is-active');
+      syncKindFilter();
+    });
+
+    document.getElementById('theme-group').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-theme]');
+      if (!btn) return;
+      document.documentElement.className = `theme-${btn.dataset.theme}`;
+      document.querySelectorAll('#theme-group .cd-btn').forEach((b) => b.classList.toggle('is-active', b === btn));
+    });
+
+    document.getElementById('product-mode').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-product]');
+      if (!btn) return;
+      loadProduct(btn.dataset.product);
+    });
+    document.getElementById('map-mode').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-view]');
+      if (!btn) return;
+      loadView(btn.dataset.view);
+    });
+
+    document.getElementById('stack-mode').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-stack]');
+      if (!btn) return;
+      scene.setStack({ mode: btn.dataset.stack, isolate: null });
+    });
+    document.getElementById('stack-layers').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-layer]');
+      if (!btn) return;
+      const cur = scene.getStack();
+      if (cur.mode === 'isolate' && cur.isolate === btn.dataset.layer) scene.setStack({ mode: 'exploded', isolate: null });
+      else scene.setStack({ mode: 'isolate', isolate: btn.dataset.layer });
+    });
+    document.getElementById('label-mode').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-labels]');
+      if (!btn) return;
+      scene.setLabels(btn.dataset.labels);
+    });
+
+    document.getElementById('play-a').addEventListener('click', () => scene.playFlow(pack.flowA));
+    document.getElementById('play-b').addEventListener('click', () => scene.playFlow(pack.flowB));
+
+    const cmd = document.getElementById('command');
+    const cmdInput = document.getElementById('command-input');
+    const cmdList = document.getElementById('command-list');
+
+    function openCommand() {
+      cmd.hidden = false;
+      cmd.classList.add('is-open');
+      fillCommand('');
+      cmdInput.value = '';
+      cmdInput.focus();
+    }
+    function closeCommand() {
+      cmd.classList.remove('is-open');
+      cmd.hidden = true;
+    }
+    function fillCommand(q) {
+      const qq = q.trim().toLowerCase();
+      const hits = nodes.filter((n) => !qq || nodeHaystack(n).includes(qq));
+      cmdList.innerHTML = hits.map((n, i) => `
+        <button class="cd-command__item${i === 0 ? ' is-selected' : ''}" data-id="${n.id}" type="button">
+          <span class="cd-badge cd-badge--${KIND_BADGE[n.kind] || 'orange'}">${n.kind}</span>
+          ${n.label}
+        </button>
+      `).join('') || `<div class="nx-empty">No match.</div>`;
+    }
+    cmd.addEventListener('click', (e) => {
+      if (e.target === cmd) closeCommand();
+      const item = e.target.closest('[data-id]');
+      if (item) {
+        scene.select(item.dataset.id);
+        closeCommand();
+      }
+    });
+    cmdInput.addEventListener('input', () => fillCommand(cmdInput.value));
+    cmdInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const first = cmdList.querySelector('[data-id]');
+        if (first) {
+          scene.select(first.dataset.id);
+          closeCommand();
+        }
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '/' && !e.metaKey && document.activeElement?.tagName !== 'INPUT') {
+        e.preventDefault();
+        openCommand();
+      }
+      if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        openCommand();
+      }
+      if (e.key === 'Escape') {
+        if (cmd.classList.contains('is-open')) closeCommand();
+        else if (scene.getScope()) scene.setScope(null);
+        else scene.select(null);
+      }
+      if (e.key === 'f' && document.activeElement?.tagName !== 'INPUT') {
+        e.preventDefault();
+        scene.fit();
+      }
+      if (e.key === 's' && document.activeElement?.tagName !== 'INPUT') {
+        e.preventDefault();
+        const cur = scene.getStack();
+        scene.setStack({ mode: cur.mode === 'flat' ? 'exploded' : 'flat', isolate: null });
+      }
+      if (e.key === 'l' && document.activeElement?.tagName !== 'INPUT') {
+        e.preventDefault();
+        const order = ['pin', 'focus', 'all'];
+        const cur = scene.getStack().labels;
+        scene.setLabels(order[(order.indexOf(cur) + 1) % order.length]);
+      }
+      if (/^[0-4]$/.test(e.key) && document.activeElement?.tagName !== 'INPUT') {
+        const layer = (pack.layers || [])[Number(e.key)];
+        if (layer) scene.setStack({ mode: 'isolate', isolate: layer.id });
+      }
+    });
+
+    renderLegend();
+    renderRegistry();
+    renderCrumbs(null);
+    renderStack(scene.getStack());
+    census();
+    renderInspect(null, { edges: [] });
+  </script>
+</body>
+</html>

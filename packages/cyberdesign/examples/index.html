@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-orange">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cyberdesign // examples</title>
+  <link rel="stylesheet" href="../dist/cyberdesign.css">
+  <style>
+    html, body { margin: 0; min-height: 100%; background: var(--cd-bg); color: var(--cd-text); font-family: var(--cd-font-mono); }
+    main { max-width: 720px; margin: 0 auto; padding: 48px 20px; }
+    h1 { font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cd-accent); }
+    p { color: var(--cd-text-secondary); font-size: 13px; line-height: 1.5; }
+    .grid { display: grid; gap: 12px; margin-top: 24px; }
+    a.card { display: block; padding: 16px 18px; border: 1px solid var(--cd-border); text-decoration: none; color: inherit; }
+    a.card:hover { border-color: var(--cd-border-glow); color: var(--cd-accent); }
+    .card strong { display: block; letter-spacing: 0.12em; text-transform: uppercase; font-size: 12px; margin-bottom: 6px; }
+    .card span { color: var(--cd-text-muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Examples</h1>
+    <p>Composed surfaces on top of the cyberdesign CSS + iso scene.</p>
+    <div class="grid">
+      <a class="card" href="./diagram.html">
+        <strong>OCINT civic intel map</strong>
+        <span>Isometric cities / tower / situation. Public default for the iso spike.</span>
+      </a>
+      <a class="card" href="./neuromancer.html">
+        <strong>Neuromancer console</strong>
+        <span>Full-screen Maas-Neotek security HUD. Charts, ticker, terminal chrome.</span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>
