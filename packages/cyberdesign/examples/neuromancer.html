@@ -54,6 +54,10 @@
       font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase;
       color: var(--cd-text-muted);
     }
+    a.status-bar__label, a.status-bar__val {
+      text-decoration: none;
+    }
+    a.status-bar__label:hover, a.status-bar__val:hover { color: var(--cd-accent); }
     .status-bar__val {
       font-size: 9px; font-weight: 700; color: var(--cd-accent);
       letter-spacing: 0.08em;
@@ -326,6 +330,10 @@
 
   <!-- ══ STATUS BAR ══════════════════════════════════════════════════════════ -->
   <div class="status-bar">
+    <div class="status-bar__seg">
+      <a class="status-bar__label" href="../">HOME</a>
+      <a class="status-bar__val" href="./" style="letter-spacing:0.16em;font-size:8px">EXAMPLES</a>
+    </div>
     <div class="status-bar__seg">
       <span class="status-bar__val" style="letter-spacing:0.2em;font-size:9px">MAAS-NEOTEK S.A.</span>
     </div>
