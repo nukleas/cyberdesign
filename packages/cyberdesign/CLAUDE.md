@@ -31,7 +31,7 @@ dist/               generated, gitignored — run `pnpm build:css` to regenerate
 
 test/index.html     visual demo harness — 31 sections, live theme toggle
 examples/diagram.html  isometric campus HUD (CdIsoScene)
-examples/map.html      SVG atlas HUD (CdMapScene — world / US / sit)
+examples/map.html      SVG atlas HUD (CdMapScene — world / US / outline+areas)
 ```
 
 ## Conventions

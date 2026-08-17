@@ -172,18 +172,14 @@
   <script type="module">
     import { CdMapScene } from '../src/js/map.js';
     import {
-      AREAS_SIT, PINS_SIT, PINS_US, PINS_WORLD, VALUES_US, VALUES_WORLD,
+      AREAS_SIT, PINS_SIT, PINS_US, PINS_WORLD, VALUES_US, VALUES_WORLD, loadOcOutline,
     } from '../src/js/maps/demo.js';
 
     const LAYERS = {
-      world: [
-        ['pin', 'Pins', 'var(--cd-accent)'],
-      ],
-      us: [
-        ['pin', 'Pins', 'var(--cd-accent)'],
-      ],
+      world: [['pins', 'Pins', 'var(--cd-accent)']],
+      us: [['pins', 'Pins', 'var(--cd-accent)']],
       sit: [
-        ['pin', 'Pins', 'var(--cd-accent)'],
+        ['pins', 'Pins', 'var(--cd-accent)'],
         ['origin', 'Origin', 'var(--cd-amber)'],
         ['plume', 'Plume', 'var(--cd-neon-purple)'],
         ['evacuation', 'Evac', 'var(--cd-neon-red)'],
@@ -196,54 +192,61 @@
       world: {
         view: 'WORLD',
         crumb: 'World',
-        pins: PINS_WORLD,
-        areas: [],
+        place: 'WORLD',
+        scene: { atlas: 'world', projection: 'naturalEarth', outline: null, fit: 'atlas', pins: PINS_WORLD, areas: [] },
         values: VALUES_WORLD,
-        projection: 'naturalEarth',
         hidden: [],
       },
       us: {
         view: 'UNITED STATES',
         crumb: 'United States',
-        pins: PINS_US,
-        areas: [],
+        place: 'UNITED STATES',
+        scene: { atlas: 'us', projection: 'albersUsa', outline: null, fit: 'atlas', pins: PINS_US, areas: [] },
         values: VALUES_US,
-        projection: 'albersUsa',
         hidden: [],
       },
       sit: {
         view: 'ORANGE COUNTY',
         crumb: 'Situation · OC',
-        pins: PINS_SIT,
-        areas: AREAS_SIT,
+        place: 'ORANGE COUNTY, CA',
+        scene: { atlas: 'none', projection: 'mercator', fit: 'outline', pins: PINS_SIT, areas: AREAS_SIT },
         values: null,
-        projection: 'mercator',
         hidden: ['watch', 'sensor'],
       },
     };
 
-    let atlas = 'world';
+    let view = 'world';
     let valuesOn = true;
     let hidden = new Set();
+    let ocOutline = null;
 
-    const scene = new CdMapScene('#scene', {
+    const coordsEl = document.getElementById('census');
+
+    const scene = CdMapScene('#scene', {
       atlas: 'world',
       pins: PINS_WORLD,
       values: VALUES_WORLD,
       labels: 'focus',
       onSelect: renderInspect,
+      onPointer({ lng, lat }) {
+        coordsEl.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)} // ${PACKS[view].place}`;
+      },
     });
 
-    function pack() { return PACKS[atlas]; }
+    function pack() { return PACKS[view]; }
 
-    function applyHidden() {
-      scene.setHiddenKinds([...hidden]);
+    function applyFilter() {
+      const rows = LAYERS[view];
+      const areaIds = rows.map(([id]) => id).filter((id) => id !== 'pins');
+      scene.setShowPins(!hidden.has('pins'));
+      const on = areaIds.filter((id) => !hidden.has(id));
+      scene.setKinds(on.length === areaIds.length ? [] : on);
       paintLayers();
     }
 
     function paintLayers() {
       const box = document.getElementById('layer-list');
-      box.innerHTML = LAYERS[atlas].map(([id, name, color]) => {
+      box.innerHTML = LAYERS[view].map(([id, name, color]) => {
         const on = !hidden.has(id);
         return `<button class="cd-map-hud__row" type="button" data-layer="${id}" aria-pressed="${on}">
           <span class="cd-map-hud__swatch" style="border-color:${color};background:${on ? color : 'transparent'}"></span>
@@ -255,57 +258,56 @@
           const id = btn.dataset.layer;
           if (hidden.has(id)) hidden.delete(id);
           else hidden.add(id);
-          applyHidden();
+          applyFilter();
         });
       });
     }
 
-    function renderInspect(feat) {
+    function renderInspect(item) {
       const el = document.getElementById('inspect-body');
       const sel = document.getElementById('sel-name');
-      if (!feat) {
+      if (!item) {
         sel.textContent = '—';
         el.className = 'nx-empty';
         el.textContent = 'Select a region, pin, or area.';
         return;
       }
-      sel.textContent = (feat.label || feat.name || feat.id || '—').toString().slice(0, 18);
-      const kind = feat.type === 'unit' ? 'region' : feat.kind || feat.type;
+      const extra = item.data || {};
+      sel.textContent = item.label.slice(0, 18);
       el.className = 'nx-section';
       el.innerHTML = `
-        ${feat.summary ? `<p class="nx-summary">${feat.summary}</p>` : ''}
+        ${extra.summary ? `<p class="nx-summary">${extra.summary}</p>` : ''}
         <dl class="nx-kv">
-          <dt>Kind</dt><dd>${kind}</dd>
-          <dt>Name</dt><dd>${feat.label || feat.name || feat.id}</dd>
-          ${feat.place ? `<dt>Place</dt><dd>${feat.place}</dd>` : ''}
-          ${feat.fresh ? `<dt>Fresh</dt><dd>${feat.fresh}</dd>` : ''}
-          ${feat.source ? `<dt>Source</dt><dd>${feat.source}</dd>` : ''}
-          ${feat.lng != null ? `<dt>Coord</dt><dd>${feat.lat.toFixed(3)}, ${feat.lng.toFixed(3)}</dd>` : ''}
+          <dt>Type</dt><dd>${item.type}</dd>
+          <dt>Kind</dt><dd>${item.kind}</dd>
+          <dt>Name</dt><dd>${item.label}</dd>
+          ${extra.place ? `<dt>Place</dt><dd>${extra.place}</dd>` : ''}
+          ${extra.fresh ? `<dt>Fresh</dt><dd>${extra.fresh}</dd>` : ''}
+          ${extra.source ? `<dt>Source</dt><dd>${extra.source}</dd>` : ''}
+          ${item.lng != null ? `<dt>Coord</dt><dd>${item.lat.toFixed(3)}, ${item.lng.toFixed(3)}</dd>` : ''}
         </dl>
       `;
     }
 
     async function load(name) {
-      atlas = name;
+      view = name;
       const p = pack();
       hidden = new Set(p.hidden);
+      if (name === 'sit' && !ocOutline) ocOutline = await loadOcOutline();
       document.getElementById('view-name').textContent = p.view;
       document.getElementById('crumb').textContent = p.crumb;
       document.getElementById('census').textContent =
-        `${p.pins.length} pins · ${p.areas.length} areas`;
+        `${p.scene.pins.length} pins · ${p.scene.areas.length} areas`;
       document.querySelectorAll('#atlas-mode .cd-btn').forEach((b) => {
         b.classList.toggle('is-active', b.dataset.atlas === name);
       });
-      const projGroup = document.getElementById('proj-mode');
-      projGroup.style.display = name === 'world' ? '' : 'none';
-      await scene.setAtlas(name, {
-        projection: p.projection,
-        pins: p.pins,
-        areas: p.areas,
+      document.getElementById('proj-mode').style.display = name === 'world' ? '' : 'none';
+      await scene.replace({
+        ...p.scene,
+        outline: name === 'sit' ? ocOutline : null,
         values: valuesOn ? p.values : null,
       });
-      scene.setHiddenKinds([...hidden]);
-      paintLayers();
+      applyFilter();
       renderInspect(null);
     }
 
@@ -316,7 +318,7 @@
 
     document.getElementById('proj-mode').addEventListener('click', (e) => {
       const b = e.target.closest('[data-proj]');
-      if (!b || atlas !== 'world') return;
+      if (!b || view !== 'world') return;
       document.querySelectorAll('#proj-mode .cd-btn').forEach((x) => x.classList.toggle('is-active', x === b));
       scene.setProjection(b.dataset.proj);
     });
