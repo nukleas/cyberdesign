@@ -26,6 +26,7 @@ From monorepo root:
 pnpm build:css
 pnpm demo   # http://localhost:4980/test/
             # isometric campus: http://localhost:4980/examples/diagram.html
+            # atlas map:        http://localhost:4980/examples/map.html
 ```
 
 ## Exports
@@ -38,3 +39,4 @@ pnpm demo   # http://localhost:4980/test/
 | `@nukleas/cyberdesign/react` | Thin React class wrappers (prefer `@nukleas/react-cyberdesign` for apps) |
 | `@nukleas/cyberdesign/tokens` | TypeScript token constants |
 | `@nukleas/cyberdesign/iso` | `CdIsoScene` isometric viewer (Phase 0; scenes stay in `examples/`) |
+| `@nukleas/cyberdesign/map` | `CdMapScene` SVG atlas (world / US / outline; no tiles, no keys) |

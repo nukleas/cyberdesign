@@ -28,6 +28,9 @@ React component with a Storybook story (`react-cyberdesign`).
   `packages/cyberdesign/src/css/components/iso.css`; projector in `src/js/iso.js`
   (`CdIsoScene`). Campus HUD demo: `packages/cyberdesign/examples/diagram.html`.
   Next is a typed model + `@nukleas/cyberdiagram` package (viewer-first, no editor).
+- **Atlas maps (Phase 0)**: SVG world / US projector (`map.css` + `CdMapScene`).
+  Demo: `packages/cyberdesign/examples/map.html`. Basemaps are vendored TopoJSON;
+  jurisdiction, pins, and areas are data. No tile servers, no API keys.
 
 ## Under consideration
 
