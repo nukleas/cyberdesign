@@ -1004,6 +1004,17 @@
         </div>
       </div>
 
+      <!-- Atlas map -->
+      <div class="section">
+        <div class="section-header">Atlas map — CdMapScene · world / US / sit</div>
+        <div class="cd-glow-card" style="height:320px;padding:0;overflow:hidden;position:relative">
+          <div id="atlas-demo" style="height:100%"></div>
+        </div>
+        <p style="margin:8px 0 0;font-size:11px;color:var(--cd-text-dim);letter-spacing:0.08em;text-transform:uppercase">
+          Full HUD → <a href="../examples/map.html" style="color:var(--cd-accent)">examples/map.html</a>
+        </p>
+      </div>
+
       <!-- Timeline -->
       <div class="section">
         <div class="section-header">Event timeline — .cd-timeline</div>
@@ -1862,6 +1873,12 @@
 
 <script type="module">
   document.getElementById('indet').indeterminate = true;
+
+  import('../src/js/map.js').then(({ CdMapScene }) => {
+    const host = document.getElementById('atlas-demo');
+    if (!host) return;
+    CdMapScene(host, { atlas: 'us', labels: 'focus' });
+  }).catch(() => {});
 
   // ── Charts ──
   import('../src/js/charts.js').then(({ CdLineChart, CdBarChart, CdWaveform, CdRadar }) => {

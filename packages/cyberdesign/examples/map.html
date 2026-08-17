@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-orange">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ATLAS // CYBERDESIGN</title>
+  <link rel="stylesheet" href="../dist/cyberdesign.css?v=atlas1">
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: var(--cd-bg);
+      color: var(--cd-text);
+      font-family: var(--cd-font-mono);
+    }
+    .nx {
+      display: grid;
+      grid-template-rows: 36px 1fr 28px;
+      grid-template-columns: 220px 1fr 280px;
+      height: 100%;
+    }
+    .nx-bar { grid-column: 1 / -1; }
+    .nx-rail, .nx-inspect {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      overflow: hidden;
+      background: color-mix(in srgb, var(--cd-bg) 92%, transparent);
+      border-right: 1px solid var(--cd-border-dim);
+    }
+    .nx-inspect { border-right: none; border-left: 1px solid var(--cd-border-dim); }
+    .nx-scene { min-width: 0; min-height: 0; position: relative; }
+    .nx-foot {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 12px;
+    }
+    .nx-section { padding: 10px 12px; border-bottom: 1px solid var(--cd-border-dim); }
+    .nx-empty { padding: 16px 14px; color: var(--cd-text-muted); font-size: var(--cd-text-sm); letter-spacing: 0.04em; }
+    .nx-kv { display: grid; grid-template-columns: 72px 1fr; gap: 6px 10px; font-size: var(--cd-text-xs); text-transform: uppercase; letter-spacing: 0.1em; }
+    .nx-kv dt { color: var(--cd-text-dim); }
+    .nx-kv dd { margin: 0; color: var(--cd-text); }
+    .nx-summary { margin: 0 0 12px; color: var(--cd-text-secondary); font-size: var(--cd-text-sm); line-height: 1.45; text-transform: none; letter-spacing: 0.03em; }
+    .cd-hud-bar .cd-btn { height: 24px; font-size: 9px; }
+    .cd-hud-bar .cd-btn.is-active, .cd-btn.is-active {
+      color: var(--cd-accent);
+      border-color: var(--cd-border-glow);
+      background: var(--cd-accent-subtle);
+    }
+    .cd-hud-segment--grow { margin-left: auto; border-right: none; display: flex; gap: 6px; align-items: center; }
+    a.cd-hud-segment__label { text-decoration: none; color: var(--cd-text-dim); }
+    a.cd-hud-segment__label:hover { color: var(--cd-accent); }
+    #site-nav .cd-btn { text-decoration: none; }
+    .nx-help { margin-left: auto; color: var(--cd-text-dim); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; display: flex; gap: 8px; }
+
+    @media (max-width: 1100px) { #theme-group { display: none; } }
+
+    @media (max-width: 900px) {
+      .nx {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(280px, 1fr) minmax(88px, 18vh) minmax(80px, 16vh) auto;
+        grid-template-areas: "bar" "scene" "rail" "inspect" "foot";
+      }
+      .nx-bar { grid-area: bar; overflow: visible; flex-wrap: wrap; height: auto; min-height: 36px; }
+      .nx-scene { grid-area: scene; }
+      .nx-rail { grid-area: rail; overflow: auto; max-height: 18vh; border-right: none; border-bottom: 1px solid var(--cd-border-dim); }
+      .nx-inspect { grid-area: inspect; overflow: auto; max-height: 16vh; border-left: none; border-top: 1px solid var(--cd-border-dim); }
+      .nx-foot { grid-area: foot; flex-wrap: wrap; height: auto; min-height: 28px; }
+      .cd-hud-segment--grow { flex-wrap: wrap; width: 100%; margin-left: 0; padding: 4px 8px 6px; }
+      .nx-bar .cd-hud-segment { height: auto; min-height: 36px; }
+    }
+
+    @media (max-width: 600px) {
+      .hide-sm, .nx-help { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="nx">
+    <div class="cd-hud-bar cd-hud-bar--top nx-bar">
+      <div class="cd-hud-segment">
+        <a class="cd-hud-segment__label" href="../">SITE</a>
+        <span class="cd-hud-segment__value">ATLAS</span>
+      </div>
+      <div class="cd-hud-segment hide-sm">
+        <span class="cd-hud-segment__label">VIEW</span>
+        <span class="cd-hud-segment__value" id="view-name">WORLD</span>
+      </div>
+      <div class="cd-hud-segment hide-sm">
+        <span class="cd-hud-segment__label">SEL</span>
+        <span class="cd-hud-segment__value" id="sel-name">—</span>
+      </div>
+      <div class="cd-hud-segment cd-hud-segment--grow">
+        <div class="cd-btn-group" id="site-nav">
+          <a class="cd-btn cd-btn--sm" href="../">Home</a>
+          <a class="cd-btn cd-btn--sm" href="./">Examples</a>
+        </div>
+        <div class="cd-btn-group" id="theme-group">
+          <button class="cd-btn cd-btn--sm is-active" data-theme="orange" type="button">ORG</button>
+          <button class="cd-btn cd-btn--sm" data-theme="cyan" type="button">CYN</button>
+          <button class="cd-btn cd-btn--sm" data-theme="green" type="button">GRN</button>
+          <button class="cd-btn cd-btn--sm" data-theme="red" type="button">RED</button>
+          <button class="cd-btn cd-btn--sm" data-theme="steel" type="button">STL</button>
+        </div>
+        <div class="cd-btn-group" id="atlas-mode">
+          <button class="cd-btn cd-btn--sm is-active" data-atlas="world" type="button">World</button>
+          <button class="cd-btn cd-btn--sm" data-atlas="us" type="button">US</button>
+          <button class="cd-btn cd-btn--sm" data-atlas="sit" type="button">Sit</button>
+        </div>
+        <div class="cd-btn-group" id="proj-mode">
+          <button class="cd-btn cd-btn--sm is-active" data-proj="naturalEarth" type="button">NE</button>
+          <button class="cd-btn cd-btn--sm" data-proj="orthographic" type="button">Globe</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="nx-rail">
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Layers</h2>
+      </div>
+      <div class="nx-section" id="layer-list"></div>
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Labels</h2>
+      </div>
+      <div class="nx-section">
+        <div class="cd-btn-group" id="label-mode">
+          <button class="cd-btn cd-btn--sm" data-labels="pin" type="button">Pin</button>
+          <button class="cd-btn cd-btn--sm is-active" data-labels="focus" type="button">Focus</button>
+          <button class="cd-btn cd-btn--sm" data-labels="all" type="button">All</button>
+        </div>
+      </div>
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Choropleth</h2>
+      </div>
+      <div class="nx-section">
+        <div class="cd-btn-group" id="value-mode">
+          <button class="cd-btn cd-btn--sm is-active" data-values="on" type="button">Signal</button>
+          <button class="cd-btn cd-btn--sm" data-values="off" type="button">Off</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="nx-scene" id="scene" aria-label="Atlas map"></main>
+
+    <aside class="nx-inspect">
+      <div class="cd-section-header">
+        <span class="cd-section-header__caret">▸</span>
+        <h2 class="cd-section-header__title">Inspector</h2>
+      </div>
+      <div class="nx-empty" id="inspect-body">Select a region, pin, or area.</div>
+    </aside>
+
+    <footer class="cd-hud-bar cd-hud-bar--bottom nx-foot">
+      <ol class="cd-breadcrumb cd-breadcrumb--arrow">
+        <li class="cd-breadcrumb__item cd-breadcrumb__item--active"><span id="crumb">World</span></li>
+      </ol>
+      <span id="census" style="color:var(--cd-text-muted);font-size:10px;letter-spacing:0.12em;">—</span>
+      <div class="nx-help">
+        <span><kbd class="cd-kbd">drag</kbd> pan</span>
+        <span><kbd class="cd-kbd">f</kbd> fit</span>
+        <span><kbd class="cd-kbd">esc</kbd> clear</span>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module">
+    import { CdMapScene } from '../src/js/map.js';
+    import {
+      AREAS_SIT, PINS_SIT, PINS_US, PINS_WORLD, VALUES_US, VALUES_WORLD,
+    } from '../src/js/maps/demo.js';
+
+    const LAYERS = {
+      world: [
+        ['pin', 'Pins', 'var(--cd-accent)'],
+      ],
+      us: [
+        ['pin', 'Pins', 'var(--cd-accent)'],
+      ],
+      sit: [
+        ['pin', 'Pins', 'var(--cd-accent)'],
+        ['origin', 'Origin', 'var(--cd-amber)'],
+        ['plume', 'Plume', 'var(--cd-neon-purple)'],
+        ['evacuation', 'Evac', 'var(--cd-neon-red)'],
+        ['watch', 'Watch', 'var(--cd-text-muted)'],
+        ['sensor', 'Sensors', 'var(--cd-neon-cyan)'],
+      ],
+    };
+
+    const PACKS = {
+      world: {
+        view: 'WORLD',
+        crumb: 'World',
+        pins: PINS_WORLD,
+        areas: [],
+        values: VALUES_WORLD,
+        projection: 'naturalEarth',
+        hidden: [],
+      },
+      us: {
+        view: 'UNITED STATES',
+        crumb: 'United States',
+        pins: PINS_US,
+        areas: [],
+        values: VALUES_US,
+        projection: 'albersUsa',
+        hidden: [],
+      },
+      sit: {
+        view: 'ORANGE COUNTY',
+        crumb: 'Situation · OC',
+        pins: PINS_SIT,
+        areas: AREAS_SIT,
+        values: null,
+        projection: 'mercator',
+        hidden: ['watch', 'sensor'],
+      },
+    };
+
+    let atlas = 'world';
+    let valuesOn = true;
+    let hidden = new Set();
+
+    const scene = new CdMapScene('#scene', {
+      atlas: 'world',
+      pins: PINS_WORLD,
+      values: VALUES_WORLD,
+      labels: 'focus',
+      onSelect: renderInspect,
+    });
+
+    function pack() { return PACKS[atlas]; }
+
+    function applyHidden() {
+      scene.setHiddenKinds([...hidden]);
+      paintLayers();
+    }
+
+    function paintLayers() {
+      const box = document.getElementById('layer-list');
+      box.innerHTML = LAYERS[atlas].map(([id, name, color]) => {
+        const on = !hidden.has(id);
+        return `<button class="cd-map-hud__row" type="button" data-layer="${id}" aria-pressed="${on}">
+          <span class="cd-map-hud__swatch" style="border-color:${color};background:${on ? color : 'transparent'}"></span>
+          ${name}
+        </button>`;
+      }).join('');
+      box.querySelectorAll('[data-layer]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.layer;
+          if (hidden.has(id)) hidden.delete(id);
+          else hidden.add(id);
+          applyHidden();
+        });
+      });
+    }
+
+    function renderInspect(feat) {
+      const el = document.getElementById('inspect-body');
+      const sel = document.getElementById('sel-name');
+      if (!feat) {
+        sel.textContent = '—';
+        el.className = 'nx-empty';
+        el.textContent = 'Select a region, pin, or area.';
+        return;
+      }
+      sel.textContent = (feat.label || feat.name || feat.id || '—').toString().slice(0, 18);
+      const kind = feat.type === 'unit' ? 'region' : feat.kind || feat.type;
+      el.className = 'nx-section';
+      el.innerHTML = `
+        ${feat.summary ? `<p class="nx-summary">${feat.summary}</p>` : ''}
+        <dl class="nx-kv">
+          <dt>Kind</dt><dd>${kind}</dd>
+          <dt>Name</dt><dd>${feat.label || feat.name || feat.id}</dd>
+          ${feat.place ? `<dt>Place</dt><dd>${feat.place}</dd>` : ''}
+          ${feat.fresh ? `<dt>Fresh</dt><dd>${feat.fresh}</dd>` : ''}
+          ${feat.source ? `<dt>Source</dt><dd>${feat.source}</dd>` : ''}
+          ${feat.lng != null ? `<dt>Coord</dt><dd>${feat.lat.toFixed(3)}, ${feat.lng.toFixed(3)}</dd>` : ''}
+        </dl>
+      `;
+    }
+
+    async function load(name) {
+      atlas = name;
+      const p = pack();
+      hidden = new Set(p.hidden);
+      document.getElementById('view-name').textContent = p.view;
+      document.getElementById('crumb').textContent = p.crumb;
+      document.getElementById('census').textContent =
+        `${p.pins.length} pins · ${p.areas.length} areas`;
+      document.querySelectorAll('#atlas-mode .cd-btn').forEach((b) => {
+        b.classList.toggle('is-active', b.dataset.atlas === name);
+      });
+      const projGroup = document.getElementById('proj-mode');
+      projGroup.style.display = name === 'world' ? '' : 'none';
+      await scene.setAtlas(name, {
+        projection: p.projection,
+        pins: p.pins,
+        areas: p.areas,
+        values: valuesOn ? p.values : null,
+      });
+      scene.setHiddenKinds([...hidden]);
+      paintLayers();
+      renderInspect(null);
+    }
+
+    document.getElementById('atlas-mode').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-atlas]');
+      if (b) load(b.dataset.atlas);
+    });
+
+    document.getElementById('proj-mode').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-proj]');
+      if (!b || atlas !== 'world') return;
+      document.querySelectorAll('#proj-mode .cd-btn').forEach((x) => x.classList.toggle('is-active', x === b));
+      scene.setProjection(b.dataset.proj);
+    });
+
+    document.getElementById('label-mode').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-labels]');
+      if (!b) return;
+      document.querySelectorAll('#label-mode .cd-btn').forEach((x) => x.classList.toggle('is-active', x === b));
+      scene.setLabels(b.dataset.labels);
+    });
+
+    document.getElementById('value-mode').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-values]');
+      if (!b) return;
+      valuesOn = b.dataset.values === 'on';
+      document.querySelectorAll('#value-mode .cd-btn').forEach((x) => x.classList.toggle('is-active', x === b));
+      scene.setValues(valuesOn ? pack().values : null);
+    });
+
+    document.getElementById('theme-group').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-theme]');
+      if (!b) return;
+      document.documentElement.className = `theme-${b.dataset.theme}`;
+      document.querySelectorAll('#theme-group .cd-btn').forEach((x) => x.classList.toggle('is-active', x === b));
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'f') scene.fit();
+      if (e.key === 'Escape') scene.select(null);
+    });
+
+    load('world');
+  </script>
+</body>
+</html>
