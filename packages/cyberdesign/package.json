@@ -43,7 +43,8 @@
       "types": "./dist/tokens/index.d.ts",
       "default": "./dist/tokens/index.js"
     },
-    "./iso": "./src/js/iso.js"
+    "./iso": "./src/js/iso.js",
+    "./map": "./src/js/map.js"
   },
   "scripts": {
     "build": "tsx build.ts && tsc -p tsconfig.build.json",
@@ -54,8 +55,10 @@
     "@types/node": "^20",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "d3-geo": "^3.1.1",
     "react": "19.2.7",
     "react-dom": "19.2.7",
+    "topojson-client": "^3.1.0",
     "tsx": "^4",
     "typescript": "^5"
   },

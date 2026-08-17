@@ -14,7 +14,7 @@ Root is unpublished (`cyberdesign-monorepo`, `"private": true`). Do not publish 
 
 | Package | Responsibility |
 | --- | --- |
-| `cyberdesign` | Source of visual truth: tokens, CSS (`cd-*` / `--cd-*`), HTML demo harness. Iso spike: `iso.css` + `src/js/iso.js`. |
+| `cyberdesign` | Source of visual truth: tokens, CSS (`cd-*` / `--cd-*`), HTML demo harness. Iso: `iso.css` + `src/js/iso.js`. Atlas: `map.css` + `src/js/map.js`. |
 | `react-cyberdesign` | Official React API: semantic props, ThemeProvider, Storybook docs |
 
 `packages/cyberdesign/src/react/` holds **thin** class wrappers (design-sync / lightweight `cyberdesign/react` export). Prefer `react-cyberdesign` for real app UI.
