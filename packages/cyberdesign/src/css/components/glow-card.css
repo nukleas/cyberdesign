@@ -1,4 +1,6 @@
 .cd-glow-card {
+  /* Padded by default, since most cards hold text; see --flush for full-bleed content. */
+  padding: 14px 16px;
   background: color-mix(in srgb, var(--cd-bg-panel) 80%, transparent);
   border: 1px solid color-mix(in srgb, var(--cd-accent) 30%, transparent);
   backdrop-filter: blur(var(--cd-card-blur, 4px));
@@ -18,6 +20,19 @@
     0 0 8px color-mix(in srgb, var(--cd-accent) 25%, transparent),
     0 0 20px color-mix(in srgb, var(--cd-accent) 12%, transparent),
     inset 0 0 8px color-mix(in srgb, var(--cd-accent) 6%, transparent);
+}
+
+/* Full-bleed content (a chart, a map, a panel header) that supplies its own spacing */
+.cd-glow-card--flush { padding: 0; }
+
+/* Clickable card (role="button") under keyboard focus: the active glow plus a ring. */
+.cd-glow-card:focus-visible {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: 2px;
+  border-color: color-mix(in srgb, var(--cd-accent) 60%, transparent);
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--cd-accent) 25%, transparent),
+    0 0 20px color-mix(in srgb, var(--cd-accent) 12%, transparent);
 }
 
 /* Color variant modifiers — override --cd-accent locally for the card */

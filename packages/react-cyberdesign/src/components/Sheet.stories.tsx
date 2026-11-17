@@ -3,6 +3,19 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Sheet } from './Sheet';
 import { Button } from './Button';
 
+/**
+ * Edge panel that behaves as a modal dialog, named by its `title` and
+ * described by its `description`.
+ *
+ * | Key | Action |
+ * | --- | --- |
+ * | Enter / Space on the opener | Opens; focus moves to the first control inside (the panel itself when it has none) |
+ * | Tab / Shift+Tab | Cycle through the sheet's controls; focus never reaches the page behind |
+ * | Escape | Calls `onClose` |
+ * | on close | Focus returns to the element that opened the sheet |
+ *
+ * While closed, the sheet's content is out of the tab order.
+ */
 const meta = {
   title: 'Overlay/Sheet',
   component: Sheet,
@@ -19,15 +32,16 @@ const meta = {
       table: { category: 'Appearance' },
     },
   },
+  args: { open: false },
 } satisfies Meta<typeof Sheet>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Press the button, Tab around, then Escape: focus lands back on the button. */
 export const Right: Story = {
-  args: { open: true },
   render: () => {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     return (
       <>
         <Button variant="primary" onClick={() => setOpen(true)}>

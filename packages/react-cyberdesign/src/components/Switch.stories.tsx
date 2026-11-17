@@ -1,6 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Switch } from './Switch';
 
+/**
+ * Toggle switch: a native checkbox with `role="switch"`, visually hidden but
+ * still in the Tab order; the track shows the focus ring.
+ *
+ * | Key | Action |
+ * | --- | --- |
+ * | Tab | Focus the switch |
+ * | Space | Toggle on / off |
+ */
 const meta = {
   title: 'Form/Switch',
   component: Switch,

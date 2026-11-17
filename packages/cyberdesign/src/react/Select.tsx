@@ -21,11 +21,14 @@ export function Select({
   label = false,
   error = false,
   className = '',
+  style,
   children,
   ...rest
 }: SelectProps) {
   return (
-    <div className="cd-select-wrap">
+    // `style` sizes the wrapper, which the select fills, so the chevron stays
+    // inside the field whatever width is given.
+    <div className="cd-select-wrap" style={style}>
       <select
         className={cx(
           'cd-select',

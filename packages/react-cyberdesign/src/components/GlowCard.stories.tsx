@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { GlowCard } from './GlowCard';
 import type { CdColor } from '../lib/types';
@@ -16,6 +17,11 @@ const colors: CdColor[] = [
 
 /**
  * Primary surface panel with neon border glow. Use `color` + `active` for selection UIs.
+ *
+ * ### Keyboard
+ * A card given `onClick` is one control (`role="button"`, `aria-pressed` from
+ * `active`): Tab focuses it and Enter / Space fire `onClick`. A card without
+ * `onClick` is a plain surface and is not focusable.
  */
 const meta = {
   title: 'Surfaces/GlowCard',
@@ -27,6 +33,7 @@ const meta = {
       options: colors,
       table: { category: 'Appearance', defaultValue: { summary: 'orange' } },
     },
+    flush: { control: 'boolean', table: { category: 'Appearance' } },
     active: {
       control: 'boolean',
       description: 'Selected state (`data-active`).',
@@ -50,8 +57,54 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+/** `flush` removes the padding for content that runs edge to edge and brings its own spacing. */
+export const Flush: Story = {
+  args: {
+    flush: true,
+    style: { width: 260 },
+    children: (
+      <>
+        <div
+          style={{
+            padding: '8px 12px',
+            borderBottom: '1px solid var(--cd-border)',
+            fontSize: 11,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }}
+        >
+          Signal
+        </div>
+        <div style={{ height: 80, background: 'var(--cd-accent-subtle)' }} />
+      </>
+    ),
+  },
+};
+
 export const Active: Story = {
   args: { active: true, color: 'cyan' },
+};
+
+/** Clickable cards as a selection UI, operable with Tab and Enter / Space. */
+export const Selectable: Story = {
+  render: () => {
+    const [selected, setSelected] = useState<CdColor>('cyan');
+    return (
+      <div style={{ display: 'flex', gap: 12 }}>
+        {colors.slice(3, 6).map((color) => (
+          <GlowCard
+            key={color}
+            color={color}
+            active={color === selected}
+            onClick={() => setSelected(color)}
+            style={{ width: 120 }}
+          >
+            <div style={{ fontSize: 12, textTransform: 'uppercase' }}>{color}</div>
+          </GlowCard>
+        ))}
+      </div>
+    );
+  },
 };
 
 export const Grid: Story = {

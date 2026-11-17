@@ -15,8 +15,14 @@
   outline: none;
 }
 
-.cd-sheetgrid:focus-visible {
-  border-color: color-mix(in srgb, var(--cd-accent) 55%, transparent);
+/* The cell table inside is the focusable grid; the frame shows its focus and
+   the active cell carries the ring. */
+.cd-sheetgrid__table:focus-visible {
+  outline: none;
+}
+
+.cd-sheetgrid:focus-within {
+  border-color: var(--cd-accent);
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--cd-accent) 20%, transparent),
     0 0 20px color-mix(in srgb, var(--cd-accent) 15%, transparent);

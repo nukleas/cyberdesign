@@ -2,6 +2,14 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Chip, ChipRow } from './Chip';
 
+/**
+ * Compact filter / toggle chip: a native `<button>` with `aria-pressed`.
+ *
+ * | Key | Action |
+ * | --- | --- |
+ * | Tab | Focus the chip (each chip in a row is a Tab stop) |
+ * | Space / Enter | Activate |
+ */
 const meta = {
   title: 'App Patterns/Chip',
   component: Chip,

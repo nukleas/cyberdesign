@@ -18,13 +18,17 @@
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
   opacity: 0;
+  /* Hidden, not just transparent: a closed dialog's controls leave the tab order. */
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.18s ease;
+  transition: opacity 0.18s ease, visibility 0s 0.2s;
 }
 
 .cd-modal-overlay.is-open {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  transition-delay: 0s;
 }
 
 /* ── Panel ────────────────────────────────────────────────────────────────── */
@@ -62,6 +66,11 @@
 .cd-modal-overlay.is-open .cd-modal {
   transform: scale(1) translateY(0);
   opacity: 1;
+}
+
+/* The panel takes focus when it has no controls; its clip-path would cut an outer ring. */
+.cd-modal:focus-visible {
+  outline-offset: -4px;
 }
 
 /* ── Header ───────────────────────────────────────────────────────────────── */

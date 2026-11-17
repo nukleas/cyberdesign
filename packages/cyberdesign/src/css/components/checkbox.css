@@ -46,17 +46,21 @@
   box-shadow: 0 0 6px color-mix(in srgb, var(--cd-accent) 30%, transparent);
 }
 
-/* Checkmark via clip-path on a pseudo-element */
+/*
+ * Checkmark: two borders of a box, rotated. The box is centred on the control;
+ * the strokes sit on its lower-left edges, so it is lifted to centre the ink.
+ */
 .cd-checkbox:checked::after {
   content: '';
   position: absolute;
-  left: 3px;
-  top: 6px;
+  left: 50%;
+  top: 50%;
   width: 8px;
   height: 4px;
+  box-sizing: border-box;
   border-left: 1.5px solid var(--cd-accent);
   border-bottom: 1.5px solid var(--cd-accent);
-  transform: rotate(-45deg) translateY(-2px);
+  transform: translate(-50%, -50%) rotate(-45deg) translate(1px, -1px);
 }
 
 /* Indeterminate state */
@@ -68,12 +72,12 @@
 .cd-checkbox:indeterminate::after {
   content: '';
   position: absolute;
-  left: 3px;
+  left: 50%;
   top: 50%;
-  width: 9px;
+  width: 8px;
   height: 1.5px;
   background: var(--cd-accent);
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
 }
 
 /* ── Radio ──────────────────────────────────────────────── */

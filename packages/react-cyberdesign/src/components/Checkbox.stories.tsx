@@ -13,6 +13,14 @@ import { Input } from './Input';
 import { InputOTP } from './InputOTP';
 import { useState } from 'react';
 
+/**
+ * Cyber checkbox: a native `<input type="checkbox">` restyled in place.
+ *
+ * | Key | Action |
+ * | --- | --- |
+ * | Tab | Focus the box |
+ * | Space | Check / uncheck |
+ */
 const meta = {
   title: 'Form/Checkbox',
   component: Checkbox,

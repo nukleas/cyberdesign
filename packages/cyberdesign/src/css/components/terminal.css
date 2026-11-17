@@ -95,7 +95,17 @@
   border: 1px solid var(--cd-border);
   background: var(--cd-bg-panel-hover);
   transition: background 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+/* A dot is a <button> when the window controls are wired up. */
+button.cd-terminal__dot {
+  padding: 0;
   cursor: pointer;
+}
+
+.cd-terminal__dot:focus-visible {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: 2px;
 }
 
 .cd-terminal__dot:hover {
@@ -112,7 +122,12 @@
   box-shadow: 0 0 6px rgba(255, 69, 108, 0.5);
 }
 
-/* Scrollable body */
+/* Scrollable body — a Tab stop while the log overflows it. */
+.cd-terminal__body:focus-visible {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: -2px;
+}
+
 .cd-terminal__body {
   flex: 1;
   overflow-y: auto;

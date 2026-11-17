@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../lib/cn';
 
@@ -13,7 +13,12 @@ export interface CollapsibleProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }
 
-/** Expand/collapse section with a trigger row. */
+/**
+ * Expand/collapse section with a trigger row.
+ *
+ * Keyboard (WAI-ARIA Disclosure): the trigger is a button, so Tab reaches it and
+ * Enter / Space toggle it. Collapsed content cannot be reached with Tab.
+ */
 export function Collapsible({
   trigger,
   defaultOpen = false,
@@ -25,6 +30,7 @@ export function Collapsible({
 }: CollapsibleProps) {
   const [internal, setInternal] = useState(defaultOpen);
   const isOpen = open ?? internal;
+  const contentId = useId();
 
   const toggle = () => {
     const next = !isOpen;
@@ -34,13 +40,21 @@ export function Collapsible({
 
   return (
     <div className={cn('cd-collapsible', isOpen && 'is-open', className)} {...rest}>
-      <button type="button" className="cd-collapsible__trigger" onClick={toggle} aria-expanded={isOpen}>
+      <button
+        type="button"
+        className="cd-collapsible__trigger"
+        onClick={toggle}
+        aria-expanded={isOpen}
+        aria-controls={contentId}
+      >
         <span>{trigger}</span>
         <span className="cd-collapsible__chevron" aria-hidden>
           ▾
         </span>
       </button>
-      <div className="cd-collapsible__content">{children}</div>
+      <div id={contentId} className="cd-collapsible__content">
+        {children}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import {
   useState,
   type ButtonHTMLAttributes,
+  type DetailsHTMLAttributes,
   type FormEvent,
   type HTMLAttributes,
   type ReactNode,
@@ -25,6 +26,90 @@ export interface ChatMessageData {
   time?: ReactNode;
   /** Author label (defaults from role). */
   author?: ReactNode;
+  /** Tools the assistant called during this turn, shown above the body. */
+  toolCalls?: ChatToolCallData[];
+}
+
+export type ChatToolCallStatus = 'pending' | 'success' | 'error';
+
+export interface ChatToolCallData {
+  /** Stable identifier, used as the React key when rendered by {@link Chat}. */
+  id?: string;
+  /** Tool name, shown in monospace. */
+  name: string;
+  /** Whether the call is still running, succeeded or failed. */
+  status: ChatToolCallStatus;
+  /** One-line outcome; truncates with an ellipsis. Defaults to the status label. */
+  summary?: ReactNode;
+  /** Short failure category chip (e.g. `timeout`); shown only when `status` is `error`. */
+  errorCategory?: ReactNode;
+  /** Wall time in milliseconds. */
+  durationMs?: number;
+  /** Tool input. Strings are shown verbatim; any other value as pretty-printed JSON. */
+  input?: unknown;
+  /** Full result text. */
+  result?: string;
+}
+
+export interface ChatToolCallProps
+  extends Omit<ChatToolCallData, 'id'>,
+    Omit<DetailsHTMLAttributes<HTMLDetailsElement>, 'name'> {}
+
+const TOOL_STATUS: Record<ChatToolCallStatus, { glyph: string; label: string }> = {
+  pending: { glyph: '…', label: 'running' },
+  success: { glyph: '✓', label: 'succeeded' },
+  error: { glyph: '✗', label: 'failed' },
+};
+
+function formatToolInput(input: unknown): string {
+  if (typeof input === 'string') return input;
+  try {
+    return JSON.stringify(input, null, 2) ?? String(input);
+  } catch {
+    return String(input);
+  }
+}
+
+function formatDuration(ms: number): string {
+  return ms >= 1000 ? `${(ms / 1000).toFixed(1)} s` : `${Math.round(ms)} ms`;
+}
+
+/**
+ * One tool call as a collapsed row: status, tool name, outcome summary, failure
+ * category and wall time. Opening it shows the input and the full result.
+ * A native `<details>`, so `open` and `onToggle` work as usual.
+ */
+export function ChatToolCall({
+  name,
+  status,
+  summary,
+  errorCategory,
+  durationMs,
+  input,
+  result,
+  className = '',
+  ...rest
+}: ChatToolCallProps) {
+  const { glyph, label } = TOOL_STATUS[status];
+  return (
+    <details className={cn('cd-chat-tool', `cd-chat-tool--${status}`, className)} {...rest}>
+      <summary className="cd-chat-tool__head">
+        <span className="cd-chat-tool__glyph" role="img" aria-label={label}>
+          {glyph}
+        </span>
+        <span className="cd-chat-tool__name">{name}</span>
+        <span className="cd-chat-tool__summary">{summary ?? label}</span>
+        {status === 'error' && errorCategory != null && (
+          <span className="cd-chat-tool__category">{errorCategory}</span>
+        )}
+        {durationMs != null && (
+          <span className="cd-chat-tool__time">{formatDuration(durationMs)}</span>
+        )}
+      </summary>
+      {input !== undefined && <pre className="cd-chat-tool__input">{formatToolInput(input)}</pre>}
+      {result != null && <pre className="cd-chat-tool__result">{result}</pre>}
+    </details>
+  );
 }
 
 export interface ChatActionProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -169,6 +254,8 @@ export interface ChatMessageProps extends HTMLAttributes<HTMLDivElement> {
   role: ChatRole;
   /** Message body. */
   children?: ReactNode;
+  /** {@link ChatToolCall} rows for this turn, stacked above the body. */
+  toolCalls?: ReactNode;
   /** Optional code fence below the body. */
   code?: string;
   codeLang?: string;
@@ -194,6 +281,7 @@ const ROLE_AUTHOR: Record<ChatRole, string> = {
 export function ChatMessage({
   role,
   children,
+  toolCalls,
   code,
   codeLang = 'strudel',
   time,
@@ -207,6 +295,8 @@ export function ChatMessage({
   ...rest
 }: ChatMessageProps) {
   const showMeta = author != null || time != null || role !== 'system';
+  // A turn that has only called tools so far has no prose bubble yet.
+  const hasBody = children != null && children !== false && children !== '';
 
   return (
     <div className={cn('cd-chat-row', `cd-chat-row--${role}`, className)} {...rest}>
@@ -216,14 +306,17 @@ export function ChatMessage({
           {time != null && <span className="cd-chat-row__meta-right">{time}</span>}
         </div>
       )}
-      <div className={cn('cd-chat-msg', `cd-chat-msg--${role}`)} style={{ position: 'relative', maxWidth: '100%' }}>
-        {children}
-        {actions != null && (
-          <ChatActions placement="overlay" visible={actionsVisible}>
-            {actions}
-          </ChatActions>
-        )}
-      </div>
+      {toolCalls != null && <div className="cd-chat-tools">{toolCalls}</div>}
+      {(toolCalls == null || hasBody) && (
+        <div className={cn('cd-chat-msg', `cd-chat-msg--${role}`)} style={{ position: 'relative', maxWidth: '100%' }}>
+          {children}
+          {actions != null && (
+            <ChatActions placement="overlay" visible={actionsVisible}>
+              {actions}
+            </ChatActions>
+          )}
+        </div>
+      )}
       {code != null && (
         <ChatCodeBlock
           code={code}
@@ -326,6 +419,9 @@ export function Chat({
               codeLang={m.codeLang}
               time={m.time}
               author={m.author}
+              toolCalls={m.toolCalls?.map(({ id, ...call }, j) => (
+                <ChatToolCall key={id ?? j} {...call} />
+              ))}
             >
               {m.content}
             </ChatMessage>

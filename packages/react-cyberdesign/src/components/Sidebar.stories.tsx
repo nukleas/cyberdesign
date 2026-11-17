@@ -30,3 +30,7 @@ export const Default: Story = {
     style: { width: 640, minHeight: 320 },
   },
 };
+
+export const Collapsed: Story = {
+  args: { ...Default.args, defaultCollapsed: true },
+};

@@ -1,6 +1,8 @@
 import {
   useCallback,
   useEffect,
+  useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -50,6 +52,8 @@ export interface SpreadsheetProps
   columnLabels?: string[];
   /** Optional row labels (defaults 1-based numbers). */
   rowLabels?: string[];
+  /** Accessible name of the grid. @default 'Spreadsheet' */
+  'aria-label'?: string;
 }
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -225,7 +229,10 @@ function inRange(cell: CellCoord, a: CellCoord, b: CellCoord): boolean {
  * Editable cyber spreadsheet grid.
  *
  * Features: cell selection, shift-range select, inline edit, formula bar,
- * keyboard nav (arrows/tab/enter), basic formulas (`=A1+B1`, `=SUM(A1:A3)`).
+ * keyboard nav, basic formulas (`=A1+B1`, `=SUM(A1:A3)`).
+ *
+ * The cell table is the grid (`role="grid"`) and the component's one Tab stop:
+ * DOM focus stays on it and `aria-activedescendant` names the active cell.
  */
 export function Spreadsheet({
   data: controlledData,
@@ -243,6 +250,7 @@ export function Spreadsheet({
   showStatus = true,
   columnLabels,
   rowLabels,
+  'aria-label': ariaLabel = 'Spreadsheet',
   className = '',
   style,
   ...rest
@@ -266,7 +274,10 @@ export function Spreadsheet({
   const [draft, setDraft] = useState('');
   const [editOrigin, setEditOrigin] = useState<'type' | 'edit'>('edit');
 
-  const rootRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLTableElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const cellIdPrefix = useId();
+  const cellId = (row: number, col: number) => `${cellIdPrefix}-${row}-${col}`;
   const cellInputRef = useRef<HTMLInputElement>(null);
   const fxInputRef = useRef<HTMLInputElement>(null);
 
@@ -310,14 +321,14 @@ export function Spreadsheet({
         setActive(move);
         setAnchor(move);
       }
-      // restore focus to grid for keyboard nav
-      requestAnimationFrame(() => rootRef.current?.focus());
     },
     [editing, draft, active, commit],
   );
 
   useEffect(() => {
-    if (editing) {
+    // An edit begun in the formula bar keeps focus there: moving it to the cell
+    // editor would blur the bar, which commits and ends the edit at once.
+    if (editing && document.activeElement !== fxInputRef.current) {
       const el = cellInputRef.current;
       if (el) {
         el.focus();
@@ -329,6 +340,27 @@ export function Spreadsheet({
       }
     }
   }, [editing, editOrigin]);
+
+  // Keep the active cell clear of the viewport edges and the sticky headers.
+  // Scrolls the grid's own viewport only, never the page.
+  useLayoutEffect(() => {
+    const viewport = viewportRef.current;
+    const cell = document.getElementById(`${cellIdPrefix}-${active.row}-${active.col}`);
+    const corner = viewport?.querySelector<HTMLElement>('.cd-sheetgrid__corner');
+    if (!viewport || !cell || !corner) return;
+    const top = cell.offsetTop - corner.offsetHeight;
+    const bottom = cell.offsetTop + cell.offsetHeight;
+    if (top < viewport.scrollTop) viewport.scrollTop = top;
+    else if (bottom > viewport.scrollTop + viewport.clientHeight) {
+      viewport.scrollTop = bottom - viewport.clientHeight;
+    }
+    const left = cell.offsetLeft - corner.offsetWidth;
+    const right = cell.offsetLeft + cell.offsetWidth;
+    if (left < viewport.scrollLeft) viewport.scrollLeft = left;
+    else if (right > viewport.scrollLeft + viewport.clientWidth) {
+      viewport.scrollLeft = right - viewport.clientWidth;
+    }
+  }, [active, cellIdPrefix]);
 
   const activeRaw = matrix[active.row]?.[active.col] ?? '';
   const activeDisplay = displayValue(activeRaw, matrix, formulas);
@@ -349,7 +381,15 @@ export function Spreadsheet({
     if (!extend) setAnchor(next);
   };
 
-  const onGridKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+  /** Rows PageUp / PageDown move by: the data rows that fit under the header. */
+  const pageRows = () => {
+    const viewport = viewportRef.current;
+    const cell = document.getElementById(cellId(active.row, active.col));
+    if (!viewport || !cell) return 1;
+    return Math.max(1, Math.floor(viewport.clientHeight / cell.offsetHeight) - 1);
+  };
+
+  const onGridKeyDown = (e: ReactKeyboardEvent<HTMLTableElement>) => {
     if (editing) return;
 
     const { key, shiftKey, metaKey, ctrlKey } = e;
@@ -412,25 +452,33 @@ export function Spreadsheet({
       return;
     }
 
-    // Navigation
-    const nav: Record<string, [number, number]> = {
-      ArrowUp: [-1, 0],
-      ArrowDown: [1, 0],
-      ArrowLeft: [0, -1],
-      ArrowRight: [0, 1],
-      Tab: [0, shiftKey ? -1 : 1],
-      Home: [0, -active.col],
-      End: [0, cols - 1 - active.col],
+    // Tab walks along the row and leaves the grid from the row's last cell
+    // (Shift+Tab from its first), so the grid is never a keyboard trap.
+    if (key === 'Tab') {
+      const col = active.col + (shiftKey ? -1 : 1);
+      if (col < 0 || col >= cols) return;
+      e.preventDefault();
+      moveActive(active.row, col, false);
+      return;
+    }
+
+    // Navigation: [row, col] the key moves to. Ctrl/Cmd+Home and Ctrl/Cmd+End
+    // go to the sheet's first and last cell.
+    const nav: Record<string, () => [number, number]> = {
+      ArrowUp: () => [active.row - 1, active.col],
+      ArrowDown: () => [active.row + 1, active.col],
+      ArrowLeft: () => [active.row, active.col - 1],
+      ArrowRight: () => [active.row, active.col + 1],
+      PageUp: () => [active.row - pageRows(), active.col],
+      PageDown: () => [active.row + pageRows(), active.col],
+      Home: () => [mod ? 0 : active.row, 0],
+      End: () => [mod ? rows - 1 : active.row, cols - 1],
     };
 
     if (key in nav) {
       e.preventDefault();
-      const [dr, dc] = nav[key];
-      if (key === 'Tab') {
-        moveActive(active.row + dr, active.col + dc, false);
-      } else {
-        moveActive(active.row + dr, active.col + dc, shiftKey);
-      }
+      const [row, col] = nav[key]();
+      moveActive(row, col, shiftKey);
       return;
     }
 
@@ -448,26 +496,25 @@ export function Spreadsheet({
 
   const onEditorKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
-      e.preventDefault();
       endEdit(false);
-      return;
-    }
-    if (e.key === 'Enter') {
-      e.preventDefault();
+    } else if (e.key === 'Enter') {
       endEdit(true, {
-        row: Math.min(rows - 1, active.row + (e.shiftKey ? -1 : 1)),
+        row: Math.max(0, Math.min(rows - 1, active.row + (e.shiftKey ? -1 : 1))),
         col: active.col,
       });
-      return;
-    }
-    if (e.key === 'Tab') {
-      e.preventDefault();
+    } else if (e.key === 'Tab') {
       endEdit(true, {
         row: active.row,
         col: Math.max(0, Math.min(cols - 1, active.col + (e.shiftKey ? -1 : 1))),
       });
+    } else {
       return;
     }
+    e.preventDefault();
+    // Hand focus back to the grid once the editor is gone. Only edits ended
+    // from the keyboard do this: one ended by focus moving elsewhere leaves
+    // focus where the user put it.
+    requestAnimationFrame(() => gridRef.current?.focus());
   };
 
   const styleVars = {
@@ -479,7 +526,6 @@ export function Spreadsheet({
 
   return (
     <div
-      ref={rootRef}
       className={cn(
         'cd-sheetgrid',
         compact && 'cd-sheetgrid--compact',
@@ -487,12 +533,6 @@ export function Spreadsheet({
         className,
       )}
       style={styleVars}
-      tabIndex={0}
-      role="grid"
-      aria-rowcount={rows}
-      aria-colcount={cols}
-      aria-label="Spreadsheet"
-      onKeyDown={onGridKeyDown}
       {...rest}
     >
       {showFormulaBar && (
@@ -505,6 +545,9 @@ export function Spreadsheet({
             value={editing ? draft : activeRaw}
             disabled={readOnly}
             spellCheck={false}
+            // Out of the Tab order: the grid is the one stop, and Enter / F2
+            // edit the same value in the cell.
+            tabIndex={-1}
             aria-label="Formula bar"
             onFocus={() => {
               if (!readOnly && !editing) beginEdit('edit');
@@ -522,8 +565,18 @@ export function Spreadsheet({
         </div>
       )}
 
-      <div className="cd-sheetgrid__viewport">
-        <table className="cd-sheetgrid__table">
+      <div ref={viewportRef} className="cd-sheetgrid__viewport">
+        <table
+          ref={gridRef}
+          className="cd-sheetgrid__table"
+          role="grid"
+          tabIndex={0}
+          aria-label={ariaLabel}
+          aria-multiselectable="true"
+          aria-readonly={readOnly}
+          aria-activedescendant={cellId(active.row, active.col)}
+          onKeyDown={onGridKeyDown}
+        >
           <thead>
             <tr>
               <th className="cd-sheetgrid__corner" scope="col" />
@@ -571,9 +624,9 @@ export function Spreadsheet({
                   return (
                     <td
                       key={c}
+                      id={cellId(r, c)}
                       role="gridcell"
                       aria-selected={isSelected}
-                      aria-colindex={c + 1}
                       className={cn(
                         'cd-sheetgrid__cell',
                         isActive && 'is-active',
@@ -588,7 +641,7 @@ export function Spreadsheet({
                         if (editing && isActive) return;
                         if (editing) endEdit(true);
                         e.preventDefault();
-                        rootRef.current?.focus();
+                        gridRef.current?.focus();
                         const next = { row: r, col: c };
                         setActive(next);
                         if (e.shiftKey) {

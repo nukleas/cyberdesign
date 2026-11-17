@@ -1,5 +1,6 @@
-import type { HTMLAttributes, DetailsHTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, DetailsHTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 import { cn } from '../lib/cn';
+import { moveFocus } from '../lib/focus';
 
 export interface AccordionItemData {
   /** Trigger heading text. */
@@ -47,14 +48,32 @@ export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }
 
-/** Disclosure accordion — native `<details>` rows, data-driven or composed via `Accordion.Item`. */
+/**
+ * Disclosure accordion — native `<details>` rows, data-driven or composed via `Accordion.Item`.
+ *
+ * Keyboard: every header is a Tab stop; Enter / Space toggle it (native `<summary>`).
+ * With focus on a header, Up / Down move to the previous / next header, wrapping,
+ * and Home / End go to the first / last. Closed content cannot be reached with Tab.
+ */
 function AccordionRoot({
   items,
   variant = 'default',
   className = '',
   children,
+  onKeyDown,
   ...rest
 }: AccordionProps) {
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown?.(event);
+    const headers = Array.from(
+      event.currentTarget.querySelectorAll<HTMLElement>(
+        ':scope > .cd-accordion__item > .cd-accordion__trigger',
+      ),
+    );
+    // Only from a header: arrow keys inside the content keep their own meaning.
+    if (headers.includes(event.target as HTMLElement)) moveFocus(event, headers);
+  };
+
   return (
     <div
       className={cn(
@@ -63,6 +82,7 @@ function AccordionRoot({
         className,
       )}
       {...rest}
+      onKeyDown={handleKeyDown}
     >
       {items
         ? items.map((item, i) => (

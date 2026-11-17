@@ -8,13 +8,17 @@
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
   opacity: 0;
+  /* Hidden, not just transparent: a closed sheet's controls leave the tab order. */
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.18s ease;
+  transition: opacity 0.18s ease, visibility 0s 0.22s;
 }
 
 .cd-sheet-overlay.is-open {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  transition-delay: 0s;
 }
 
 .cd-sheet {
@@ -34,6 +38,11 @@
 .cd-sheet-overlay.is-open .cd-sheet {
   opacity: 1;
   transform: translate(0, 0);
+}
+
+/* The panel takes focus when it has no controls; it sits on the viewport edge, so ring inside. */
+.cd-sheet:focus-visible {
+  outline-offset: -4px;
 }
 
 /* Sides */

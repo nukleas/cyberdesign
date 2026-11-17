@@ -9,11 +9,14 @@ export interface SwitchProps
   label?: ReactNode;
 }
 
-/** Toggle switch — visually-hidden checkbox driving a neon track + thumb. */
+/**
+ * Toggle switch — visually-hidden native checkbox, announced as a switch,
+ * driving a neon track + thumb. Space toggles it; the track shows the focus ring.
+ */
 export function Switch({ size = 'md', label, className = '', ...rest }: SwitchProps) {
   return (
     <label className={cn('cd-switch', size === 'sm' && 'cd-switch--sm', className)}>
-      <input type="checkbox" className="cd-switch__input" {...rest} />
+      <input type="checkbox" role="switch" className="cd-switch__input" {...rest} />
       <span className="cd-switch__track">
         <span className="cd-switch__thumb" />
       </span>

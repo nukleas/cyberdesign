@@ -30,9 +30,14 @@
 }
 
 .cd-menubar__trigger:hover,
+.cd-menubar__trigger:focus-visible,
 .cd-menubar__item.is-open > .cd-menubar__trigger {
   color: var(--cd-accent);
   background: var(--cd-accent-subtle);
+}
+
+.cd-menubar__trigger:focus-visible {
+  outline-offset: -2px; /* inside the bar, clear of the neighbours */
 }
 
 .cd-menubar__menu {
@@ -46,15 +51,19 @@
   border: 1px solid color-mix(in srgb, var(--cd-accent) 28%, transparent);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   opacity: 0;
+  /* Hidden, not just transparent: a closed menu's items cannot take focus. */
+  visibility: hidden;
   pointer-events: none;
   transform: translateY(-4px);
-  transition: opacity 0.12s ease, transform 0.12s ease;
+  transition: opacity 0.12s ease, transform 0.12s ease, visibility 0s 0.12s;
 }
 
 .cd-menubar__item.is-open > .cd-menubar__menu {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
+  transition-delay: 0s;
 }
 
 .cd-menubar__action {
@@ -72,9 +81,19 @@
   cursor: pointer;
 }
 
-.cd-menubar__action:hover {
+.cd-menubar__action:hover:not(:disabled),
+.cd-menubar__action:focus-visible {
   background: var(--cd-accent-subtle);
   color: var(--cd-accent);
+}
+
+.cd-menubar__action:focus-visible {
+  outline-offset: 0; /* tighter for menu items */
+}
+
+.cd-menubar__action:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 /* Navigation menu (horizontal links) */
@@ -103,6 +122,7 @@
 }
 
 .cd-nav-menu__link:hover,
+.cd-nav-menu__link:focus-visible,
 .cd-nav-menu__link.is-active {
   color: var(--cd-accent);
   border-color: color-mix(in srgb, var(--cd-accent) 30%, transparent);
@@ -120,15 +140,19 @@
   font-family: var(--cd-font-mono);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px color-mix(in srgb, var(--cd-accent) 15%, transparent);
   opacity: 0;
+  /* Hidden, not just transparent: a closed menu's items leave the tab order. */
+  visibility: hidden;
   pointer-events: none;
   transform: scale(0.97);
-  transition: opacity 0.1s ease, transform 0.1s ease;
+  transition: opacity 0.1s ease, transform 0.1s ease, visibility 0s 0.1s;
 }
 
 .cd-context-menu.is-open {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: scale(1);
+  transition-delay: 0s;
 }
 
 .cd-context-menu__item {
@@ -146,12 +170,18 @@
   cursor: pointer;
 }
 
-.cd-context-menu__item:hover:not(:disabled) {
+.cd-context-menu__item:hover:not(:disabled),
+.cd-context-menu__item:focus-visible {
   background: var(--cd-accent-subtle);
   color: var(--cd-accent);
 }
 
-.cd-context-menu__item--danger:hover:not(:disabled) {
+.cd-context-menu__item:focus-visible {
+  outline-offset: 0; /* tighter for menu items */
+}
+
+.cd-context-menu__item--danger:hover:not(:disabled),
+.cd-context-menu__item--danger:focus-visible {
   background: rgba(255, 69, 108, 0.1);
   color: var(--cd-neon-red);
 }
@@ -167,7 +197,24 @@
   background: var(--cd-border-dim);
 }
 
-.cd-context-menu__kbd {
+.cd-context-menu__label {
+  padding: 6px 12px 3px;
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--cd-text-dim);
+  cursor: default;
+}
+
+.cd-context-menu__item-icon {
+  flex-shrink: 0;
+  width: 14px;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.cd-context-menu__item-kbd {
   margin-left: auto;
   font-size: var(--cd-text-xs);
   color: var(--cd-text-dim);
@@ -263,8 +310,14 @@
   text-align: center;
 }
 
+/* Hidden visually only: the label stays the link's accessible name. */
 .cd-sidebar--collapsed .cd-sidebar__link-label {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .cd-sidebar__main {

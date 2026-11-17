@@ -21,7 +21,14 @@ export interface SidebarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'titl
   onCollapsedChange?: (collapsed: boolean) => void;
 }
 
-/** App shell with collapsible sidebar navigation. */
+/**
+ * App shell with collapsible sidebar navigation.
+ *
+ * Keyboard: the collapse button and every link are native controls — Tab reaches
+ * them, Enter (and Space on buttons) activates. The collapse button reports its
+ * state with `aria-expanded`; collapsed links keep their label as accessible
+ * name. The active link carries `aria-current="page"`.
+ */
 export function Sidebar({
   title = 'Nav',
   links,
@@ -46,28 +53,46 @@ export function Sidebar({
       <aside className={cn('cd-sidebar', isCollapsed && 'cd-sidebar--collapsed')}>
         <div className="cd-sidebar__header">
           <span className="cd-sidebar__title">{title}</span>
-          <Button type="button" size="sm" icon onClick={toggle} aria-label="Toggle sidebar">
+          <Button
+            type="button"
+            size="sm"
+            icon
+            onClick={toggle}
+            aria-label="Toggle sidebar"
+            aria-expanded={!isCollapsed}
+          >
             {isCollapsed ? '›' : '‹'}
           </Button>
         </div>
         <nav className="cd-sidebar__nav">
           {links.map((link, i) => {
             const cls = cn('cd-sidebar__link', link.active && 'is-active');
+            const current = link.active ? 'page' : undefined;
             const body = (
               <>
-                {link.icon != null && <span className="cd-sidebar__link-icon">{link.icon}</span>}
+                {link.icon != null && (
+                  <span className="cd-sidebar__link-icon" aria-hidden>
+                    {link.icon}
+                  </span>
+                )}
                 <span className="cd-sidebar__link-label">{link.label}</span>
               </>
             );
             if (link.href) {
               return (
-                <a key={i} href={link.href} className={cls} onClick={link.onClick}>
+                <a key={i} href={link.href} className={cls} aria-current={current} onClick={link.onClick}>
                   {body}
                 </a>
               );
             }
             return (
-              <button key={i} type="button" className={cls} onClick={link.onClick}>
+              <button
+                key={i}
+                type="button"
+                className={cls}
+                aria-current={current}
+                onClick={link.onClick}
+              >
                 {body}
               </button>
             );

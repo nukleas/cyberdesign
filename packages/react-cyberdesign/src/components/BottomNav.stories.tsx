@@ -20,6 +20,7 @@ export const Default: Story = {
           active: {v}
         </div>
         <BottomNav
+          aria-label="Views"
           value={v}
           onValueChange={setV}
           items={[

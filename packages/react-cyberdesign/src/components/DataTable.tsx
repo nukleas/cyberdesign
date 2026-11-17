@@ -8,6 +8,14 @@ export interface DataTableColumn<T> {
   cell: (row: T, index: number) => ReactNode;
   /** Right-align numeric cells. */
   numeric?: boolean;
+  /**
+   * Makes the column sortable: its header becomes a button. `'asc'` / `'desc'`
+   * are the current direction; `true` is sortable but not the sorted column.
+   * The table does not sort `data` itself.
+   */
+  sort?: boolean | 'asc' | 'desc';
+  /** The column's sort button was pressed. */
+  onSort?: () => void;
 }
 
 export interface DataTableProps<T> {
@@ -20,6 +28,8 @@ export interface DataTableProps<T> {
   emptyTitle?: ReactNode;
   emptyDescription?: ReactNode;
   className?: string;
+  /** Accessible name of the table. */
+  'aria-label'?: string;
 }
 
 /** Declarative data table built on {@link Table}. */
@@ -32,17 +42,27 @@ export function DataTable<T>({
   emptyTitle = 'No rows',
   emptyDescription = 'There is nothing to display yet.',
   className,
+  'aria-label': ariaLabel,
 }: DataTableProps<T>) {
   if (data.length === 0) {
     return <Empty title={emptyTitle} description={emptyDescription} />;
   }
 
   return (
-    <Table compact={compact} bordered={bordered} scroll className={className}>
+    <Table
+      compact={compact}
+      bordered={bordered}
+      scroll
+      className={className}
+      aria-label={ariaLabel}
+      wrapProps={{ 'aria-label': ariaLabel }}
+    >
       <Table.Head>
         <Table.Row>
           {columns.map((col) => (
-            <Table.HeaderCell key={col.key}>{col.header}</Table.HeaderCell>
+            <Table.HeaderCell key={col.key} sort={col.sort} onSort={col.onSort}>
+              {col.header}
+            </Table.HeaderCell>
           ))}
         </Table.Row>
       </Table.Head>

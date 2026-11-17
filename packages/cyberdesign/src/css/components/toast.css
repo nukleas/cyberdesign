@@ -75,6 +75,17 @@
   line-height: 1.5;
 }
 
+/* Long jobs: a .cd-progress bar and a row of .cd-btn--sm actions under the text */
+.cd-toast__progress { margin-top: 8px; }
+
+.cd-toast__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 8px;
+}
+
 .cd-toast__dismiss {
   flex-shrink: 0;
   background: none;

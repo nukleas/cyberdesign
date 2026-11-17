@@ -18,6 +18,10 @@ export interface BottomNavProps extends Omit<HTMLAttributes<HTMLElement>, 'onCha
 
 /**
  * Mobile bottom tab bar — dashboard-app MAP / FEED / STATS / TIME pattern.
+ *
+ * Keyboard: each item is a native button — Tab reaches it and Enter / Space
+ * select it. The active item carries `aria-current="page"`. Name the `<nav>`
+ * with `aria-label` when the page has more than one.
  */
 export function BottomNav({
   items,
@@ -37,9 +41,14 @@ export function BottomNav({
             disabled={item.disabled}
             className={cn('cd-bottom-nav__item', active && 'is-active')}
             data-active={active || undefined}
+            aria-current={active ? 'page' : undefined}
             onClick={() => onValueChange?.(item.id)}
           >
-            {item.icon != null && <span className="cd-bottom-nav__icon">{item.icon}</span>}
+            {item.icon != null && (
+              <span className="cd-bottom-nav__icon" aria-hidden>
+                {item.icon}
+              </span>
+            )}
             <span className="cd-bottom-nav__label">{item.label}</span>
             {item.badge != null && (
               <span className="cd-bottom-nav__badge">{item.badge}</span>

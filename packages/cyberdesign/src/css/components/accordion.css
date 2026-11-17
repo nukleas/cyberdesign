@@ -60,6 +60,7 @@
 }
 
 .cd-accordion__trigger:focus-visible {
+  outline-offset: -2px; /* the item clips its overflow */
   color: var(--cd-accent);
   background: color-mix(in srgb, var(--cd-accent) 4%, var(--cd-bg-panel));
 }

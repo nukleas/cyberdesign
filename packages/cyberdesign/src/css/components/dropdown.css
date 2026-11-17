@@ -35,10 +35,12 @@
     0% var(--cd-clip-sm)
   );
   opacity: 0;
+  /* Hidden, not just transparent: a closed menu's items leave the tab order. */
+  visibility: hidden;
   transform: translateY(-6px) scale(0.97);
   pointer-events: none;
   transform-origin: top left;
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0s 0.15s;
 }
 
 /* Right-aligned variant */
@@ -64,12 +66,16 @@
   transform-origin: top right;
 }
 
-/* Open state — toggled by JS or :focus-within */
-.cd-dropdown.is-open > .cd-dropdown__menu,
-.cd-dropdown:focus-within > .cd-dropdown__menu {
+/*
+ * Open state — .is-open only. Opening on :focus-within as well kept the menu
+ * up after an item was chosen, because the chosen item still had focus.
+ */
+.cd-dropdown.is-open > .cd-dropdown__menu {
   opacity: 1;
+  visibility: visible;
   transform: translateY(0) scale(1);
   pointer-events: auto;
+  transition-delay: 0s;
 }
 
 /* ── Trigger ──────────────────────────────────────────────────────────────── */
@@ -132,7 +138,8 @@
 
 /* Danger item */
 .cd-dropdown__item--danger { color: var(--cd-text-muted); }
-.cd-dropdown__item--danger:hover {
+.cd-dropdown__item--danger:hover,
+.cd-dropdown__item--danger:focus-visible {
   background: color-mix(in srgb, var(--cd-red) 10%, transparent);
   color: var(--cd-red);
 }

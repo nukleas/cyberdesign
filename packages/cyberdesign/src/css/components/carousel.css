@@ -12,6 +12,10 @@
   width: 100%;
 }
 
+.cd-carousel__viewport:focus-visible {
+  outline-offset: -2px; /* the carousel clips its overflow */
+}
+
 .cd-carousel__track {
   display: flex;
   transition: transform 0.28s ease;
@@ -22,6 +26,13 @@
   min-width: 0;
   padding: 4px;
   box-sizing: border-box;
+}
+
+/* Off-screen slides: out of the Tab order and the accessibility tree, once
+   they have slid out of view. */
+.cd-carousel__slide[aria-hidden="true"] {
+  visibility: hidden;
+  transition: visibility 0s 0.28s;
 }
 
 .cd-carousel__slide-inner {
@@ -41,6 +52,7 @@
   justify-content: space-between;
   gap: 8px;
   margin-top: 10px;
+  padding: 0 4px 4px; /* lines up with the slide inset; room for focus rings */
 }
 
 .cd-carousel__dots {
@@ -65,5 +77,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cd-carousel__track { transition: none; }
+  .cd-carousel__track,
+  .cd-carousel__slide[aria-hidden="true"] { transition: none; }
 }

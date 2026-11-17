@@ -1,32 +1,15 @@
-import { useState } from 'react';
-import type { HTMLAttributes, ReactNode } from 'react';
+import { useId, useRef, useState } from 'react';
+import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
+import { flushSync } from 'react-dom';
 import { cn } from '../lib/cn';
-
-export interface DropdownItem {
-  /** Item label text. */
-  label: ReactNode;
-  /** Leading icon glyph rendered in the `__item-icon` slot. */
-  icon?: ReactNode;
-  /** Right-aligned keyboard shortcut hint (`__item-kbd`). */
-  kbd?: ReactNode;
-  /** Destructive styling (red on hover). */
-  danger?: boolean;
-  /** Disable selection. */
-  disabled?: boolean;
-  /** Fired when the item is clicked (closes the menu). */
-  onSelect?: () => void;
-}
-
-export type DropdownEntry =
-  | DropdownItem
-  | { sep: true }
-  | { label: ReactNode; heading: true };
+import { MenuEntries, focusMenuItem, menuItems, moveMenuFocus, useMenuDismiss } from '../lib/menu';
+import type { MenuEntry } from '../lib/menu';
 
 export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   /** Trigger node — rendered as the `cd-dropdown__trigger` button content. */
   trigger: ReactNode;
   /** Menu entries: items, `{ sep: true }` separators, or `{ heading: true }` labels. */
-  items: DropdownEntry[];
+  items: MenuEntry[];
   /** Right-align the menu panel under the trigger. */
   align?: 'left' | 'right';
   /** Extra classes for the trigger button (e.g. `cd-btn cd-btn--primary`). */
@@ -35,7 +18,15 @@ export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onS
   defaultOpen?: boolean;
 }
 
-/** Dropdown menu — a trigger button toggling a `cd-dropdown__menu` of data-driven items. */
+/**
+ * Dropdown menu — a trigger button toggling a `cd-dropdown__menu` of data-driven items.
+ *
+ * Keyboard (WAI-ARIA menu button): on the trigger, ArrowDown, Enter or Space
+ * opens the menu on its first item and ArrowUp on its last. In the menu, arrow
+ * keys, Home, End and first-letter type-ahead move between enabled items;
+ * Enter or Space chooses one and returns focus to the trigger (a `switch` item
+ * keeps the menu open); Escape closes; Tab closes and moves on.
+ */
 export function Dropdown({
   trigger,
   items,
@@ -46,56 +37,51 @@ export function Dropdown({
   ...rest
 }: DropdownProps) {
   const [open, setOpen] = useState(defaultOpen);
+  const root = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const id = useId();
+
+  const close = (restoreFocus: boolean) => {
+    setOpen(false);
+    if (restoreFocus) triggerRef.current?.focus();
+  };
+  useMenuDismiss(open, root, close);
+
+  const onTriggerKeyDown = (e: KeyboardEvent) => {
+    // Enter and Space on an open menu fall through to the click, which closes it.
+    const opens = e.key === 'ArrowDown' || (!open && (e.key === 'Enter' || e.key === ' '));
+    if (!opens && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    // The menu has to be visible before one of its items can take focus.
+    flushSync(() => setOpen(true));
+    focusMenuItem(menuRef.current, opens ? 'first' : 'last');
+  };
 
   return (
-    <div className={cn('cd-dropdown', open && 'is-open', className)} {...rest}>
+    <div ref={root} className={cn('cd-dropdown', open && 'is-open', className)} {...rest}>
       <button
+        ref={triggerRef}
+        id={`${id}-trigger`}
         type="button"
         className={cn(triggerClassName, 'cd-dropdown__trigger')}
+        aria-haspopup="menu"
         aria-expanded={open}
+        aria-controls={`${id}-menu`}
         onClick={() => setOpen((o) => !o)}
+        onKeyDown={onTriggerKeyDown}
       >
         {trigger}
       </button>
       <div
+        ref={menuRef}
+        id={`${id}-menu`}
         className={cn('cd-dropdown__menu', align === 'right' && 'cd-dropdown__menu--right')}
         role="menu"
+        aria-labelledby={`${id}-trigger`}
+        onKeyDown={(e) => moveMenuFocus(e, menuItems(e.currentTarget))}
       >
-        {items.map((entry, i) => {
-          if ('sep' in entry && entry.sep) {
-            return <div key={i} className="cd-dropdown__sep" />;
-          }
-          if ('heading' in entry && entry.heading) {
-            return (
-              <div key={i} className="cd-dropdown__label">
-                {entry.label}
-              </div>
-            );
-          }
-          const item = entry as DropdownItem;
-          return (
-            <button
-              key={i}
-              type="button"
-              role="menuitem"
-              className={cn('cd-dropdown__item', item.danger && 'cd-dropdown__item--danger')}
-              disabled={item.disabled}
-              aria-disabled={item.disabled || undefined}
-              onClick={() => {
-                item.onSelect?.();
-                setOpen(false);
-              }}
-            >
-              {item.icon != null && (
-                <span className="cd-dropdown__item-icon">{item.icon}</span>
-              )}
-              {item.label}
-              {item.kbd != null && (
-                <span className="cd-dropdown__item-kbd">{item.kbd}</span>
-              )}
-            </button>
-          );
-        })}
+        <MenuEntries block="cd-dropdown" items={items} onClose={() => close(true)} />
       </div>
     </div>
   );

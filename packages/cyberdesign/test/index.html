@@ -174,7 +174,7 @@
     .anim-demo__preview { margin-left: auto; font-size: var(--cd-text-xs); color: var(--cd-accent); }
 
     /* ── Component demos ── */
-    .card-demo { width: 200px; padding: 16px; }
+    .card-demo { width: 200px; }
     .card-demo__title { font-size: var(--cd-text-sm); font-weight: 700; color: var(--cd-text); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
     .card-demo__body { font-size: var(--cd-text-xs); color: var(--cd-text-muted); line-height: 1.5; }
 
@@ -687,6 +687,32 @@
           <button class="cd-btn cd-btn--primary" onclick="cdToast('API key rotated — new key active','accent','⬡')">Accent</button>
         </div>
         <p class="cd-label" style="color:var(--cd-text-muted);margin-top:10px">Toasts stack top-right, auto-dismiss after 4s.</p>
+        <div class="col" style="max-width:380px;margin-top:14px">
+          <div class="cd-toast cd-toast--accent" role="status">
+            <span class="cd-toast__icon">⬇</span>
+            <div class="cd-toast__content">
+              <div class="cd-toast__title" id="toast-demo-dl">Downloading update</div>
+              <div class="cd-toast__body">62% — 18.4 of 29.7 MB</div>
+              <div class="cd-progress cd-toast__progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-labelledby="toast-demo-dl">
+                <div class="cd-progress__bar" style="width:62%"></div>
+              </div>
+              <div class="cd-toast__actions">
+                <button class="cd-btn cd-btn--sm">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="cd-toast cd-toast--accent" role="status">
+            <span class="cd-toast__icon">⬡</span>
+            <div class="cd-toast__content">
+              <div class="cd-toast__title" id="toast-demo-render">Rendering video</div>
+              <div class="cd-toast__body">Encoding audio…</div>
+              <div class="cd-progress cd-progress--indeterminate cd-toast__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-labelledby="toast-demo-render">
+                <div class="cd-progress__bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cd-label" style="color:var(--cd-text-muted);margin-top:10px">Long jobs: .cd-toast__progress (a .cd-progress bar) and .cd-toast__actions.</p>
       </div>
 
       <!-- Dropdown -->
@@ -725,6 +751,38 @@
               <button class="cd-dropdown__item">Event count</button>
             </div>
           </div>
+          <div class="cd-dropdown" id="dd4">
+            <button class="cd-btn cd-dropdown__trigger" onclick="cdToggleDropdown('dd4')">View</button>
+            <div class="cd-dropdown__menu" role="menu">
+              <button class="cd-dropdown__item" role="menuitemcheckbox" aria-checked="true"><span class="cd-menu-item__gutter cd-menu-item__gutter--check"></span><span class="cd-menu-item__label">Word wrap</span><span class="cd-menu-item__hint">80 cols</span></button>
+              <button class="cd-dropdown__item" role="menuitemcheckbox" aria-checked="false"><span class="cd-menu-item__gutter cd-menu-item__gutter--check"></span><span class="cd-menu-item__label">Minimap</span><span class="cd-dropdown__item-kbd">⌘M</span></button>
+              <div class="cd-dropdown__sep"></div>
+              <button class="cd-dropdown__item" role="menuitemradio" aria-checked="true"><span class="cd-menu-item__gutter cd-menu-item__gutter--radio"></span><span class="cd-menu-item__label">Comfortable</span><span class="cd-menu-item__hint">default</span></button>
+              <button class="cd-dropdown__item" role="menuitemradio" aria-checked="false"><span class="cd-menu-item__gutter cd-menu-item__gutter--radio"></span><span class="cd-menu-item__label">Compact</span></button>
+              <div class="cd-dropdown__sep"></div>
+              <button class="cd-dropdown__item" role="menuitemcheckbox" aria-checked="true"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Scanlines</span><span class="cd-menu-item__switch"></span></button>
+              <button class="cd-dropdown__item" role="menuitemcheckbox" aria-checked="false"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Glow</span><span class="cd-menu-item__switch"></span></button>
+              <div class="cd-dropdown__sep"></div>
+              <button class="cd-dropdown__item" role="menuitem"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Reset layout</span><span class="cd-menu-item__hint">3 panes</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Context menu -->
+      <div class="section">
+        <div class="section-header">Context Menu — .cd-context-menu</div>
+        <div class="cd-context-menu is-open" role="menu" style="position:static;display:inline-block">
+          <button class="cd-context-menu__item" role="menuitem"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Open</span><span class="cd-context-menu__item-kbd">↵</span></button>
+          <button class="cd-context-menu__item" role="menuitemcheckbox" aria-checked="true"><span class="cd-menu-item__gutter cd-menu-item__gutter--check"></span><span class="cd-menu-item__label">Show hidden files</span><span class="cd-menu-item__hint">12</span></button>
+          <div class="cd-context-menu__sep"></div>
+          <div class="cd-context-menu__label">Sort by</div>
+          <button class="cd-context-menu__item" role="menuitemradio" aria-checked="true"><span class="cd-menu-item__gutter cd-menu-item__gutter--radio"></span><span class="cd-menu-item__label">Name</span></button>
+          <button class="cd-context-menu__item" role="menuitemradio" aria-checked="false"><span class="cd-menu-item__gutter cd-menu-item__gutter--radio"></span><span class="cd-menu-item__label">Modified</span></button>
+          <div class="cd-context-menu__sep"></div>
+          <button class="cd-context-menu__item" role="menuitemcheckbox" aria-checked="true"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Preview pane</span><span class="cd-menu-item__switch"></span></button>
+          <div class="cd-context-menu__sep"></div>
+          <button class="cd-context-menu__item cd-context-menu__item--danger" role="menuitem"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Delete</span><span class="cd-menu-item__hint">3 items</span></button>
         </div>
       </div>
 
@@ -934,7 +992,7 @@
         <div class="section-header">Table — .cd-table</div>
         <div class="cd-table-wrap" style="max-width:640px">
           <table class="cd-table">
-            <thead><tr><th>Source</th><th data-sort="asc">Severity</th><th data-sort>Events</th><th class="cd-table__num">Score</th><th>Status</th></tr></thead>
+            <thead><tr><th>Source</th><th aria-sort="ascending"><button type="button" class="cd-table__sort">Severity</button></th><th aria-sort="none"><button type="button" class="cd-table__sort">Events</button></th><th class="cd-table__num">Score</th><th>Status</th></tr></thead>
             <tbody>
               <tr><td>192.168.1.44</td><td><span class="cd-badge cd-badge--red">Critical</span></td><td>1,204</td><td class="cd-table__num">98.4</td><td data-status="err">Blocked</td></tr>
               <tr><td>10.0.0.17</td><td><span class="cd-badge cd-badge--amber">High</span></td><td>487</td><td class="cd-table__num">74.1</td><td data-status="warn">Review</td></tr>
@@ -954,6 +1012,27 @@
               <tr><td>rate:192.168</td><td>47/60</td><td class="cd-table__num">13s</td></tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- Virtual list -->
+      <div class="section">
+        <div class="section-header">Virtual list — .cd-virtual-list (static: every row is in the DOM here; React VirtualList renders only the window)</div>
+        <div class="cd-virtual-list cd-scrollbar" role="list" style="--cd-virtual-list-row-height:40px; --cd-virtual-list-count:12; height:200px; max-width:320px; border:1px solid var(--cd-border)">
+          <div class="cd-virtual-list__spacer" role="presentation">
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="1" style="--cd-virtual-list-index:0"><div class="cd-item cd-item--interactive">bank_000 — kick</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="2" style="--cd-virtual-list-index:1"><div class="cd-item cd-item--interactive">bank_001 — snare</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="3" style="--cd-virtual-list-index:2"><div class="cd-item cd-item--interactive">bank_002 — hat</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="4" style="--cd-virtual-list-index:3"><div class="cd-item cd-item--interactive">bank_003 — clap</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="5" style="--cd-virtual-list-index:4"><div class="cd-item cd-item--interactive">bank_004 — tom</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="6" style="--cd-virtual-list-index:5"><div class="cd-item cd-item--interactive">bank_005 — rim</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="7" style="--cd-virtual-list-index:6"><div class="cd-item cd-item--interactive">bank_006 — crash</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="8" style="--cd-virtual-list-index:7"><div class="cd-item cd-item--interactive">bank_007 — ride</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="9" style="--cd-virtual-list-index:8"><div class="cd-item cd-item--interactive">bank_008 — bass</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="10" style="--cd-virtual-list-index:9"><div class="cd-item cd-item--interactive">bank_009 — pad</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="11" style="--cd-virtual-list-index:10"><div class="cd-item cd-item--interactive">bank_010 — lead</div></div>
+            <div class="cd-virtual-list__row" role="listitem" aria-setsize="12" aria-posinset="12" style="--cd-virtual-list-index:11"><div class="cd-item cd-item--interactive">bank_011 — fx</div></div>
+          </div>
         </div>
       </div>
 
@@ -1012,19 +1091,19 @@
       <div class="section">
         <div class="section-header">Canvas charts — CdLineChart · CdBarChart · CdWaveform · CdRadar</div>
         <div class="row" style="flex-wrap:wrap;gap:16px;align-items:flex-start">
-          <div class="cd-glow-card" style="width:380px;display:flex;flex-direction:column">
+          <div class="cd-glow-card cd-glow-card--flush" style="width:380px;display:flex;flex-direction:column">
             <div class="cd-chart__header"><span class="cd-chart__title">Incident Trend</span><span class="cd-chart__meta">7-day rolling</span></div>
             <div class="cd-chart" style="height:160px"><canvas id="line-chart"></canvas></div>
           </div>
-          <div class="cd-glow-card" style="width:280px;display:flex;flex-direction:column">
+          <div class="cd-glow-card cd-glow-card--flush" style="width:280px;display:flex;flex-direction:column">
             <div class="cd-chart__header"><span class="cd-chart__title">Category Breakdown</span><span class="cd-chart__meta">this week</span></div>
             <div class="cd-chart" style="height:160px"><canvas id="bar-chart"></canvas></div>
           </div>
-          <div class="cd-glow-card cd-glow-card--cyan" style="width:240px;display:flex;flex-direction:column">
+          <div class="cd-glow-card cd-glow-card--cyan cd-glow-card--flush" style="width:240px;display:flex;flex-direction:column">
             <div class="cd-chart__header"><span class="cd-chart__title">Coverage Radar</span><span class="cd-chart__meta">source quality</span></div>
             <div class="cd-chart" style="height:200px"><svg id="radar-chart" style="width:100%;height:100%"></svg></div>
           </div>
-          <div class="cd-glow-card" style="width:340px;display:flex;flex-direction:column">
+          <div class="cd-glow-card cd-glow-card--flush" style="width:340px;display:flex;flex-direction:column">
             <div class="cd-chart__header"><span class="cd-chart__title">Signal · Scope</span><span class="cd-chart__meta cd-animate-pulse-glow" style="color:#52ff9f">● LIVE</span></div>
             <div class="cd-chart cd-chart--scope" style="height:72px"><canvas id="waveform-chart"></canvas></div>
           </div>
@@ -1034,7 +1113,7 @@
       <!-- Atlas map -->
       <div class="section">
         <div class="section-header">Atlas map — CdMapScene · world / US / outline</div>
-        <div class="cd-glow-card" style="height:320px;padding:0;overflow:hidden;position:relative">
+        <div class="cd-glow-card cd-glow-card--flush" style="height:320px;overflow:hidden;position:relative">
           <div id="atlas-demo" style="height:100%"></div>
         </div>
         <p style="margin:8px 0 0;font-size:11px;color:var(--cd-text-dim);letter-spacing:0.08em;text-transform:uppercase">
@@ -1287,9 +1366,9 @@
             <div class="cd-terminal__header">
               <span class="cd-terminal__title">WINTERMUTE // SEC-07</span>
               <div class="cd-terminal__controls">
-                <span class="cd-terminal__dot cd-terminal__dot--min" title="Minimize"></span>
-                <span class="cd-terminal__dot cd-terminal__dot--max" title="Maximize"></span>
-                <span class="cd-terminal__dot cd-terminal__dot--close" title="Close"></span>
+                <button type="button" class="cd-terminal__dot cd-terminal__dot--min" aria-label="Minimize" title="Minimize"></button>
+                <button type="button" class="cd-terminal__dot cd-terminal__dot--max" aria-label="Maximize" title="Maximize"></button>
+                <button type="button" class="cd-terminal__dot cd-terminal__dot--close" aria-label="Close" title="Close"></button>
               </div>
             </div>
             <div class="cd-terminal__body cd-scrollbar">
@@ -1357,6 +1436,61 @@
           <div class="cd-terminal__input">
             <span class="cd-terminal__prompt">user@edge&gt; </span>
             <input class="cd-terminal__field" id="live-input" placeholder="help, status, glitch, clear" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat tool calls -->
+      <div class="section">
+        <div class="section-header">Chat tool calls — .cd-chat-tools / .cd-chat-tool</div>
+        <div class="cd-chat" style="max-width:420px;height:auto">
+          <div class="cd-chat__messages">
+            <div class="cd-chat-row cd-chat-row--user">
+              <div class="cd-chat-row__meta"><span>You</span></div>
+              <div class="cd-chat-msg cd-chat-msg--user">why is the build red?</div>
+            </div>
+            <div class="cd-chat-row cd-chat-row--assistant">
+              <div class="cd-chat-row__meta"><span>AI</span></div>
+              <div class="cd-chat-tools">
+                <details class="cd-chat-tool cd-chat-tool--success">
+                  <summary class="cd-chat-tool__head">
+                    <span class="cd-chat-tool__glyph" role="img" aria-label="succeeded">✓</span>
+                    <span class="cd-chat-tool__name">read_file</span>
+                    <span class="cd-chat-tool__summary">build.ts — 212 lines, bundle array registers 41 component stylesheets</span>
+                    <span class="cd-chat-tool__time">38 ms</span>
+                  </summary>
+                  <pre class="cd-chat-tool__input">{
+  "path": "build.ts"
+}</pre>
+                  <pre class="cd-chat-tool__result">import { readFileSync, writeFileSync } from 'node:fs';
+// … 210 more lines</pre>
+                </details>
+                <details class="cd-chat-tool cd-chat-tool--error">
+                  <summary class="cd-chat-tool__head">
+                    <span class="cd-chat-tool__glyph" role="img" aria-label="failed">✗</span>
+                    <span class="cd-chat-tool__name">run_command</span>
+                    <span class="cd-chat-tool__summary">pnpm build exited with code 1</span>
+                    <span class="cd-chat-tool__category">exit</span>
+                    <span class="cd-chat-tool__time">4.2 s</span>
+                  </summary>
+                  <pre class="cd-chat-tool__input">{
+  "command": "pnpm build"
+}</pre>
+                  <pre class="cd-chat-tool__result">error: ENOENT: no such file or directory, open 'src/css/components/chat.css'</pre>
+                </details>
+                <details class="cd-chat-tool cd-chat-tool--pending">
+                  <summary class="cd-chat-tool__head">
+                    <span class="cd-chat-tool__glyph" role="img" aria-label="running">…</span>
+                    <span class="cd-chat-tool__name">search_files</span>
+                    <span class="cd-chat-tool__summary">running</span>
+                  </summary>
+                  <pre class="cd-chat-tool__input">{
+  "query": "chat.css"
+}</pre>
+                </details>
+              </div>
+              <div class="cd-chat-msg cd-chat-msg--assistant">The bundle array points at a stylesheet that no longer exists. Checking where it moved.</div>
+            </div>
           </div>
         </div>
       </div>
@@ -1450,6 +1584,12 @@
           <div class="row" style="gap:24px">
             <span class="cd-tooltip" data-tip="Above tooltip — default" style="font-size:11px;color:var(--cd-text-secondary);cursor:help">Hover me ↑</span>
             <span class="cd-tooltip cd-tooltip--below" data-tip="Below tooltip variant" style="font-size:11px;color:var(--cd-text-secondary);cursor:help">Hover me ↓</span>
+          </div>
+          <p class="cd-label" style="color:var(--cd-text-muted);margin-top:8px">Floating tooltip — .cd-tooltip-float (static specimens; a script sets top / left, see React Tooltip)</p>
+          <div class="row" style="gap:24px;align-items:center;padding:6px 0">
+            <div class="cd-tooltip-float cd-tooltip-float--top" role="tooltip" style="position:relative;z-index:auto;animation:none">Above the trigger<span class="cd-tooltip-float__arrow" style="left:50%"></span></div>
+            <div class="cd-tooltip-float cd-tooltip-float--bottom" role="tooltip" style="position:relative;z-index:auto;animation:none">Below the trigger<span class="cd-tooltip-float__arrow" style="left:50%"></span></div>
+            <div class="cd-tooltip-float cd-tooltip-float--top" role="tooltip" style="position:relative;z-index:auto;animation:none">Clamped at an edge: the arrow tracks the trigger and long content wraps at the max width<span class="cd-tooltip-float__arrow" style="left:14px"></span></div>
           </div>
           <p class="cd-label" style="color:var(--cd-text-muted);margin-top:8px">Progress bars</p>
           <div class="col" style="gap:10px">
@@ -2005,6 +2145,20 @@
   };
   document.addEventListener('click', e => {
     if (!e.target.closest('.cd-dropdown')) document.querySelectorAll('.cd-dropdown').forEach(d => d.classList.remove('is-open'));
+  });
+
+  // Stateful menu items: check and switch items toggle, a radio item unchecks its neighbours.
+  document.addEventListener('click', e => {
+    const item = e.target.closest('[role="menuitemcheckbox"], [role="menuitemradio"]');
+    if (!item) return;
+    if (item.getAttribute('role') === 'menuitemcheckbox') {
+      item.setAttribute('aria-checked', String(item.getAttribute('aria-checked') !== 'true'));
+      return;
+    }
+    for (const dir of ['previousElementSibling', 'nextElementSibling']) {
+      for (let el = item[dir]; el && el.getAttribute('role') === 'menuitemradio'; el = el[dir]) el.setAttribute('aria-checked', 'false');
+    }
+    item.setAttribute('aria-checked', 'true');
   });
 
   // ── Modal keyboard escape ──

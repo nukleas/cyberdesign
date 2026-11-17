@@ -58,6 +58,11 @@
   gap: 2px;
 }
 
+/* A row of the grid (role="row"); its cells lay out in the grid directly. */
+.cd-calendar__week {
+  display: contents;
+}
+
 .cd-calendar__weekday {
   text-align: center;
   font-size: 10px;
@@ -83,7 +88,7 @@
   min-height: 32px;
 }
 
-.cd-calendar__day:hover:not(:disabled):not(.is-outside) {
+.cd-calendar__day:hover:not(:disabled):not([aria-disabled='true']):not(.is-outside) {
   border-color: color-mix(in srgb, var(--cd-accent) 35%, transparent);
   color: var(--cd-accent);
 }
@@ -104,7 +109,12 @@
   box-shadow: 0 0 8px color-mix(in srgb, var(--cd-accent) 20%, transparent);
 }
 
-.cd-calendar__day:disabled {
+.cd-calendar__day:focus-visible {
+  outline-offset: 0; /* tighter: the cells are 2px apart */
+}
+
+.cd-calendar__day:disabled,
+.cd-calendar__day[aria-disabled='true'] {
   opacity: 0.25;
   cursor: not-allowed;
 }

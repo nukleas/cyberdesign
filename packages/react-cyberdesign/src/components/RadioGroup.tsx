@@ -20,7 +20,15 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, 'o
   orientation?: 'vertical' | 'horizontal';
 }
 
-/** Group of labelled radio options with shared name. */
+/**
+ * Group of labelled radio options with shared name.
+ *
+ * Keyboard: native radio inputs, so the browser provides the WAI-ARIA Radio Group
+ * behaviour. The group is one Tab stop (the checked option, else the first);
+ * Up / Down / Left / Right move to the previous / next option and check it,
+ * wrapping; Space checks the focused option. Disabled options are skipped.
+ * Name the group with `aria-label` or `aria-labelledby`.
+ */
 export function RadioGroup({
   name,
   items,

@@ -1,5 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../lib/cn';
+import { pressOnKey } from '../lib/pressable';
 
 export interface ItemProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   media?: ReactNode;
@@ -7,6 +8,11 @@ export interface ItemProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'>
   description?: ReactNode;
   actions?: ReactNode;
   bordered?: boolean;
+  /**
+   * The whole row is one control: it gets `role="button"`, a Tab stop, and
+   * Enter / Space fire `onClick`. Do not put other controls (buttons, links)
+   * inside an interactive row; keep the row static and put them in `actions`.
+   */
   interactive?: boolean;
   children?: ReactNode;
 }
@@ -21,6 +27,7 @@ export function Item({
   interactive = false,
   className = '',
   children,
+  onKeyDown,
   ...rest
 }: ItemProps) {
   return (
@@ -31,6 +38,15 @@ export function Item({
         interactive && 'cd-item--interactive',
         className,
       )}
+      {...(interactive && { role: 'button', tabIndex: 0 })}
+      onKeyDown={
+        interactive
+          ? (event) => {
+              onKeyDown?.(event);
+              if (!event.defaultPrevented) pressOnKey(event);
+            }
+          : onKeyDown
+      }
       {...rest}
     >
       {media != null && <div className="cd-item__media">{media}</div>}
