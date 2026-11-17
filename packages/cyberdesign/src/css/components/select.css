@@ -1,5 +1,7 @@
 /* ── Select wrapper ─────────────────────────────────────── */
-/* Wrap <select> in .cd-select-wrap to get the custom arrow  */
+/* Wrap <select> in .cd-select-wrap to get the custom arrow. */
+/* Set a width on the wrap, not the select: the arrow is     */
+/* placed from the wrap's right edge.                        */
 
 .cd-select-wrap {
   position: relative;
