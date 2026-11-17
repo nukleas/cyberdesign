@@ -1,32 +1,14 @@
 import { useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../lib/cn';
-
-export interface DropdownItem {
-  /** Item label text. */
-  label: ReactNode;
-  /** Leading icon glyph rendered in the `__item-icon` slot. */
-  icon?: ReactNode;
-  /** Right-aligned keyboard shortcut hint (`__item-kbd`). */
-  kbd?: ReactNode;
-  /** Destructive styling (red on hover). */
-  danger?: boolean;
-  /** Disable selection. */
-  disabled?: boolean;
-  /** Fired when the item is clicked (closes the menu). */
-  onSelect?: () => void;
-}
-
-export type DropdownEntry =
-  | DropdownItem
-  | { sep: true }
-  | { label: ReactNode; heading: true };
+import { MenuEntries } from '../lib/menu';
+import type { MenuEntry } from '../lib/menu';
 
 export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   /** Trigger node — rendered as the `cd-dropdown__trigger` button content. */
   trigger: ReactNode;
   /** Menu entries: items, `{ sep: true }` separators, or `{ heading: true }` labels. */
-  items: DropdownEntry[];
+  items: MenuEntry[];
   /** Right-align the menu panel under the trigger. */
   align?: 'left' | 'right';
   /** Extra classes for the trigger button (e.g. `cd-btn cd-btn--primary`). */
@@ -61,41 +43,7 @@ export function Dropdown({
         className={cn('cd-dropdown__menu', align === 'right' && 'cd-dropdown__menu--right')}
         role="menu"
       >
-        {items.map((entry, i) => {
-          if ('sep' in entry && entry.sep) {
-            return <div key={i} className="cd-dropdown__sep" />;
-          }
-          if ('heading' in entry && entry.heading) {
-            return (
-              <div key={i} className="cd-dropdown__label">
-                {entry.label}
-              </div>
-            );
-          }
-          const item = entry as DropdownItem;
-          return (
-            <button
-              key={i}
-              type="button"
-              role="menuitem"
-              className={cn('cd-dropdown__item', item.danger && 'cd-dropdown__item--danger')}
-              disabled={item.disabled}
-              aria-disabled={item.disabled || undefined}
-              onClick={() => {
-                item.onSelect?.();
-                setOpen(false);
-              }}
-            >
-              {item.icon != null && (
-                <span className="cd-dropdown__item-icon">{item.icon}</span>
-              )}
-              {item.label}
-              {item.kbd != null && (
-                <span className="cd-dropdown__item-kbd">{item.kbd}</span>
-              )}
-            </button>
-          );
-        })}
+        <MenuEntries block="cd-dropdown" items={items} onClose={() => setOpen(false)} />
       </div>
     </div>
   );

@@ -724,6 +724,38 @@
               <button class="cd-dropdown__item">Event count</button>
             </div>
           </div>
+          <div class="cd-dropdown" id="dd4">
+            <button class="cd-btn cd-dropdown__trigger" onclick="cdToggleDropdown('dd4')">View</button>
+            <div class="cd-dropdown__menu" role="menu">
+              <button class="cd-dropdown__item" role="menuitemcheckbox" aria-checked="true"><span class="cd-menu-item__gutter cd-menu-item__gutter--check"></span><span class="cd-menu-item__label">Word wrap</span><span class="cd-menu-item__hint">80 cols</span></button>
+              <button class="cd-dropdown__item" role="menuitemcheckbox" aria-checked="false"><span class="cd-menu-item__gutter cd-menu-item__gutter--check"></span><span class="cd-menu-item__label">Minimap</span><span class="cd-dropdown__item-kbd">⌘M</span></button>
+              <div class="cd-dropdown__sep"></div>
+              <button class="cd-dropdown__item" role="menuitemradio" aria-checked="true"><span class="cd-menu-item__gutter cd-menu-item__gutter--radio"></span><span class="cd-menu-item__label">Comfortable</span><span class="cd-menu-item__hint">default</span></button>
+              <button class="cd-dropdown__item" role="menuitemradio" aria-checked="false"><span class="cd-menu-item__gutter cd-menu-item__gutter--radio"></span><span class="cd-menu-item__label">Compact</span></button>
+              <div class="cd-dropdown__sep"></div>
+              <button class="cd-dropdown__item" role="menuitemcheckbox" aria-checked="true"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Scanlines</span><span class="cd-menu-item__switch"></span></button>
+              <button class="cd-dropdown__item" role="menuitemcheckbox" aria-checked="false"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Glow</span><span class="cd-menu-item__switch"></span></button>
+              <div class="cd-dropdown__sep"></div>
+              <button class="cd-dropdown__item" role="menuitem"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Reset layout</span><span class="cd-menu-item__hint">3 panes</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Context menu -->
+      <div class="section">
+        <div class="section-header">Context Menu — .cd-context-menu</div>
+        <div class="cd-context-menu is-open" role="menu" style="position:static;display:inline-block">
+          <button class="cd-context-menu__item" role="menuitem"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Open</span><span class="cd-context-menu__item-kbd">↵</span></button>
+          <button class="cd-context-menu__item" role="menuitemcheckbox" aria-checked="true"><span class="cd-menu-item__gutter cd-menu-item__gutter--check"></span><span class="cd-menu-item__label">Show hidden files</span><span class="cd-menu-item__hint">12</span></button>
+          <div class="cd-context-menu__sep"></div>
+          <div class="cd-context-menu__label">Sort by</div>
+          <button class="cd-context-menu__item" role="menuitemradio" aria-checked="true"><span class="cd-menu-item__gutter cd-menu-item__gutter--radio"></span><span class="cd-menu-item__label">Name</span></button>
+          <button class="cd-context-menu__item" role="menuitemradio" aria-checked="false"><span class="cd-menu-item__gutter cd-menu-item__gutter--radio"></span><span class="cd-menu-item__label">Modified</span></button>
+          <div class="cd-context-menu__sep"></div>
+          <button class="cd-context-menu__item" role="menuitemcheckbox" aria-checked="true"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Preview pane</span><span class="cd-menu-item__switch"></span></button>
+          <div class="cd-context-menu__sep"></div>
+          <button class="cd-context-menu__item cd-context-menu__item--danger" role="menuitem"><span class="cd-menu-item__gutter"></span><span class="cd-menu-item__label">Delete</span><span class="cd-menu-item__hint">3 items</span></button>
         </div>
       </div>
 
@@ -2025,6 +2057,20 @@
   };
   document.addEventListener('click', e => {
     if (!e.target.closest('.cd-dropdown')) document.querySelectorAll('.cd-dropdown').forEach(d => d.classList.remove('is-open'));
+  });
+
+  // Stateful menu items: check and switch items toggle, a radio item unchecks its neighbours.
+  document.addEventListener('click', e => {
+    const item = e.target.closest('[role="menuitemcheckbox"], [role="menuitemradio"]');
+    if (!item) return;
+    if (item.getAttribute('role') === 'menuitemcheckbox') {
+      item.setAttribute('aria-checked', String(item.getAttribute('aria-checked') !== 'true'));
+      return;
+    }
+    for (const dir of ['previousElementSibling', 'nextElementSibling']) {
+      for (let el = item[dir]; el && el.getAttribute('role') === 'menuitemradio'; el = el[dir]) el.setAttribute('aria-checked', 'false');
+    }
+    item.setAttribute('aria-checked', 'true');
   });
 
   // ── Modal keyboard escape ──

@@ -4,6 +4,7 @@
 export { cn } from './lib/cn';
 export { fuzzyRank, fuzzyScore } from './lib/fuzzy';
 export type { CdColor, CdTheme, CdSize } from './lib/types';
+export type { MenuItem, MenuEntry } from './lib/menu';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
 export type { ThemeProviderProps } from './theme/ThemeProvider';
 

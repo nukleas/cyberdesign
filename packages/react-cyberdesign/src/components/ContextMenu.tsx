@@ -1,18 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode, MouseEvent as ReactMouseEvent } from 'react';
 import { cn } from '../lib/cn';
-
-export interface ContextMenuItem {
-  label: ReactNode;
-  kbd?: ReactNode;
-  danger?: boolean;
-  disabled?: boolean;
-  onSelect?: () => void;
-  sep?: boolean;
-}
+import { MenuEntries } from '../lib/menu';
+import type { MenuEntry } from '../lib/menu';
 
 export interface ContextMenuProps extends HTMLAttributes<HTMLDivElement> {
-  items: ContextMenuItem[];
+  /** Menu entries: items, `{ sep: true }` separators, or `{ heading: true }` labels. */
+  items: MenuEntry[];
+  /** Content that opens the menu on right-click. */
   children: ReactNode;
 }
 
@@ -20,14 +15,19 @@ export interface ContextMenuProps extends HTMLAttributes<HTMLDivElement> {
 export function ContextMenu({ items, children, className = '', ...rest }: ContextMenuProps) {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ x: 0, y: 0 });
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open) return;
     const close = () => setOpen(false);
-    window.addEventListener('click', close);
+    // Clicks inside the menu are the items' business: a switch item keeps it open.
+    const onClick = (e: MouseEvent) => {
+      if (!menuRef.current?.contains(e.target as Node)) close();
+    };
+    window.addEventListener('click', onClick);
     window.addEventListener('scroll', close, true);
     return () => {
-      window.removeEventListener('click', close);
+      window.removeEventListener('click', onClick);
       window.removeEventListener('scroll', close, true);
     };
   }, [open]);
@@ -42,31 +42,12 @@ export function ContextMenu({ items, children, className = '', ...rest }: Contex
     <div className={cn(className)} onContextMenu={onContextMenu} {...rest}>
       {children}
       <div
+        ref={menuRef}
         className={cn('cd-context-menu', open && 'is-open')}
         style={{ left: pos.x, top: pos.y }}
         role="menu"
       >
-        {items.map((item, i) =>
-          item.sep ? (
-            <div key={i} className="cd-context-menu__sep" />
-          ) : (
-            <button
-              key={i}
-              type="button"
-              role="menuitem"
-              disabled={item.disabled}
-              className={cn('cd-context-menu__item', item.danger && 'cd-context-menu__item--danger')}
-              onClick={(e) => {
-                e.stopPropagation();
-                item.onSelect?.();
-                setOpen(false);
-              }}
-            >
-              {item.label}
-              {item.kbd != null && <span className="cd-context-menu__kbd">{item.kbd}</span>}
-            </button>
-          ),
-        )}
+        <MenuEntries block="cd-context-menu" items={items} onClose={() => setOpen(false)} />
       </div>
     </div>
   );

@@ -167,7 +167,24 @@
   background: var(--cd-border-dim);
 }
 
-.cd-context-menu__kbd {
+.cd-context-menu__label {
+  padding: 6px 12px 3px;
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--cd-text-dim);
+  cursor: default;
+}
+
+.cd-context-menu__item-icon {
+  flex-shrink: 0;
+  width: 14px;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.cd-context-menu__item-kbd {
   margin-left: auto;
   font-size: var(--cd-text-xs);
   color: var(--cd-text-dim);
