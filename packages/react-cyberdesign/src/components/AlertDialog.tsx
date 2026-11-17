@@ -1,4 +1,4 @@
-import { useEffect, useId } from 'react';
+import { useId } from 'react';
 import type { ReactNode } from 'react';
 import { Modal } from './Modal';
 import { Button } from './Button';
@@ -38,12 +38,6 @@ export function AlertDialog({
   destructive = false,
 }: AlertDialogProps) {
   const messageId = useId();
-  const cancelId = useId();
-
-  // Runs after Modal's own effect, which has just focused its first control (the ✕).
-  useEffect(() => {
-    if (open) document.getElementById(cancelId)?.focus();
-  }, [open, cancelId]);
 
   return (
     <Modal
@@ -55,7 +49,8 @@ export function AlertDialog({
       aria-describedby={messageId}
       footer={
         <>
-          <Button id={cancelId} type="button" onClick={onClose}>
+          {/* Initial focus goes to the least destructive action. */}
+          <Button data-autofocus type="button" onClick={onClose}>
             {cancelLabel}
           </Button>
           <Button

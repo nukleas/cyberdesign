@@ -103,8 +103,11 @@ function TooltipBubble({ id, triggerRef, side, onClose, children }: TooltipBubbl
   useLayoutEffect(update, [update, children]);
 
   useEffect(() => {
+    // Captured and stopped: this Escape dismisses the hint, not the dialog around it.
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key !== 'Escape') return;
+      e.stopPropagation();
+      onClose();
     };
     // A hovered trigger that moves has left the pointer, so the hint goes. A
     // keyboard-focused one keeps its hint (focusing it may be what scrolled
@@ -118,11 +121,11 @@ function TooltipBubble({ id, triggerRef, side, onClose, children }: TooltipBubbl
       const trigger = triggerRef.current;
       if (trigger && e.target instanceof Node && e.target.contains(trigger)) onMove();
     };
-    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keydown', onKeyDown, true);
     document.addEventListener('scroll', onScroll, true);
     window.addEventListener('resize', onMove);
     return () => {
-      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('keydown', onKeyDown, true);
       document.removeEventListener('scroll', onScroll, true);
       window.removeEventListener('resize', onMove);
     };

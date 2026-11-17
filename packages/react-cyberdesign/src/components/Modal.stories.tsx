@@ -4,6 +4,10 @@ import { Modal } from './Modal';
 import { Button } from './Button';
 import { AlertDialog } from './AlertDialog';
 import { Popover } from './Popover';
+import { Dropdown } from './Dropdown';
+import { Combobox } from './Combobox';
+import { Tooltip } from './Tooltip';
+import { RadioGroup } from './RadioGroup';
 
 /**
  * Modal dialog (`role="dialog"`, `aria-modal`), named by its `title`.
@@ -104,6 +108,52 @@ export const Nested: Story = {
         >
           This permanently deletes cold storage snapshots.
         </AlertDialog>
+      </>
+    );
+  },
+};
+
+/**
+ * Widgets that use Escape themselves. With a menu, a combobox list or a
+ * tooltip showing, Escape dismisses that and leaves the dialog open; the next
+ * Escape closes the dialog. The radio group is the last control, and Tab still
+ * wraps to the first.
+ */
+export const WithWidgets: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button variant="primary" onClick={() => setOpen(true)}>Open form</Button>
+        <Modal open={open} onClose={() => setOpen(false)} title="Export" hideClose>
+          <div style={{ display: 'grid', gap: 12, minHeight: 220 }}>
+            <Dropdown
+              trigger="Format"
+              items={[{ label: 'WAV' }, { label: 'MP3' }, { label: 'Stems' }]}
+            />
+            <Combobox
+              aria-label="Sample rate"
+              options={[
+                { value: '44100', label: '44.1 kHz' },
+                { value: '48000', label: '48 kHz' },
+                { value: '96000', label: '96 kHz' },
+              ]}
+            />
+            <Tooltip tip="Adds a tail so reverbs ring out">
+              <Button size="sm">Include tail</Button>
+            </Tooltip>
+            <RadioGroup
+              name="export-length"
+              aria-label="Length"
+              defaultValue="loop"
+              items={[
+                { value: 'loop', label: 'Full loop' },
+                { value: 'bars', label: 'Bars' },
+                { value: 'custom', label: 'Custom' },
+              ]}
+            />
+          </div>
+        </Modal>
       </>
     );
   },

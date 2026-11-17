@@ -57,15 +57,8 @@ export function DatePicker({
   const panelId = useId();
   const selected = value ?? internal;
 
-  useOverlayFocus(panelRef, open, () => setOpen(false));
-
-  // useOverlayFocus lands on the first tabbable element (the previous-month
-  // button); a date picker starts on the grid's day instead.
-  useEffect(() => {
-    if (open) {
-      panelRef.current?.querySelector<HTMLElement>('[role="gridcell"][tabindex="0"]')?.focus();
-    }
-  }, [open]);
+  // A date picker starts on the grid's day, not the previous-month button.
+  useOverlayFocus(panelRef, open, () => setOpen(false), '[role="gridcell"][tabindex="0"]');
 
   // A press outside the field and its calendar closes it.
   useEffect(() => {
