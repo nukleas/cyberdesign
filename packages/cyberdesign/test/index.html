@@ -1413,6 +1413,61 @@
         </div>
       </div>
 
+      <!-- Chat tool calls -->
+      <div class="section">
+        <div class="section-header">Chat tool calls — .cd-chat-tools / .cd-chat-tool</div>
+        <div class="cd-chat" style="max-width:420px;height:auto">
+          <div class="cd-chat__messages">
+            <div class="cd-chat-row cd-chat-row--user">
+              <div class="cd-chat-row__meta"><span>You</span></div>
+              <div class="cd-chat-msg cd-chat-msg--user">why is the build red?</div>
+            </div>
+            <div class="cd-chat-row cd-chat-row--assistant">
+              <div class="cd-chat-row__meta"><span>AI</span></div>
+              <div class="cd-chat-tools">
+                <details class="cd-chat-tool cd-chat-tool--success">
+                  <summary class="cd-chat-tool__head">
+                    <span class="cd-chat-tool__glyph" role="img" aria-label="succeeded">✓</span>
+                    <span class="cd-chat-tool__name">read_file</span>
+                    <span class="cd-chat-tool__summary">build.ts — 212 lines, bundle array registers 41 component stylesheets</span>
+                    <span class="cd-chat-tool__time">38 ms</span>
+                  </summary>
+                  <pre class="cd-chat-tool__input">{
+  "path": "build.ts"
+}</pre>
+                  <pre class="cd-chat-tool__result">import { readFileSync, writeFileSync } from 'node:fs';
+// … 210 more lines</pre>
+                </details>
+                <details class="cd-chat-tool cd-chat-tool--error">
+                  <summary class="cd-chat-tool__head">
+                    <span class="cd-chat-tool__glyph" role="img" aria-label="failed">✗</span>
+                    <span class="cd-chat-tool__name">run_command</span>
+                    <span class="cd-chat-tool__summary">pnpm build exited with code 1</span>
+                    <span class="cd-chat-tool__category">exit</span>
+                    <span class="cd-chat-tool__time">4.2 s</span>
+                  </summary>
+                  <pre class="cd-chat-tool__input">{
+  "command": "pnpm build"
+}</pre>
+                  <pre class="cd-chat-tool__result">error: ENOENT: no such file or directory, open 'src/css/components/chat.css'</pre>
+                </details>
+                <details class="cd-chat-tool cd-chat-tool--pending">
+                  <summary class="cd-chat-tool__head">
+                    <span class="cd-chat-tool__glyph" role="img" aria-label="running">…</span>
+                    <span class="cd-chat-tool__name">search_files</span>
+                    <span class="cd-chat-tool__summary">running</span>
+                  </summary>
+                  <pre class="cd-chat-tool__input">{
+  "query": "chat.css"
+}</pre>
+                </details>
+              </div>
+              <div class="cd-chat-msg cd-chat-msg--assistant">The bundle array points at a stylesheet that no longer exists. Checking where it moved.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /panel-data -->
 
 
