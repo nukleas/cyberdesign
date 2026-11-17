@@ -36,7 +36,14 @@ function buildPages(page: number, pageCount: number, siblingCount: number): Arra
   return pages;
 }
 
-/** Page navigation — windowed page list with prev/next, ellipsis and optional info. */
+/**
+ * Page navigation — windowed page list with prev/next, ellipsis and optional info.
+ *
+ * Keyboard: every control is a native button — Tab / Shift+Tab move between them
+ * and Enter / Space activate. The current page carries `aria-current="page"`.
+ * Prev / next stay focusable at the first / last page (`aria-disabled`), so
+ * focus is not dropped when you page to either end.
+ */
 export function Pagination({
   page,
   pageCount,
@@ -69,7 +76,7 @@ export function Pagination({
       <button
         type="button"
         className="cd-pagination__prev cd-pagination__item"
-        disabled={page <= 1}
+        aria-label="Previous page"
         aria-disabled={page <= 1 || undefined}
         onClick={() => go(page - 1)}
       >
@@ -85,6 +92,7 @@ export function Pagination({
             key={p}
             type="button"
             className={cn('cd-pagination__item', p === page && 'is-active')}
+            aria-label={`Page ${p}`}
             aria-current={p === page ? 'page' : undefined}
             onClick={() => go(p)}
           >
@@ -95,7 +103,7 @@ export function Pagination({
       <button
         type="button"
         className="cd-pagination__next cd-pagination__item"
-        disabled={page >= pageCount}
+        aria-label="Next page"
         aria-disabled={page >= pageCount || undefined}
         onClick={() => go(page + 1)}
       >

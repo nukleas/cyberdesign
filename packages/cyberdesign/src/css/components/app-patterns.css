@@ -293,6 +293,10 @@
   color: var(--cd-text-muted);
 }
 
+.cd-bottom-nav__item:focus-visible {
+  outline-offset: -2px; /* the bar sits on the viewport edge */
+}
+
 .cd-bottom-nav__item.is-active,
 .cd-bottom-nav__item[data-active='true'] {
   color: var(--cd-accent);

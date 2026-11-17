@@ -310,8 +310,14 @@
   text-align: center;
 }
 
+/* Hidden visually only: the label stays the link's accessible name. */
 .cd-sidebar--collapsed .cd-sidebar__link-label {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .cd-sidebar__main {

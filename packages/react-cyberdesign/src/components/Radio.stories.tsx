@@ -18,6 +18,7 @@ export const Group: Story = {
   render: () => (
     <RadioGroup
       name="tier"
+      aria-label="Tier"
       defaultValue="pro"
       items={[
         { value: 'free', label: 'Free' },

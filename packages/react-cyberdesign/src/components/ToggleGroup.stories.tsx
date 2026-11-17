@@ -11,6 +11,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Single: Story = {
   args: {
+    'aria-label': 'Range',
     defaultValue: 'week',
     items: [
       { value: 'day', label: 'Day' },
@@ -20,8 +21,21 @@ export const Single: Story = {
   },
 };
 
+export const WithDisabled: Story = {
+  args: {
+    'aria-label': 'Range',
+    items: [
+      { value: 'day', label: 'Day' },
+      { value: 'week', label: 'Week', disabled: true },
+      { value: 'month', label: 'Month' },
+      { value: 'year', label: 'Year' },
+    ],
+  },
+};
+
 export const Multiple: Story = {
   args: {
+    'aria-label': 'Text style',
     multiple: true,
     defaultValue: ['b', 'i'],
     items: [

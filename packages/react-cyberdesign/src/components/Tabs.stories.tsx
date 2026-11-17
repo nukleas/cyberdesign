@@ -1,10 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs } from './Tabs';
 
-/**
- * Tabbed navigation. Semantic `variant`: underline | pills | vertical.
- * Supports controlled (`active` + `onTabChange`) and uncontrolled (`defaultActive`) modes.
- */
 const meta = {
   title: 'Navigation/Tabs',
   component: Tabs,

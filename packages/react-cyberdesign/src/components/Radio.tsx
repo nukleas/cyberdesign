@@ -9,7 +9,12 @@ export interface RadioProps
   description?: ReactNode;
 }
 
-/** Cyber radio — neon filled dot; renders inside a `cd-control` label when labelled. */
+/**
+ * Cyber radio — neon filled dot; renders inside a `cd-control` label when labelled.
+ *
+ * Keyboard: a native radio input. Radios sharing a `name` form one Tab stop;
+ * arrow keys move between them and check, Space checks the focused one.
+ */
 export function Radio({ label, description, className = '', ...rest }: RadioProps) {
   const input = (
     <input type="radio" className={cn('cd-radio', !label && className)} {...rest} />

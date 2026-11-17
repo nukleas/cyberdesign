@@ -7,7 +7,13 @@ export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }
 
-/** Groups adjacent `Button` children with shared borders. */
+/**
+ * Groups adjacent `Button` children with shared borders.
+ *
+ * Keyboard: a plain `role="group"` of native buttons — each button is its own
+ * Tab stop and Enter / Space activate it. There are no arrow keys; for a single
+ * Tab stop with roving focus use `ToggleGroup`.
+ */
 export function ButtonGroup({
   vertical = false,
   className = '',

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
 import { Collapsible } from './Collapsible';
 
 const meta = {
@@ -14,9 +15,12 @@ export const Default: Story = {
     defaultOpen: true,
     trigger: 'Advanced options',
     children: (
-      <p style={{ margin: 0, paddingBottom: 8, fontSize: 12 }}>
-        Tunables for retry budget, backoff, and circuit breakers.
-      </p>
+      <>
+        <p style={{ margin: 0, paddingBottom: 8, fontSize: 12 }}>
+          Tunables for retry budget, backoff, and circuit breakers.
+        </p>
+        <Button size="sm">Reset tunables</Button>
+      </>
     ),
     style: { width: 320 },
   },

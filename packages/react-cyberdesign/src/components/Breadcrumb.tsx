@@ -19,7 +19,12 @@ export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, 'chil
   'aria-label'?: string;
 }
 
-/** Breadcrumb trail — data-driven crumbs with slash / arrow / dot separators; renders `<nav><ol>`. */
+/**
+ * Breadcrumb trail — data-driven crumbs with slash / arrow / dot separators; renders `<nav><ol>`.
+ *
+ * Keyboard: crumbs with an `href` are native links — Tab reaches each one and
+ * Enter follows it. The active crumb is plain text marked `aria-current="page"`.
+ */
 export function Breadcrumb({
   items,
   variant = 'default',
@@ -46,7 +51,7 @@ export function Breadcrumb({
               className={cn('cd-breadcrumb__item', isActive && 'cd-breadcrumb__item--active')}
             >
               {isActive || item.href == null ? (
-                <span>{item.label}</span>
+                <span aria-current={isActive ? 'page' : undefined}>{item.label}</span>
               ) : (
                 <a className="cd-breadcrumb__link" href={item.href}>
                   {item.label}
