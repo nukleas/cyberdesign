@@ -2,6 +2,7 @@
 // Import styles once: `import "react-cyberdesign/styles.css"`
 
 export { cn } from './lib/cn';
+export { fuzzyRank, fuzzyScore } from './lib/fuzzy';
 export type { CdColor, CdTheme, CdSize } from './lib/types';
 export { ThemeProvider, useTheme } from './theme/ThemeProvider';
 export type { ThemeProviderProps } from './theme/ThemeProvider';
