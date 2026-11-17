@@ -1558,6 +1558,12 @@
             <span class="cd-tooltip" data-tip="Above tooltip — default" style="font-size:11px;color:var(--cd-text-secondary);cursor:help">Hover me ↑</span>
             <span class="cd-tooltip cd-tooltip--below" data-tip="Below tooltip variant" style="font-size:11px;color:var(--cd-text-secondary);cursor:help">Hover me ↓</span>
           </div>
+          <p class="cd-label" style="color:var(--cd-text-muted);margin-top:8px">Floating tooltip — .cd-tooltip-float (static specimens; a script sets top / left, see React Tooltip)</p>
+          <div class="row" style="gap:24px;align-items:center;padding:6px 0">
+            <div class="cd-tooltip-float cd-tooltip-float--top" role="tooltip" style="position:relative;z-index:auto;animation:none">Above the trigger<span class="cd-tooltip-float__arrow" style="left:50%"></span></div>
+            <div class="cd-tooltip-float cd-tooltip-float--bottom" role="tooltip" style="position:relative;z-index:auto;animation:none">Below the trigger<span class="cd-tooltip-float__arrow" style="left:50%"></span></div>
+            <div class="cd-tooltip-float cd-tooltip-float--top" role="tooltip" style="position:relative;z-index:auto;animation:none">Clamped at an edge: the arrow tracks the trigger and long content wraps at the max width<span class="cd-tooltip-float__arrow" style="left:14px"></span></div>
+          </div>
           <p class="cd-label" style="color:var(--cd-text-muted);margin-top:8px">Progress bars</p>
           <div class="col" style="gap:10px">
             <div class="cd-progress"><div class="cd-progress__bar" style="width:65%"></div></div>

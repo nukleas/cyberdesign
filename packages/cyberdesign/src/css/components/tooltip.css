@@ -1,0 +1,144 @@
+/* ── Tooltip ────────────────────────────────────────────── */
+/*
+  Two tooltips share one bubble skin.
+
+  CSS-only — no script, but clipped by any `overflow` ancestor:
+
+    <span class="cd-tooltip" data-tip="Helpful hint">hover me</span>
+
+  Floating — a body-level bubble a script positions from the trigger's
+  bounding rect, so it is never clipped. The script sets `top` / `left` on
+  the bubble and `left` (the trigger's centre) on the arrow; React's
+  `Tooltip` does this:
+
+    <span class="cd-tooltip-trigger"><button aria-describedby="tip-1">…</button></span>
+    …
+    <div class="cd-tooltip-float cd-tooltip-float--top" id="tip-1" role="tooltip"
+         style="top: 120px; left: 48px">
+      Helpful hint
+      <span class="cd-tooltip-float__arrow" style="left: 40px"></span>
+    </div>
+*/
+
+/* Shared bubble skin */
+.cd-tooltip::after,
+.cd-tooltip-float {
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cd-text);
+  background: var(--cd-bg-panel);
+  border: 1px solid color-mix(in srgb, var(--cd-accent) 45%, transparent);
+  padding: 4px 8px;
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--cd-accent) 20%, transparent),
+    2px 2px 0 color-mix(in srgb, var(--cd-accent-secondary) 20%, transparent);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ── CSS-only ── */
+
+.cd-tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.cd-tooltip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+/* Arrow */
+.cd-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid color-mix(in srgb, var(--cd-accent) 45%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  z-index: 9999;
+}
+
+.cd-tooltip:hover::after,
+.cd-tooltip:hover::before {
+  opacity: 1;
+}
+
+/* Tooltip below */
+.cd-tooltip--below::after {
+  bottom: auto;
+  top: calc(100% + 8px);
+}
+
+.cd-tooltip--below::before {
+  bottom: auto;
+  top: calc(100% + 3px);
+  border-top: none;
+  border-bottom: 5px solid color-mix(in srgb, var(--cd-accent) 45%, transparent);
+}
+
+/* ── Floating ── */
+
+/* Gives the trigger wrapper a box that hugs its content, for measuring. */
+.cd-tooltip-trigger {
+  display: inline-flex;
+}
+
+.cd-tooltip-float {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(280px, calc(100vw - 16px));
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  animation: cd-tooltip-float-in 120ms ease;
+}
+
+/* Arrow — sits in the 8px gap between bubble and trigger. */
+.cd-tooltip-float__arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+/* Bubble above the trigger: arrow hangs off the bottom border. */
+.cd-tooltip-float--top .cd-tooltip-float__arrow {
+  top: calc(100% + 1px);
+  border-top: 5px solid color-mix(in srgb, var(--cd-accent) 45%, transparent);
+}
+
+/* Bubble below the trigger: arrow rises from the top border. */
+.cd-tooltip-float--bottom .cd-tooltip-float__arrow {
+  bottom: calc(100% + 1px);
+  border-bottom: 5px solid color-mix(in srgb, var(--cd-accent) 45%, transparent);
+}
+
+@keyframes cd-tooltip-float-in {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-tooltip::after,
+  .cd-tooltip::before { transition: none; }
+  .cd-tooltip-float { animation: none; }
+}
