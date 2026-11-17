@@ -12,6 +12,23 @@ import { Input } from './Input';
  *
  * The viewport takes its height from its container or from `style`; every row
  * is exactly `rowHeight` pixels tall.
+ *
+ * ### Keyboard
+ * Pass `activeIndex` (with `onActiveIndexChange`) to make the list a single Tab
+ * stop with one active row. Focus stays on the viewport and
+ * `aria-activedescendant` names the active row, so it survives rows unmounting.
+ *
+ * | Key | Action |
+ * | --- | --- |
+ * | Tab | Focus the list (one stop) |
+ * | Up / Down | Previous / next row |
+ * | PageUp / PageDown | Move by one viewport of rows |
+ * | Home / End | First / last row |
+ * | Enter / Space | Activate the active row (`onRowActivate`) |
+ *
+ * The active row is always scrolled into view; the index does not wrap. A click
+ * on a row makes it active and activates it. Without `activeIndex` the list is
+ * static and has no key handling.
  */
 const meta = {
   title: 'Data/VirtualList',
@@ -26,6 +43,9 @@ const meta = {
     getRowKey: { control: false, table: { category: 'Content' } },
     rowProps: { control: false, table: { category: 'Content' } },
     handleRef: { control: false, table: { category: 'Behavior' } },
+    activeIndex: { control: false, table: { category: 'Behavior' } },
+    onActiveIndexChange: { control: false, table: { category: 'Behavior' } },
+    onRowActivate: { control: false, table: { category: 'Behavior' } },
   },
 } satisfies Meta<typeof VirtualList>;
 export default meta;
@@ -58,9 +78,43 @@ export const TenThousandRows: Story = {
       rowHeight={rowHeight}
       overscan={overscan}
       getRowKey={(bank) => bank.id}
-      renderRow={(bank, index) => <Item interactive title={bank.name} actions={index + 1} />}
+      renderRow={(bank, index) => <Item title={bank.name} actions={index + 1} />}
     />
   ),
+};
+
+/**
+ * 10,000 selectable rows driven from the keyboard: Tab into the list, move with
+ * the arrow keys, PageUp / PageDown, Home / End, and select with Enter / Space.
+ */
+export const KeyboardSelect: Story = {
+  render: ({ rowHeight, overscan }) => {
+    const [active, setActive] = useState(0);
+    const [selected, setSelected] = useState(-1);
+    return (
+      <div style={{ display: 'grid', gap: 12, width: 320 }}>
+        <Button>Before</Button>
+        <VirtualList
+          className="cd-scrollbar"
+          style={{ ...frame, width: undefined }}
+          aria-label="Sound banks"
+          items={BANKS}
+          rowHeight={rowHeight}
+          overscan={overscan}
+          getRowKey={(bank) => bank.id}
+          activeIndex={active}
+          onActiveIndexChange={setActive}
+          onRowActivate={(_, index) => setSelected(index)}
+          rowProps={(_, index) => ({ 'aria-selected': index === selected })}
+          renderRow={(bank, index) => <Item title={bank.name} actions={index + 1} />}
+        />
+        <Button>After</Button>
+        <output style={{ fontSize: 11, color: 'var(--cd-text-muted)' }}>
+          active {active} · selected {selected < 0 ? 'none' : BANKS[selected].name}
+        </output>
+      </div>
+    );
+  },
 };
 
 /** `handleRef.scrollToIndex` moves a row into view by the shortest scroll. */
@@ -92,16 +146,13 @@ export const ScrollToIndex: Story = {
         <VirtualList
           className="cd-scrollbar"
           style={{ ...frame, width: undefined }}
-          role="listbox"
           aria-label="Sound banks"
           handleRef={handle}
           items={BANKS}
           rowHeight={ROW_HEIGHT}
           getRowKey={(bank) => bank.id}
-          rowProps={(_, index) => ({ role: 'option', 'aria-selected': index === target })}
-          renderRow={(bank, index) => (
-            <Item interactive bordered={index === target} title={bank.name} onClick={() => go(index)} />
-          )}
+          rowProps={(_, index) => ({ 'aria-current': index === target || undefined })}
+          renderRow={(bank, index) => <Item bordered={index === target} title={bank.name} />}
         />
       </div>
     );
@@ -128,7 +179,7 @@ export const ChangingLength: Story = {
           items={BANKS.slice(0, count)}
           rowHeight={ROW_HEIGHT}
           getRowKey={(bank) => bank.id}
-          renderRow={(bank) => <Item interactive title={bank.name} />}
+          renderRow={(bank) => <Item title={bank.name} />}
         />
       </div>
     );

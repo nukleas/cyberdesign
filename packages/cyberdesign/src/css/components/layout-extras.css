@@ -24,6 +24,14 @@
   scrollbar-color: var(--cd-scrollbar-thumb, color-mix(in srgb, var(--cd-accent) 25%, transparent)) transparent;
 }
 
+/* A scroll area (or any scroll container) that is its own Tab stop. Inset, so
+   an ancestor that clips its overflow cannot hide the ring. */
+.cd-scroll-area:focus-visible,
+.cd-resizable__panel:focus-visible {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: -2px;
+}
+
 .cd-scroll-area--thin::-webkit-scrollbar { width: 4px; height: 4px; }
 .cd-scroll-area--thin::-webkit-scrollbar-track { background: transparent; }
 .cd-scroll-area--thin::-webkit-scrollbar-thumb {
@@ -170,6 +178,17 @@
   background: color-mix(in srgb, var(--cd-accent) 45%, transparent);
 }
 
+/* Keyboard focus: the whole bar lights up, brighter than hover. */
+.cd-resizable__handle:focus-visible {
+  outline: none;
+  background: var(--cd-accent);
+  box-shadow: 0 0 8px var(--cd-accent-glow);
+}
+
+.cd-resizable__handle:focus-visible::after {
+  background: var(--cd-bg);
+}
+
 .cd-resizable__handle::after {
   content: '';
   position: absolute;
@@ -212,6 +231,12 @@
 .cd-item--interactive:hover {
   background: var(--cd-accent-subtle);
   border-color: color-mix(in srgb, var(--cd-accent) 25%, transparent);
+}
+
+.cd-item--interactive:focus-visible {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: -2px;
+  background: var(--cd-accent-subtle);
 }
 
 .cd-item__media {

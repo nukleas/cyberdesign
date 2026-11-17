@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import type {
   HTMLAttributes,
   TableHTMLAttributes,
@@ -6,13 +7,18 @@ import type {
   ReactNode,
 } from 'react';
 import { cn } from '../lib/cn';
+import { useScrollTabStop } from '../lib/useScrollTabStop';
 
 export interface TableProps extends TableHTMLAttributes<HTMLTableElement> {
   /** Tighter padding and smaller type. */
   compact?: boolean;
   /** Draw cell borders. */
   bordered?: boolean;
-  /** Wrap the table in a horizontally-scrollable `cd-table-wrap` container. */
+  /**
+   * Wrap the table in a horizontally-scrollable `cd-table-wrap` container. While
+   * the table overflows it and holds nothing focusable, the container is a Tab
+   * stop so the arrow keys scroll it; name it through `wrapProps`.
+   */
   scroll?: boolean;
   /** Props forwarded to the wrapping `cd-table-wrap` div when `scroll` is set. */
   wrapProps?: HTMLAttributes<HTMLDivElement>;
@@ -45,10 +51,20 @@ export function Table({
 
   if (!scroll) return table;
 
-  const { className: wrapClassName = '', ...wrapRest } = wrapProps ?? {};
+  return <TableWrap {...wrapProps}>{table}</TableWrap>;
+}
+
+function TableWrap({ className = '', children, ...rest }: HTMLAttributes<HTMLDivElement>) {
+  const ref = useRef<HTMLDivElement>(null);
+  const tabStop = useScrollTabStop(ref);
   return (
-    <div className={cn('cd-table-wrap', wrapClassName)} {...wrapRest}>
-      {table}
+    <div
+      ref={ref}
+      className={cn('cd-table-wrap', className)}
+      {...(tabStop && { tabIndex: 0, role: 'group' })}
+      {...rest}
+    >
+      {children}
     </div>
   );
 }
@@ -83,27 +99,41 @@ function TableRow({ children, ...rest }: TableRowProps) {
 export interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElement> {
   /** Right-aligned tabular-numeric header cell (`cd-table__num`). */
   numeric?: boolean;
-  /** Mark column sortable; `'asc'`/`'desc'` show a direction arrow (sets `data-sort`). */
+  /**
+   * Makes the column sortable: the header content becomes a button (Tab, then
+   * Enter / Space) and the cell carries `aria-sort`. `'asc'` / `'desc'` are the
+   * current direction; `true` is sortable but not the sorted column.
+   */
   sort?: boolean | 'asc' | 'desc';
+  /** The sort button was pressed. Change the sort order and pass the new `sort`. */
+  onSort?: () => void;
   children?: ReactNode;
 }
 
-/** `<th>` header cell — supports numeric alignment and a sortable `data-sort` indicator. */
+const ARIA_SORT = { asc: 'ascending', desc: 'descending' } as const;
+
+/** `<th>` header cell — supports numeric alignment and a keyboard-operable sort button. */
 function TableHeaderCell({
   numeric = false,
   sort,
+  onSort,
   className = '',
   children,
   ...rest
 }: TableHeaderCellProps) {
-  const dataSort = sort === true ? '' : sort || undefined;
   return (
     <th
       className={cn(numeric && 'cd-table__num', className)}
-      data-sort={dataSort}
+      aria-sort={sort ? (sort === true ? 'none' : ARIA_SORT[sort]) : undefined}
       {...rest}
     >
-      {children}
+      {sort ? (
+        <button type="button" className="cd-table__sort" onClick={onSort}>
+          {children}
+        </button>
+      ) : (
+        children
+      )}
     </th>
   );
 }

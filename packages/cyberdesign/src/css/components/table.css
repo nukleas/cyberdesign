@@ -5,6 +5,12 @@
   overflow-x: auto;
 }
 
+/* The wrap is a Tab stop while the table overflows it. */
+.cd-table-wrap:focus-visible {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: -2px;
+}
+
 .cd-table {
   width: 100%;
   border-collapse: collapse;
@@ -30,21 +36,36 @@
   background: color-mix(in srgb, var(--cd-accent) 4%, transparent);
 }
 
-/* Sortable column header */
-.cd-table th[data-sort] {
+/* Sortable column header:
+     <th aria-sort="none|ascending|descending"><button class="cd-table__sort">…</button></th>
+   The button is the control; the direction arrow follows the cell's aria-sort. */
+.cd-table__sort {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
   cursor: pointer;
   user-select: none;
 }
 
-.cd-table th[data-sort]::after {
+.cd-table__sort::after {
   content: ' ·';
   color: var(--cd-text-dim);
 }
 
-.cd-table th[data-sort="asc"]::after  { content: ' ↑'; color: var(--cd-accent); }
-.cd-table th[data-sort="desc"]::after { content: ' ↓'; color: var(--cd-accent); }
+.cd-table th[aria-sort="ascending"] .cd-table__sort::after  { content: ' ↑'; color: var(--cd-accent); }
+.cd-table th[aria-sort="descending"] .cd-table__sort::after { content: ' ↓'; color: var(--cd-accent); }
 
-.cd-table th[data-sort]:hover {
+.cd-table__sort:hover {
+  color: var(--cd-accent-bright);
+}
+
+.cd-table__sort:focus-visible {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: 3px;
   color: var(--cd-accent-bright);
 }
 

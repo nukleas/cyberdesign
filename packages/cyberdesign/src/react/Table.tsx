@@ -85,27 +85,41 @@ function TableRow({ children, ...rest }: TableRowProps) {
 export interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElement> {
   /** Right-aligned tabular-numeric header cell (`cd-table__num`). */
   numeric?: boolean;
-  /** Mark column sortable; `'asc'`/`'desc'` show a direction arrow (sets `data-sort`). */
+  /**
+   * Makes the column sortable: the header content becomes a button (Tab, then
+   * Enter / Space) and the cell carries `aria-sort`. `'asc'` / `'desc'` are the
+   * current direction; `true` is sortable but not the sorted column.
+   */
   sort?: boolean | 'asc' | 'desc';
+  /** The sort button was pressed. Change the sort order and pass the new `sort`. */
+  onSort?: () => void;
   children?: ReactNode;
 }
 
-/** `<th>` header cell — supports numeric alignment and a sortable `data-sort` indicator. */
+const ARIA_SORT = { asc: 'ascending', desc: 'descending' } as const;
+
+/** `<th>` header cell — supports numeric alignment and a keyboard-operable sort button. */
 function TableHeaderCell({
   numeric = false,
   sort,
+  onSort,
   className = '',
   children,
   ...rest
 }: TableHeaderCellProps) {
-  const dataSort = sort === true ? '' : sort || undefined;
   return (
     <th
       className={cx(numeric && 'cd-table__num', className)}
-      data-sort={dataSort}
+      aria-sort={sort ? (sort === true ? 'none' : ARIA_SORT[sort]) : undefined}
       {...rest}
     >
-      {children}
+      {sort ? (
+        <button type="button" className="cd-table__sort" onClick={onSort}>
+          {children}
+        </button>
+      ) : (
+        children
+      )}
     </th>
   );
 }

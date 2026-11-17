@@ -3,6 +3,15 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Transport } from './Transport';
 import { StatusDot } from './StatusDot';
 
+/**
+ * Play / Stop cluster.
+ *
+ * ### Keyboard
+ * | Key | Action |
+ * | --- | --- |
+ * | Tab | Focus the enabled button |
+ * | Enter / Space | Press it; focus moves to the other button, so the same key toggles back |
+ */
 const meta = {
   title: 'App Patterns/Transport',
   component: Transport,

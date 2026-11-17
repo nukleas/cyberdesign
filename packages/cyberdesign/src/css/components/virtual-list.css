@@ -37,3 +37,33 @@
   height: var(--cd-virtual-list-row-height, 0px);
   overflow: hidden;
 }
+
+/* ── Keyboard mode ─────────────────────────────────────────────────────────
+   The viewport is the one Tab stop (it keeps the base :focus-visible ring);
+   `aria-activedescendant` names the active row, marked `.is-active`.
+   Hover is a fill, active is a ring, selected is a fill with an edge bar, so
+   the three stay distinguishable when they coincide. */
+
+.cd-virtual-list--interactive .cd-virtual-list__row {
+  cursor: pointer;
+}
+
+.cd-virtual-list--interactive .cd-virtual-list__row:hover {
+  background: var(--cd-accent-subtle);
+}
+
+.cd-virtual-list__row[aria-selected="true"] {
+  background: color-mix(in srgb, var(--cd-accent) 14%, transparent);
+  box-shadow: inset 2px 0 0 var(--cd-accent);
+}
+
+/* Dim while focus is elsewhere, full strength while the list has it. */
+.cd-virtual-list__row.is-active {
+  outline: 1px solid color-mix(in srgb, var(--cd-accent) 45%, transparent);
+  outline-offset: -1px;
+}
+
+.cd-virtual-list:focus-visible .cd-virtual-list__row.is-active {
+  outline: 2px solid var(--cd-accent);
+  outline-offset: -2px;
+}

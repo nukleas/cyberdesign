@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { GlowCard } from './GlowCard';
 import type { CdColor } from '../lib/types';
@@ -16,6 +17,11 @@ const colors: CdColor[] = [
 
 /**
  * Primary surface panel with neon border glow. Use `color` + `active` for selection UIs.
+ *
+ * ### Keyboard
+ * A card given `onClick` is one control (`role="button"`, `aria-pressed` from
+ * `active`): Tab focuses it and Enter / Space fire `onClick`. A card without
+ * `onClick` is a plain surface and is not focusable.
  */
 const meta = {
   title: 'Surfaces/GlowCard',
@@ -52,6 +58,28 @@ export const Default: Story = {};
 
 export const Active: Story = {
   args: { active: true, color: 'cyan' },
+};
+
+/** Clickable cards as a selection UI, operable with Tab and Enter / Space. */
+export const Selectable: Story = {
+  render: () => {
+    const [selected, setSelected] = useState<CdColor>('cyan');
+    return (
+      <div style={{ display: 'flex', gap: 12 }}>
+        {colors.slice(3, 6).map((color) => (
+          <GlowCard
+            key={color}
+            color={color}
+            active={color === selected}
+            onClick={() => setSelected(color)}
+            style={{ padding: 16, width: 120 }}
+          >
+            <div style={{ fontSize: 12, textTransform: 'uppercase' }}>{color}</div>
+          </GlowCard>
+        ))}
+      </div>
+    );
+  },
 };
 
 export const Grid: Story = {

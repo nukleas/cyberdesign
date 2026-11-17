@@ -965,7 +965,7 @@
         <div class="section-header">Table — .cd-table</div>
         <div class="cd-table-wrap" style="max-width:640px">
           <table class="cd-table">
-            <thead><tr><th>Source</th><th data-sort="asc">Severity</th><th data-sort>Events</th><th class="cd-table__num">Score</th><th>Status</th></tr></thead>
+            <thead><tr><th>Source</th><th aria-sort="ascending"><button type="button" class="cd-table__sort">Severity</button></th><th aria-sort="none"><button type="button" class="cd-table__sort">Events</button></th><th class="cd-table__num">Score</th><th>Status</th></tr></thead>
             <tbody>
               <tr><td>192.168.1.44</td><td><span class="cd-badge cd-badge--red">Critical</span></td><td>1,204</td><td class="cd-table__num">98.4</td><td data-status="err">Blocked</td></tr>
               <tr><td>10.0.0.17</td><td><span class="cd-badge cd-badge--amber">High</span></td><td>487</td><td class="cd-table__num">74.1</td><td data-status="warn">Review</td></tr>
@@ -1339,9 +1339,9 @@
             <div class="cd-terminal__header">
               <span class="cd-terminal__title">WINTERMUTE // SEC-07</span>
               <div class="cd-terminal__controls">
-                <span class="cd-terminal__dot cd-terminal__dot--min" title="Minimize"></span>
-                <span class="cd-terminal__dot cd-terminal__dot--max" title="Maximize"></span>
-                <span class="cd-terminal__dot cd-terminal__dot--close" title="Close"></span>
+                <button type="button" class="cd-terminal__dot cd-terminal__dot--min" aria-label="Minimize" title="Minimize"></button>
+                <button type="button" class="cd-terminal__dot cd-terminal__dot--max" aria-label="Maximize" title="Maximize"></button>
+                <button type="button" class="cd-terminal__dot cd-terminal__dot--close" aria-label="Close" title="Close"></button>
               </div>
             </div>
             <div class="cd-terminal__body cd-scrollbar">

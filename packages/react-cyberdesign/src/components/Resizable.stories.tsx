@@ -1,6 +1,20 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Resizable } from './Resizable';
 
+/**
+ * Two-panel split view with a draggable, focusable divider.
+ *
+ * ### Keyboard
+ * | Key | Action |
+ * | --- | --- |
+ * | Tab | Focus the divider |
+ * | Left / Right (side by side), Up / Down (stacked) | Resize by 2% |
+ * | Shift + arrow | Resize by 10% |
+ * | Home / End | First panel to `minSize` / `maxSize` |
+ *
+ * A panel whose content overflows and has nothing focusable inside is also a
+ * Tab stop, so it can be scrolled with the arrow keys.
+ */
 const meta = {
   title: 'Layout/Resizable',
   component: Resizable,

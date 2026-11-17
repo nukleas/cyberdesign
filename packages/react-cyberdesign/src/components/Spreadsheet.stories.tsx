@@ -18,14 +18,22 @@ import { Kbd } from './Kbd';
  * ### Keyboard
  * | Key | Action |
  * | --- | --- |
- * | Arrows | Move selection |
- * | Shift+Arrows | Extend range |
+ * | Arrows | Move the active cell |
+ * | Home / End | First / last cell of the row |
+ * | ⌘/Ctrl+Home / End | First / last cell of the sheet |
+ * | PageUp / PageDown | Move by one viewport of rows |
+ * | Shift + any of the above | Extend the selected range |
  * | Enter / F2 | Edit cell |
  * | Type | Overwrite cell |
- * | Tab | Commit + next column |
+ * | Enter / Shift+Enter (editing) | Commit + row below / above |
+ * | Tab / Shift+Tab | Next / previous cell in the row (commits an edit); from the row's last / first cell, leaves the grid |
  * | Esc | Cancel edit |
  * | Delete | Clear selection |
+ * | Backspace | Clear the cell and edit |
  * | ⌘/Ctrl+C / V | Copy / paste (TSV blocks) |
+ *
+ * The cell table is the only Tab stop (`role="grid"`); the active cell is
+ * exposed through `aria-activedescendant` and is always scrolled into view.
  */
 const meta = {
   title: 'Data/Spreadsheet',
@@ -224,10 +232,13 @@ export const KeyboardCheatSheet: Story = {
       >
         {[
           ['Arrows', 'Move active cell'],
-          ['Shift+Arrows', 'Extend selection'],
+          ['Home / End', 'Row start / end'],
+          ['⌘/Ctrl+Home / End', 'Sheet start / end'],
+          ['PageUp / PageDown', 'Move by a viewport'],
+          ['Shift+move', 'Extend selection'],
           ['Enter / F2', 'Start edit'],
           ['Type char', 'Overwrite cell'],
-          ['Tab / Shift+Tab', 'Commit + move'],
+          ['Tab / Shift+Tab', 'Move in row, leave at its end'],
           ['Esc', 'Cancel edit'],
           ['Delete', 'Clear selection'],
           ['Backspace', 'Clear & edit'],

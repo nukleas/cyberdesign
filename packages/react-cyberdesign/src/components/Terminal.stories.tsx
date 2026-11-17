@@ -1,6 +1,19 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Terminal } from './Terminal';
 
+/**
+ * Terminal window: header, scrollable log, optional command input.
+ *
+ * ### Keyboard
+ * | Key | Action |
+ * | --- | --- |
+ * | Tab | Window controls (when `onControl` is set), the log (when it overflows), the command input |
+ * | Enter / Space | Press the focused window control |
+ * | Arrows / PageUp / PageDown / Home / End | Scroll the focused log |
+ *
+ * Without `onControl` the control dots are decoration and are skipped.
+ */
 const meta = {
   title: 'Cyber/Terminal',
   component: Terminal,
@@ -21,6 +34,26 @@ export const Default: Story = {
       { type: 'error', text: 'warn: edge-03 unreachable' },
     ],
     style: { width: 420 },
+  },
+};
+
+/** `onControl` turns the dots into named buttons; a log that overflows is a Tab stop. */
+export const ControlsAndLongLog: Story = {
+  render: () => {
+    const [last, setLast] = useState('none');
+    return (
+      <Terminal
+        title={`last control: ${last}`}
+        controls
+        onControl={setLast}
+        style={{ width: 420, height: 220 }}
+        lines={Array.from({ length: 40 }, (_, i) => ({
+          type: 'output' as const,
+          text: `packet ${String(i + 1).padStart(3, '0')} ok`,
+        }))}
+        input
+      />
+    );
   },
 };
 
