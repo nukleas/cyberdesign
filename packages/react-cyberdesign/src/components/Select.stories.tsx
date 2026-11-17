@@ -1,6 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Select, type SelectProps } from './Select';
 
+/**
+ * Native `<select>` with a custom chevron, so the browser provides the keys.
+ *
+ * | Key | Action |
+ * | --- | --- |
+ * | Space / Enter / ArrowDown / ArrowUp | Open the list (platform-dependent; arrows may change the value directly) |
+ * | ArrowDown / ArrowUp, Home / End | Move through the options |
+ * | Type | Jump to the option starting with the typed letters |
+ * | Enter | Choose; Escape closes without choosing |
+ */
 const meta = {
   title: 'Form/Select',
   component: Select,

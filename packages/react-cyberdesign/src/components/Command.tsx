@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../lib/cn';
+import { useActiveDescendant } from '../lib/activeDescendant';
 import { fuzzyRank } from '../lib/fuzzy';
 
 export interface CommandItem {
@@ -23,6 +24,8 @@ export interface CommandProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSe
   placeholder?: string;
   emptyText?: string;
   onSelect?: (item: CommandItem) => void;
+  /** Accessible name of the search input and its list. @default 'Command palette' */
+  'aria-label'?: string;
 }
 
 const primaryText = (item: CommandItem) =>
@@ -39,18 +42,25 @@ const secondaryText = (item: CommandItem) =>
  * "Save File"). Groups keep their headings and are ordered by their best match,
  * so the first row is always the best match overall — it is highlighted and
  * Enter runs it. With an empty query the original order is kept.
+ *
+ * Keyboard (WAI-ARIA combobox with a listbox): focus stays in the input, which
+ * names the highlighted row through `aria-activedescendant`; rows are not Tab
+ * stops. ArrowDown / ArrowUp move one row, PageDown / PageUp one screenful,
+ * Home / End go to the first / last row, Enter runs the highlighted row.
+ * Disabled rows are skipped. Pass `aria-label` to name the palette.
  */
 export function Command({
   items,
   placeholder = 'Type a command…',
   emptyText = 'No results',
   onSelect,
+  'aria-label': ariaLabel = 'Command palette',
   className = '',
   ...rest
 }: CommandProps) {
   const [query, setQuery] = useState('');
-  const [active, setActive] = useState(0);
   const listRef = useRef<HTMLDivElement>(null);
+  const listId = useId();
 
   const groups = useMemo(() => {
     const map = new Map<string, CommandItem[]>();
@@ -64,22 +74,12 @@ export function Command({
 
   // Rows in display order — keyboard navigation walks exactly what is rendered.
   const rows = useMemo(() => groups.flatMap(([, groupItems]) => groupItems), [groups]);
-  const activeIdx = Math.max(0, Math.min(active, rows.length - 1));
+  const nav = useActiveDescendant(listRef, rows.length, (i) => rows[i].disabled === true);
 
-  // Keep the highlighted row inside the scrolling list.
-  useEffect(() => {
-    const list = listRef.current;
-    const row = list?.querySelector('.is-selected');
-    if (!list || !row) return;
-    if (activeIdx === 0) {
-      list.scrollTop = 0;
-      return;
-    }
-    const l = list.getBoundingClientRect();
-    const r = row.getBoundingClientRect();
-    if (r.top < l.top) list.scrollTop -= l.top - r.top;
-    else if (r.bottom > l.bottom) list.scrollTop += r.bottom - l.bottom;
-  }, [activeIdx, query]);
+  const run = (item: CommandItem) => {
+    item.onSelect?.();
+    onSelect?.(item);
+  };
 
   let rowIdx = -1;
 
@@ -88,56 +88,74 @@ export function Command({
       <div className="cd-command__input-wrap">
         <input
           className="cd-command__input"
+          role="combobox"
+          aria-label={ariaLabel}
+          aria-expanded
+          aria-controls={listId}
+          aria-autocomplete="list"
+          aria-activedescendant={nav.activeId}
+          autoComplete="off"
           value={query}
           placeholder={placeholder}
           onChange={(e) => {
             setQuery(e.target.value);
-            setActive(0);
+            nav.setActive(0);
           }}
           onKeyDown={(e) => {
-            if (e.key === 'ArrowDown') {
+            if (nav.onKeyDown(e)) return;
+            if (e.key === 'Enter' && nav.active >= 0) {
               e.preventDefault();
-              setActive(Math.min(activeIdx + 1, rows.length - 1));
-            } else if (e.key === 'ArrowUp') {
-              e.preventDefault();
-              setActive(Math.max(activeIdx - 1, 0));
-            } else if (e.key === 'Enter' && rows[activeIdx] && !rows[activeIdx].disabled) {
-              rows[activeIdx].onSelect?.();
-              onSelect?.(rows[activeIdx]);
+              run(rows[nav.active]);
             }
           }}
         />
       </div>
-      <div ref={listRef} className="cd-command__list" role="listbox">
+      <div
+        ref={listRef}
+        id={listId}
+        className="cd-command__list"
+        role="listbox"
+        aria-label={ariaLabel}
+        // Clicking a row must not take focus out of the input.
+        onMouseDown={(e) => e.preventDefault()}
+      >
         {rows.length === 0 && <div className="cd-command__empty">{emptyText}</div>}
-        {groups.map(([group, groupItems]) => (
-          <div key={group || '__default'}>
-            {group && <div className="cd-command__group-label">{group}</div>}
-            {groupItems.map((item) => {
-              rowIdx += 1;
-              const idx = rowIdx;
-              return (
-                <button
-                  key={item.value}
-                  type="button"
-                  role="option"
-                  aria-selected={idx === activeIdx}
-                  disabled={item.disabled}
-                  className={cn('cd-command__item', idx === activeIdx && 'is-selected')}
-                  data-selected={idx === activeIdx}
-                  onMouseEnter={() => setActive(idx)}
-                  onClick={() => {
-                    item.onSelect?.();
-                    onSelect?.(item);
-                  }}
-                >
-                  {item.label}
-                  {item.kbd != null && <span className="cd-command__item-kbd">{item.kbd}</span>}
-                </button>
-              );
-            })}
-          </div>
-        ))}
+        {groups.map(([group, groupItems], groupIdx) => {
+          const options = groupItems.map((item) => {
+            rowIdx += 1;
+            const idx = rowIdx;
+            const isActive = idx === nav.active;
+            return (
+              <div
+                key={item.value}
+                id={nav.optionId(idx)}
+                role="option"
+                aria-selected={isActive}
+                aria-disabled={item.disabled || undefined}
+                className={cn('cd-command__item', isActive && 'is-selected')}
+                onMouseMove={() => {
+                  if (!isActive && !item.disabled) nav.setActive(idx, false);
+                }}
+                onClick={() => {
+                  if (!item.disabled) run(item);
+                }}
+              >
+                {item.label}
+                {item.kbd != null && <span className="cd-command__item-kbd">{item.kbd}</span>}
+              </div>
+            );
+          });
+          if (!group) return options;
+          const labelId = `${listId}-group-${groupIdx}`;
+          return (
+            <div key={group} role="group" aria-labelledby={labelId}>
+              <div id={labelId} className="cd-command__group-label">
+                {group}
+              </div>
+              {options}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -1,6 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Slider } from './Slider';
 
+/**
+ * Range slider: a native `<input type="range">`, so the browser provides the keys.
+ *
+ * | Key | Action |
+ * | --- | --- |
+ * | ArrowRight / ArrowUp | Increase by one `step` |
+ * | ArrowLeft / ArrowDown | Decrease by one `step` |
+ * | PageUp / PageDown | Increase / decrease by a larger step |
+ * | Home / End | `min` / `max` |
+ */
 const meta = {
   title: 'Form/Slider',
   component: Slider,

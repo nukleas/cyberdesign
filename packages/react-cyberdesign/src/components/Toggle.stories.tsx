@@ -4,6 +4,14 @@ import { ToggleGroup } from './ToggleGroup';
 import { ButtonGroup } from './ButtonGroup';
 import { Button } from './Button';
 
+/**
+ * Two-state toggle: a native `<button>` with `aria-pressed`.
+ *
+ * | Key | Action |
+ * | --- | --- |
+ * | Tab | Focus the toggle |
+ * | Space / Enter | Press / release |
+ */
 const meta = {
   title: 'Primitives/Toggle',
   component: Toggle,
