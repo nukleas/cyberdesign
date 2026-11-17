@@ -274,7 +274,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cd-progress__bar { transition: none; }
+
+  /* No scan: a dimmed full bar reads as "busy, no measure" without moving. */
   .cd-progress--indeterminate .cd-progress__bar {
-    animation-duration: 0.001ms;
+    width: 100% !important;
+    opacity: 0.5;
+    animation: none;
   }
 }

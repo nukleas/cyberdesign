@@ -33,6 +33,27 @@ export const Error: Story = {
 export const Dismissible: Story = {
   args: { onDismiss: () => {}, title: 'Dismiss me', children: 'Click ✕' },
 };
+export const WithProgress: Story = {
+  name: 'Progress + Cancel',
+  args: {
+    variant: 'accent',
+    icon: '⬇',
+    title: 'Downloading update',
+    children: '62% — 18.4 of 29.7 MB',
+    progress: 62,
+    actions: <Button size="sm">Cancel</Button>,
+  },
+};
+export const IndeterminateProgress: Story = {
+  name: 'Progress (indeterminate)',
+  args: {
+    variant: 'accent',
+    icon: '⬡',
+    title: 'Rendering video',
+    children: 'Encoding audio…',
+    progress: 'indeterminate',
+  },
+};
 
 function ToastDemo() {
   const { toast } = useToast();

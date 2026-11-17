@@ -660,6 +660,32 @@
           <button class="cd-btn cd-btn--primary" onclick="cdToast('API key rotated — new key active','accent','⬡')">Accent</button>
         </div>
         <p class="cd-label" style="color:var(--cd-text-muted);margin-top:10px">Toasts stack top-right, auto-dismiss after 4s.</p>
+        <div class="col" style="max-width:380px;margin-top:14px">
+          <div class="cd-toast cd-toast--accent" role="status">
+            <span class="cd-toast__icon">⬇</span>
+            <div class="cd-toast__content">
+              <div class="cd-toast__title" id="toast-demo-dl">Downloading update</div>
+              <div class="cd-toast__body">62% — 18.4 of 29.7 MB</div>
+              <div class="cd-progress cd-toast__progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-labelledby="toast-demo-dl">
+                <div class="cd-progress__bar" style="width:62%"></div>
+              </div>
+              <div class="cd-toast__actions">
+                <button class="cd-btn cd-btn--sm">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="cd-toast cd-toast--accent" role="status">
+            <span class="cd-toast__icon">⬡</span>
+            <div class="cd-toast__content">
+              <div class="cd-toast__title" id="toast-demo-render">Rendering video</div>
+              <div class="cd-toast__body">Encoding audio…</div>
+              <div class="cd-progress cd-progress--indeterminate cd-toast__progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-labelledby="toast-demo-render">
+                <div class="cd-progress__bar"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="cd-label" style="color:var(--cd-text-muted);margin-top:10px">Long jobs: .cd-toast__progress (a .cd-progress bar) and .cd-toast__actions.</p>
       </div>
 
       <!-- Dropdown -->
