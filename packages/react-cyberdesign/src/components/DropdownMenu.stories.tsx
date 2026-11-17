@@ -5,7 +5,7 @@ const meta = {
   title: 'Navigation/DropdownMenu',
   component: DropdownMenu,
   tags: ['autodocs'],
-  parameters: { docs: { description: { component: 'Alias of `Dropdown`.' } } },
+  parameters: { docs: { description: { component: 'Alias of `Dropdown`, with the same keyboard support: see Navigation/Dropdown for the key map.' } } },
 } satisfies Meta<typeof DropdownMenu>;
 export default meta;
 type Story = StoryObj<typeof meta>;

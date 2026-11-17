@@ -30,9 +30,14 @@
 }
 
 .cd-menubar__trigger:hover,
+.cd-menubar__trigger:focus-visible,
 .cd-menubar__item.is-open > .cd-menubar__trigger {
   color: var(--cd-accent);
   background: var(--cd-accent-subtle);
+}
+
+.cd-menubar__trigger:focus-visible {
+  outline-offset: -2px; /* inside the bar, clear of the neighbours */
 }
 
 .cd-menubar__menu {
@@ -46,15 +51,19 @@
   border: 1px solid color-mix(in srgb, var(--cd-accent) 28%, transparent);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   opacity: 0;
+  /* Hidden, not just transparent: a closed menu's items cannot take focus. */
+  visibility: hidden;
   pointer-events: none;
   transform: translateY(-4px);
-  transition: opacity 0.12s ease, transform 0.12s ease;
+  transition: opacity 0.12s ease, transform 0.12s ease, visibility 0s 0.12s;
 }
 
 .cd-menubar__item.is-open > .cd-menubar__menu {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: translateY(0);
+  transition-delay: 0s;
 }
 
 .cd-menubar__action {
@@ -72,9 +81,19 @@
   cursor: pointer;
 }
 
-.cd-menubar__action:hover {
+.cd-menubar__action:hover:not(:disabled),
+.cd-menubar__action:focus-visible {
   background: var(--cd-accent-subtle);
   color: var(--cd-accent);
+}
+
+.cd-menubar__action:focus-visible {
+  outline-offset: 0; /* tighter for menu items */
+}
+
+.cd-menubar__action:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 /* Navigation menu (horizontal links) */
@@ -103,6 +122,7 @@
 }
 
 .cd-nav-menu__link:hover,
+.cd-nav-menu__link:focus-visible,
 .cd-nav-menu__link.is-active {
   color: var(--cd-accent);
   border-color: color-mix(in srgb, var(--cd-accent) 30%, transparent);
@@ -150,12 +170,18 @@
   cursor: pointer;
 }
 
-.cd-context-menu__item:hover:not(:disabled) {
+.cd-context-menu__item:hover:not(:disabled),
+.cd-context-menu__item:focus-visible {
   background: var(--cd-accent-subtle);
   color: var(--cd-accent);
 }
 
-.cd-context-menu__item--danger:hover:not(:disabled) {
+.cd-context-menu__item:focus-visible {
+  outline-offset: 0; /* tighter for menu items */
+}
+
+.cd-context-menu__item--danger:hover:not(:disabled),
+.cd-context-menu__item--danger:focus-visible {
   background: rgba(255, 69, 108, 0.1);
   color: var(--cd-neon-red);
 }

@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
-import type { HTMLAttributes, ReactNode } from 'react';
+import { useId, useRef, useState } from 'react';
+import type { HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
+import { flushSync } from 'react-dom';
 import { cn } from '../lib/cn';
-import { MenuEntries } from '../lib/menu';
+import { MenuEntries, focusMenuItem, menuItems, moveMenuFocus, useMenuDismiss } from '../lib/menu';
 import type { MenuEntry } from '../lib/menu';
 
 export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'> {
@@ -17,7 +18,15 @@ export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onS
   defaultOpen?: boolean;
 }
 
-/** Dropdown menu — a trigger button toggling a `cd-dropdown__menu` of data-driven items. */
+/**
+ * Dropdown menu — a trigger button toggling a `cd-dropdown__menu` of data-driven items.
+ *
+ * Keyboard (WAI-ARIA menu button): on the trigger, ArrowDown, Enter or Space
+ * opens the menu on its first item and ArrowUp on its last. In the menu, arrow
+ * keys, Home, End and first-letter type-ahead move between enabled items;
+ * Enter or Space chooses one and returns focus to the trigger (a `switch` item
+ * keeps the menu open); Escape closes; Tab closes and moves on.
+ */
 export function Dropdown({
   trigger,
   items,
@@ -29,44 +38,50 @@ export function Dropdown({
 }: DropdownProps) {
   const [open, setOpen] = useState(defaultOpen);
   const root = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const id = useId();
 
-  // While open, a press outside or Escape closes the menu.
-  useEffect(() => {
-    if (!open) return;
-    const onPointerDown = (e: PointerEvent) => {
-      if (!root.current?.contains(e.target as Node)) setOpen(false);
-    };
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Escape') return;
-      setOpen(false);
-      // Focus was inside the menu that is going away; hand it back to the trigger.
-      if (root.current?.contains(document.activeElement)) {
-        root.current.querySelector<HTMLElement>('.cd-dropdown__trigger')?.focus();
-      }
-    };
-    window.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('keydown', onKeyDown);
-    return () => {
-      window.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('keydown', onKeyDown);
-    };
-  }, [open]);
+  const close = (restoreFocus: boolean) => {
+    setOpen(false);
+    if (restoreFocus) triggerRef.current?.focus();
+  };
+  useMenuDismiss(open, root, close);
+
+  const onTriggerKeyDown = (e: KeyboardEvent) => {
+    // Enter and Space on an open menu fall through to the click, which closes it.
+    const opens = e.key === 'ArrowDown' || (!open && (e.key === 'Enter' || e.key === ' '));
+    if (!opens && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    // The menu has to be visible before one of its items can take focus.
+    flushSync(() => setOpen(true));
+    focusMenuItem(menuRef.current, opens ? 'first' : 'last');
+  };
 
   return (
     <div ref={root} className={cn('cd-dropdown', open && 'is-open', className)} {...rest}>
       <button
+        ref={triggerRef}
+        id={`${id}-trigger`}
         type="button"
         className={cn(triggerClassName, 'cd-dropdown__trigger')}
+        aria-haspopup="menu"
         aria-expanded={open}
+        aria-controls={`${id}-menu`}
         onClick={() => setOpen((o) => !o)}
+        onKeyDown={onTriggerKeyDown}
       >
         {trigger}
       </button>
       <div
+        ref={menuRef}
+        id={`${id}-menu`}
         className={cn('cd-dropdown__menu', align === 'right' && 'cd-dropdown__menu--right')}
         role="menu"
+        aria-labelledby={`${id}-trigger`}
+        onKeyDown={(e) => moveMenuFocus(e, menuItems(e.currentTarget))}
       >
-        <MenuEntries block="cd-dropdown" items={items} onClose={() => setOpen(false)} />
+        <MenuEntries block="cd-dropdown" items={items} onClose={() => close(true)} />
       </div>
     </div>
   );

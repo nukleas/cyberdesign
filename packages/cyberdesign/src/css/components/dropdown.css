@@ -138,7 +138,8 @@
 
 /* Danger item */
 .cd-dropdown__item--danger { color: var(--cd-text-muted); }
-.cd-dropdown__item--danger:hover {
+.cd-dropdown__item--danger:hover,
+.cd-dropdown__item--danger:focus-visible {
   background: color-mix(in srgb, var(--cd-red) 10%, transparent);
   color: var(--cd-red);
 }
