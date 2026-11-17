@@ -89,4 +89,5 @@ export * from './components/Toggle';
 export * from './components/ToggleGroup';
 export * from './components/Tooltip';
 export * from './components/Transport';
+export * from './components/Tree';
 export * from './components/Typography';

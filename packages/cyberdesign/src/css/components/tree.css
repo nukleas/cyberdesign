@@ -1,0 +1,111 @@
+/* ── Tree — hierarchical list (file explorer, outline, nested navigation) ── */
+
+/*
+ * Rows are rendered flat: one .cd-tree__row per visible node, indented by the
+ * --cd-tree-depth variable hook (0 for top-level rows).
+ */
+.cd-tree {
+  --cd-tree-indent: 14px;
+  --cd-tree-row-height: 26px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--cd-font-mono);
+  font-size: var(--cd-text-sm);
+  color: var(--cd-text-secondary);
+  user-select: none;
+}
+
+/* Denser rows for narrow sidebars */
+.cd-tree--sm {
+  --cd-tree-indent: 12px;
+  --cd-tree-row-height: 22px;
+  font-size: var(--cd-text-xs);
+}
+
+.cd-tree__row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--cd-tree-row-height);
+  padding: 0 8px 0 calc(6px + var(--cd-tree-depth, 0) * var(--cd-tree-indent));
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.cd-tree__row:hover {
+  background: var(--cd-bg-panel-hover);
+  color: var(--cd-text);
+}
+
+.cd-tree__row.is-selected {
+  background: var(--cd-accent-subtle);
+  border-left-color: var(--cd-accent);
+  color: var(--cd-accent);
+}
+
+.cd-tree__row:focus-visible {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cd-accent) 55%, transparent);
+}
+
+.cd-tree__row.is-disabled {
+  color: var(--cd-text-dim);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Disclosure chevron; leaves keep the box so labels stay aligned */
+.cd-tree__caret {
+  flex-shrink: 0;
+  width: 10px;
+  text-align: center;
+  color: var(--cd-text-dim);
+  transition: transform 0.12s ease;
+}
+
+.cd-tree__row.is-expanded > .cd-tree__caret {
+  transform: rotate(90deg);
+}
+
+.cd-tree__icon {
+  flex-shrink: 0;
+  width: 1.25em;
+  text-align: center;
+}
+
+.cd-tree__label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Trailing detail: a count, a status mark, a modified dot */
+.cd-tree__meta {
+  flex-shrink: 0;
+  font-size: var(--cd-text-xs);
+  color: var(--cd-text-dim);
+}
+
+/* Inline rename field; pair with .cd-input.cd-input--sm */
+.cd-tree__input {
+  flex: 1;
+  min-width: 0;
+  height: calc(var(--cd-tree-row-height) - 4px);
+}
+
+/* Placeholder row inside an open branch: "Empty", "Loading…" */
+.cd-tree__note {
+  min-height: var(--cd-tree-row-height);
+  padding: 0 8px 0 calc(24px + var(--cd-tree-depth, 0) * var(--cd-tree-indent));
+  display: flex;
+  align-items: center;
+  font-style: italic;
+  color: var(--cd-text-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cd-tree__caret { transition: none; }
+}
