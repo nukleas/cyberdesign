@@ -90,3 +90,4 @@ export * from './components/ToggleGroup';
 export * from './components/Tooltip';
 export * from './components/Transport';
 export * from './components/Typography';
+export * from './components/VirtualList';

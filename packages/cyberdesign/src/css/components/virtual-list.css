@@ -1,0 +1,39 @@
+/* ── Virtual list — fixed-pitch windowed list ───────────────────────────── */
+
+/* Only the rows near the viewport exist in the DOM. Geometry is driven by
+   three custom properties so markup stays declarative:
+     --cd-virtual-list-row-height   row pitch, a length      (on the viewport)
+     --cd-virtual-list-count        total number of rows     (on the viewport)
+     --cd-virtual-list-index        zero-based row index     (on each row)
+   The viewport needs a bounded height: it fills its container by default, or
+   set `height` / `max-height` on it. */
+
+.cd-virtual-list {
+  position: relative;
+  height: 100%;
+  /* Lets it shrink inside a flex column instead of growing to its full length. */
+  min-height: 0;
+  overflow-y: auto;
+  /* Rows come and go while scrolling; anchoring to one would fight the scrollbar. */
+  overflow-anchor: none;
+}
+
+/* Gives the viewport its full scroll height. */
+.cd-virtual-list__spacer {
+  position: relative;
+  width: 100%;
+  height: calc(var(--cd-virtual-list-count, 0) * var(--cd-virtual-list-row-height, 0px));
+}
+
+/* Rows are absolutely positioned on a fixed pitch. No gap, no margin: either
+   would desynchronise pitch from height and drift the window. */
+.cd-virtual-list__row {
+  position: absolute;
+  top: calc(var(--cd-virtual-list-index, 0) * var(--cd-virtual-list-row-height, 0px));
+  left: 0;
+  right: 0;
+  /* Grid so the row's content stretches to the full pitch on both axes. */
+  display: grid;
+  height: var(--cd-virtual-list-row-height, 0px);
+  overflow: hidden;
+}
