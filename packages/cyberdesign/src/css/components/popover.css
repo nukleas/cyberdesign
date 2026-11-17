@@ -20,16 +20,23 @@
     0 8px 24px rgba(0, 0, 0, 0.5),
     0 0 16px color-mix(in srgb, var(--cd-accent) 18%, transparent);
   opacity: 0;
+  /* Hidden, not just transparent: a closed popover's controls leave the tab order. */
+  visibility: hidden;
   pointer-events: none;
   transform: translateY(4px) scale(0.98);
-  transition: opacity 0.12s ease, transform 0.12s ease;
+  transition: opacity 0.12s ease, transform 0.12s ease, visibility 0s 0.12s;
 }
 
-.cd-popover.is-open > .cd-popover__content,
-.cd-popover:focus-within > .cd-popover__content {
+/*
+ * Open state — .is-open only. Opening on :focus-within as well showed the panel
+ * whenever the trigger had focus, and Escape could not close it.
+ */
+.cd-popover.is-open > .cd-popover__content {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: translateY(0) scale(1);
+  transition-delay: 0s;
 }
 
 /* Placement */
@@ -80,7 +87,7 @@
   line-height: 1.5;
 }
 
-/* Hover card — open on hover of host */
+/* Hover card — the host gets .is-open on hover and on focus; Escape removes it */
 .cd-hover-card {
   position: relative;
   display: inline-block;
@@ -101,12 +108,14 @@
   color: var(--cd-text);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px color-mix(in srgb, var(--cd-accent) 15%, transparent);
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.12s ease 80ms;
+  transition: opacity 0.12s ease 80ms, visibility 0s 0.2s;
 }
 
-.cd-hover-card:hover > .cd-hover-card__content,
-.cd-hover-card:focus-within > .cd-hover-card__content {
+.cd-hover-card.is-open > .cd-hover-card__content {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
+  transition-delay: 80ms, 0s;
 }

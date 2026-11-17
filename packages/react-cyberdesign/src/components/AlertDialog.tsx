@@ -1,13 +1,15 @@
+import { useEffect, useId } from 'react';
 import type { ReactNode } from 'react';
 import { Modal } from './Modal';
 import { Button } from './Button';
 
 export interface AlertDialogProps {
   open: boolean;
+  /** Fired by Cancel, Escape, a backdrop press, the ✕ button, and after `onConfirm`. */
   onClose?: () => void;
-  /** Dialog title. */
+  /** Dialog title; it names the dialog. */
   title?: ReactNode;
-  /** Body description. */
+  /** The message; it is announced as the dialog's description. */
   children?: ReactNode;
   /** Confirm button label. @default 'Confirm' */
   confirmLabel?: ReactNode;
@@ -19,7 +21,12 @@ export interface AlertDialogProps {
   destructive?: boolean;
 }
 
-/** Confirmation dialog built on Modal — cancel / confirm actions. */
+/**
+ * Confirmation dialog built on Modal (`role="alertdialog"`) — cancel / confirm actions.
+ *
+ * Opens with focus on Cancel, the least destructive action, so a stray Enter
+ * never confirms. Escape cancels: it calls `onClose` and never `onConfirm`.
+ */
 export function AlertDialog({
   open,
   onClose,
@@ -30,15 +37,25 @@ export function AlertDialog({
   onConfirm,
   destructive = false,
 }: AlertDialogProps) {
+  const messageId = useId();
+  const cancelId = useId();
+
+  // Runs after Modal's own effect, which has just focused its first control (the ✕).
+  useEffect(() => {
+    if (open) document.getElementById(cancelId)?.focus();
+  }, [open, cancelId]);
+
   return (
     <Modal
       open={open}
       onClose={onClose}
       title={title}
       size="sm"
+      role="alertdialog"
+      aria-describedby={messageId}
       footer={
         <>
-          <Button type="button" onClick={onClose}>
+          <Button id={cancelId} type="button" onClick={onClose}>
             {cancelLabel}
           </Button>
           <Button
@@ -54,7 +71,7 @@ export function AlertDialog({
         </>
       }
     >
-      {children}
+      <div id={messageId}>{children}</div>
     </Modal>
   );
 }
