@@ -77,8 +77,8 @@ export const LazyLoading: Story = {
       <Tree
         {...args}
         nodes={nodes}
-        onExpandedChange={(_, opened) => {
-          if (opened.children) return;
+        onExpandedChange={(_, opened, open) => {
+          if (!open || opened.children) return;
           setTimeout(() => {
             const children = [1, 2, 3].map((n) => ({ id: `${opened.id}/node-0${n}`, label: `node-0${n}` }));
             setNodes((current) => current.map((node) => (node.id === opened.id ? { ...node, children } : node)));
@@ -89,28 +89,39 @@ export const LazyLoading: Story = {
   },
 };
 
-/** Press F2 on a row to rename it. Enter or clicking away commits; Escape cancels. */
+/**
+ * Press F2 on a row to rename it. Enter or clicking away commits; Escape cancels.
+ * Ids here are paths, as in a file explorer, so a rename changes the row's id;
+ * focus and selection follow it.
+ */
 export const Renaming: Story = {
   render: (args) => {
     const [nodes, setNodes] = useState<TreeNode[]>([
-      { id: 'a', label: 'notes.md' },
-      { id: 'b', label: 'draft.md' },
-      { id: 'c', label: 'archive', children: [{ id: 'd', label: 'old.md' }] },
+      { id: 'notes.md', label: 'notes.md' },
+      { id: 'draft.md', label: 'draft.md' },
+      { id: 'archive', label: 'archive', children: [{ id: 'archive/old.md', label: 'old.md' }] },
     ]);
-    const [editing, setEditing] = useState<string | null>('b');
-    const rename = (items: TreeNode[], id: string, label: string): TreeNode[] =>
-      items.map((node) =>
-        node.id === id ? { ...node, label } : { ...node, children: node.children && rename(node.children, id, label) },
-      );
+    const [selected, setSelected] = useState<string | null>('draft.md');
+    const [editing, setEditing] = useState<string | null>('draft.md');
+    const rename = (items: TreeNode[], from: string, to: string): TreeNode[] =>
+      items.map((node) => {
+        const id = node.id === from ? to : node.id.startsWith(`${from}/`) ? to + node.id.slice(from.length) : node.id;
+        const label = node.id === from ? to.slice(to.lastIndexOf('/') + 1) : node.label;
+        return { ...node, id, label, children: node.children && rename(node.children, from, to) };
+      });
     return (
       <Tree
         {...args}
         nodes={nodes}
-        defaultExpanded={['c']}
+        defaultExpanded={['archive']}
+        selected={selected}
+        onSelect={(node) => setSelected(node.id)}
         editing={editing}
         onEditStart={(node) => setEditing(node.id)}
         onEditCommit={(node, value) => {
-          setNodes((current) => rename(current, node.id, value));
+          const to = node.id.slice(0, node.id.lastIndexOf('/') + 1) + value;
+          setNodes((current) => rename(current, node.id, to));
+          setSelected(to);
           setEditing(null);
         }}
         onEditCancel={() => setEditing(null)}

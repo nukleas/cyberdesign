@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from 'react';
 import { cn } from '../lib/cn';
 
@@ -18,7 +18,8 @@ export interface TreeNode {
   children?: TreeNode[];
   /**
    * Marks a branch whose children are not loaded yet. Opening it fires
-   * `onExpandedChange`; a "Loading…" row shows until `children` is provided.
+   * `onExpandedChange` with `open` true; a "Loading…" row shows until
+   * `children` is provided.
    */
   branch?: boolean;
   /** Dim the row and skip it for pointer and keyboard. */
@@ -41,13 +42,17 @@ export interface TreeProps extends Omit<HTMLAttributes<HTMLUListElement>, 'onSel
   /** Initially open branch ids (uncontrolled). */
   defaultExpanded?: string[];
   /**
-   * Fires with the new open ids and the branch that changed. Load a lazy
-   * branch's children here.
+   * Fires with the new open ids, the branch that changed and whether it is
+   * now open. Load a lazy branch's children here when `open` is true.
    */
-  onExpandedChange?: (expanded: string[], node: TreeNode) => void;
+  onExpandedChange?: (expanded: string[], node: TreeNode, open: boolean) => void;
   /** Fires on double-click or Enter on a leaf (open the file, follow the link). */
   onActivate?: (node: TreeNode) => void;
-  /** Id of the node being renamed; its label becomes a text field. */
+  /**
+   * Id of the node being renamed; its label becomes a text field. Renaming is
+   * always controlled: set this from `onEditStart` and clear it from
+   * `onEditCommit` and `onEditCancel`.
+   */
   editing?: string | null;
   /** Text the rename field starts with. Needed when `label` is not a string. */
   editingValue?: string;
@@ -76,8 +81,9 @@ const isBranch = (node: TreeNode) => node.children !== undefined || node.branch 
  * nested navigation. Follows the WAI-ARIA tree pattern: arrow keys move and
  * open or close branches, Home/End jump, Enter activates, F2 starts a rename.
  *
- * Selection, expansion and renaming can each be controlled or left to the
- * component. Children can be supplied up front or loaded when a branch opens.
+ * Selection and expansion can each be controlled or left to the component;
+ * renaming is controlled through `editing`. Children can be supplied up front
+ * or loaded when a branch opens.
  */
 export function Tree({
   nodes,
@@ -98,12 +104,17 @@ export function Tree({
   emptyLabel = 'Empty',
   loadingLabel = 'Loading…',
   className,
+  onFocus,
+  onBlur,
   ...rest
 }: TreeProps) {
   const [internalSelected, setInternalSelected] = useState<string | null>(defaultSelected);
   const [internalExpanded, setInternalExpanded] = useState<string[]>(defaultExpanded);
   const [focused, setFocused] = useState<string | null>(null);
   const list = useRef<HTMLUListElement>(null);
+  // Whether keyboard focus was last inside this tree, so it can be put back
+  // when the focused row goes away.
+  const hadFocus = useRef(false);
 
   const selectedId = selected === undefined ? internalSelected : selected;
   const openIds = expanded ?? internalExpanded;
@@ -145,14 +156,33 @@ export function Tree({
   const setOpen = (node: TreeNode, open: boolean) => {
     const next = open ? [...openIds.filter((id) => id !== node.id), node.id] : openIds.filter((id) => id !== node.id);
     if (expanded === undefined) setInternalExpanded(next);
-    onExpandedChange?.(next, node);
+    onExpandedChange?.(next, node, open);
   };
+
+  const rowElement = (id: string) =>
+    list.current?.querySelector<HTMLElement>(`[data-tree-id="${CSS.escape(id)}"]`);
 
   const focusRow = (node: TreeNode) => {
     setFocused(node.id);
-    list.current?.querySelector<HTMLElement>(`[data-tree-id="${CSS.escape(node.id)}"]`)?.focus();
+    rowElement(node.id)?.focus();
     select(node);
   };
+
+  // The focused row can disappear under the user: a rename that changes its id
+  // (a file path), a delete, a reload. Move focus to the tab stop rather than
+  // letting it fall out of the tree.
+  useEffect(() => {
+    if (focused === null || reachable.some((row) => row.node.id === focused)) return;
+    setFocused(null);
+    if (!hadFocus.current) return;
+    // Wait a frame: if the row went because the user clicked elsewhere, focus
+    // is still on its way there and must not be pulled back.
+    requestAnimationFrame(() => {
+      const active = document.activeElement;
+      if (active && active !== document.body) return;
+      list.current?.querySelector<HTMLElement>('[role="treeitem"][tabindex="0"]')?.focus();
+    });
+  });
 
   const onKeyDown = (event: KeyboardEvent<HTMLLIElement>, row: Extract<Row, { kind: 'node' }>) => {
     // Keys typed into the rename field belong to it.
@@ -198,7 +228,21 @@ export function Tree({
   };
 
   return (
-    <ul ref={list} role="tree" className={cn('cd-tree', size === 'sm' && 'cd-tree--sm', className)} {...rest}>
+    <ul
+      ref={list}
+      role="tree"
+      className={cn('cd-tree', size === 'sm' && 'cd-tree--sm', className)}
+      onFocus={(event) => {
+        hadFocus.current = true;
+        onFocus?.(event);
+      }}
+      onBlur={(event) => {
+        // A removed row blurs to nothing; only a move to another element counts as leaving.
+        if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) hadFocus.current = false;
+        onBlur?.(event);
+      }}
+      {...rest}
+    >
       {rows.map((row) => {
         const indent = { '--cd-tree-depth': row.depth } as CSSProperties;
         if (row.kind === 'note') {
@@ -294,10 +338,16 @@ function RenameField({
       onClick={(event) => event.stopPropagation()}
       onBlur={() => !cancelled.current && onCommit(value.trim())}
       onKeyDown={(event) => {
-        // Enter commits through blur, so a commit happens once however the field is left.
-        if (event.key === 'Enter') event.currentTarget.blur();
+        // Enter that confirms an IME composition is not a commit.
+        if (event.nativeEvent.isComposing) return;
+        // Both keys hand focus back to the row, so the keyboard stays in the tree.
+        const row = event.currentTarget.closest<HTMLElement>('[role="treeitem"]');
+        // Enter commits through the blur this causes, so a commit happens once
+        // however the field is left.
+        if (event.key === 'Enter') row?.focus();
         if (event.key === 'Escape') {
           cancelled.current = true;
+          row?.focus();
           onCancel();
         }
       }}
