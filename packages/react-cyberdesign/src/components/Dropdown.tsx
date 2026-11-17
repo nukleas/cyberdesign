@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../lib/cn';
 import { MenuEntries } from '../lib/menu';
@@ -28,9 +28,32 @@ export function Dropdown({
   ...rest
 }: DropdownProps) {
   const [open, setOpen] = useState(defaultOpen);
+  const root = useRef<HTMLDivElement>(null);
+
+  // While open, a press outside or Escape closes the menu.
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!root.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setOpen(false);
+      // Focus was inside the menu that is going away; hand it back to the trigger.
+      if (root.current?.contains(document.activeElement)) {
+        root.current.querySelector<HTMLElement>('.cd-dropdown__trigger')?.focus();
+      }
+    };
+    window.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
 
   return (
-    <div className={cn('cd-dropdown', open && 'is-open', className)} {...rest}>
+    <div ref={root} className={cn('cd-dropdown', open && 'is-open', className)} {...rest}>
       <button
         type="button"
         className={cn(triggerClassName, 'cd-dropdown__trigger')}

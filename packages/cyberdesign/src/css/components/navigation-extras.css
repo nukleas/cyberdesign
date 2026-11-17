@@ -120,15 +120,19 @@
   font-family: var(--cd-font-mono);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 16px color-mix(in srgb, var(--cd-accent) 15%, transparent);
   opacity: 0;
+  /* Hidden, not just transparent: a closed menu's items leave the tab order. */
+  visibility: hidden;
   pointer-events: none;
   transform: scale(0.97);
-  transition: opacity 0.1s ease, transform 0.1s ease;
+  transition: opacity 0.1s ease, transform 0.1s ease, visibility 0s 0.1s;
 }
 
 .cd-context-menu.is-open {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
   transform: scale(1);
+  transition-delay: 0s;
 }
 
 .cd-context-menu__item {
