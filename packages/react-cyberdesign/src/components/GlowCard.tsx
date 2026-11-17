@@ -8,6 +8,8 @@ export interface GlowCardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'col
   color?: CdColor;
   /** Marks the card as selected (`data-active`, and `aria-pressed` on a clickable card). */
   active?: boolean;
+  /** Remove the card's padding, for full-bleed content that brings its own (a chart, a map, a panel header). */
+  flush?: boolean;
   children?: ReactNode;
   /**
    * Makes the whole card one control: it gets `role="button"`, a Tab stop, and
@@ -22,6 +24,7 @@ export interface GlowCardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'col
 export function GlowCard({
   color = 'orange',
   active,
+  flush = false,
   className,
   onClick,
   onKeyDown,
@@ -31,7 +34,7 @@ export function GlowCard({
 }: GlowCardProps) {
   return (
     <div
-      className={cn('cd-glow-card', `cd-glow-card--${color}`, className)}
+      className={cn('cd-glow-card', `cd-glow-card--${color}`, flush && 'cd-glow-card--flush', className)}
       data-active={active ? 'true' : undefined}
       onClick={onClick}
       {...(onClick && { role: 'button', tabIndex: 0, 'aria-pressed': active })}

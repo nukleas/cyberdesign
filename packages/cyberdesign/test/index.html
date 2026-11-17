@@ -174,7 +174,7 @@
     .anim-demo__preview { margin-left: auto; font-size: var(--cd-text-xs); color: var(--cd-accent); }
 
     /* ── Component demos ── */
-    .card-demo { width: 200px; padding: 16px; }
+    .card-demo { width: 200px; }
     .card-demo__title { font-size: var(--cd-text-sm); font-weight: 700; color: var(--cd-text); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
     .card-demo__body { font-size: var(--cd-text-xs); color: var(--cd-text-muted); line-height: 1.5; }
 
@@ -1064,19 +1064,19 @@
       <div class="section">
         <div class="section-header">Canvas charts — CdLineChart · CdBarChart · CdWaveform · CdRadar</div>
         <div class="row" style="flex-wrap:wrap;gap:16px;align-items:flex-start">
-          <div class="cd-glow-card" style="width:380px;display:flex;flex-direction:column">
+          <div class="cd-glow-card cd-glow-card--flush" style="width:380px;display:flex;flex-direction:column">
             <div class="cd-chart__header"><span class="cd-chart__title">Incident Trend</span><span class="cd-chart__meta">7-day rolling</span></div>
             <div class="cd-chart" style="height:160px"><canvas id="line-chart"></canvas></div>
           </div>
-          <div class="cd-glow-card" style="width:280px;display:flex;flex-direction:column">
+          <div class="cd-glow-card cd-glow-card--flush" style="width:280px;display:flex;flex-direction:column">
             <div class="cd-chart__header"><span class="cd-chart__title">Category Breakdown</span><span class="cd-chart__meta">this week</span></div>
             <div class="cd-chart" style="height:160px"><canvas id="bar-chart"></canvas></div>
           </div>
-          <div class="cd-glow-card cd-glow-card--cyan" style="width:240px;display:flex;flex-direction:column">
+          <div class="cd-glow-card cd-glow-card--cyan cd-glow-card--flush" style="width:240px;display:flex;flex-direction:column">
             <div class="cd-chart__header"><span class="cd-chart__title">Coverage Radar</span><span class="cd-chart__meta">source quality</span></div>
             <div class="cd-chart" style="height:200px"><svg id="radar-chart" style="width:100%;height:100%"></svg></div>
           </div>
-          <div class="cd-glow-card" style="width:340px;display:flex;flex-direction:column">
+          <div class="cd-glow-card cd-glow-card--flush" style="width:340px;display:flex;flex-direction:column">
             <div class="cd-chart__header"><span class="cd-chart__title">Signal · Scope</span><span class="cd-chart__meta cd-animate-pulse-glow" style="color:#52ff9f">● LIVE</span></div>
             <div class="cd-chart cd-chart--scope" style="height:72px"><canvas id="waveform-chart"></canvas></div>
           </div>
@@ -1086,7 +1086,7 @@
       <!-- Atlas map -->
       <div class="section">
         <div class="section-header">Atlas map — CdMapScene · world / US / outline</div>
-        <div class="cd-glow-card" style="height:320px;padding:0;overflow:hidden;position:relative">
+        <div class="cd-glow-card cd-glow-card--flush" style="height:320px;overflow:hidden;position:relative">
           <div id="atlas-demo" style="height:100%"></div>
         </div>
         <p style="margin:8px 0 0;font-size:11px;color:var(--cd-text-dim);letter-spacing:0.08em;text-transform:uppercase">

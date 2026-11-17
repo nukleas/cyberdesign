@@ -33,6 +33,7 @@ const meta = {
       options: colors,
       table: { category: 'Appearance', defaultValue: { summary: 'orange' } },
     },
+    flush: { control: 'boolean', table: { category: 'Appearance' } },
     active: {
       control: 'boolean',
       description: 'Selected state (`data-active`).',
@@ -56,6 +57,30 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
+/** `flush` removes the padding for content that runs edge to edge and brings its own spacing. */
+export const Flush: Story = {
+  args: {
+    flush: true,
+    style: { width: 260 },
+    children: (
+      <>
+        <div
+          style={{
+            padding: '8px 12px',
+            borderBottom: '1px solid var(--cd-border)',
+            fontSize: 11,
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }}
+        >
+          Signal
+        </div>
+        <div style={{ height: 80, background: 'var(--cd-accent-subtle)' }} />
+      </>
+    ),
+  },
+};
+
 export const Active: Story = {
   args: { active: true, color: 'cyan' },
 };
@@ -72,7 +97,7 @@ export const Selectable: Story = {
             color={color}
             active={color === selected}
             onClick={() => setSelected(color)}
-            style={{ padding: 16, width: 120 }}
+            style={{ width: 120 }}
           >
             <div style={{ fontSize: 12, textTransform: 'uppercase' }}>{color}</div>
           </GlowCard>
